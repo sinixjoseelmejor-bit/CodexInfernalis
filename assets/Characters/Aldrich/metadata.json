@@ -1,0 +1,152 @@
+{
+  "character": {
+    "id": "51bad9c0-caf6-49fb-94f3-884fdb76d283",
+    "name": "Aldrich",
+    "prompt": "An Eldritch horror entity, an amorphous blob of semi-translucent, glowing flesh floating in a void. It is a mass of chaotic organic matter. Multiple eyes of varying sizes pop out and recede into the form. Teeth-filled rifts open and close randomly across its surface, showing sharp, crystalline fangs. The creature emits a faint, sickly purple light. Cosmic horror art style, surreal, dreamlike, intricate details. Abstract and terrifying.",
+    "size": {
+      "width": 80,
+      "height": 80
+    },
+    "template_id": "mannequin",
+    "directions": 8,
+    "view": "low top-down",
+    "created_at": "2026-04-17T22:07:26.412496+00:00"
+  },
+  "frames": {
+    "rotations": {
+      "south": "rotations/south.png",
+      "south-east": "rotations/south-east.png",
+      "east": "rotations/east.png",
+      "north-east": "rotations/north-east.png",
+      "north": "rotations/north.png",
+      "north-west": "rotations/north-west.png",
+      "west": "rotations/west.png",
+      "south-west": "rotations/south-west.png"
+    },
+    "animations": {
+      "AldrichWalk-ca79f0eb": {
+        "south-west": [
+          "animations/AldrichWalk-ca79f0eb/south-west/frame_000.png",
+          "animations/AldrichWalk-ca79f0eb/south-west/frame_001.png",
+          "animations/AldrichWalk-ca79f0eb/south-west/frame_002.png",
+          "animations/AldrichWalk-ca79f0eb/south-west/frame_003.png",
+          "animations/AldrichWalk-ca79f0eb/south-west/frame_004.png",
+          "animations/AldrichWalk-ca79f0eb/south-west/frame_005.png",
+          "animations/AldrichWalk-ca79f0eb/south-west/frame_006.png",
+          "animations/AldrichWalk-ca79f0eb/south-west/frame_007.png",
+          "animations/AldrichWalk-ca79f0eb/south-west/frame_008.png",
+          "animations/AldrichWalk-ca79f0eb/south-west/frame_009.png",
+          "animations/AldrichWalk-ca79f0eb/south-west/frame_010.png"
+        ],
+        "north": [
+          "animations/AldrichWalk-ca79f0eb/north/frame_000.png",
+          "animations/AldrichWalk-ca79f0eb/north/frame_001.png",
+          "animations/AldrichWalk-ca79f0eb/north/frame_002.png",
+          "animations/AldrichWalk-ca79f0eb/north/frame_003.png",
+          "animations/AldrichWalk-ca79f0eb/north/frame_004.png",
+          "animations/AldrichWalk-ca79f0eb/north/frame_005.png",
+          "animations/AldrichWalk-ca79f0eb/north/frame_006.png",
+          "animations/AldrichWalk-ca79f0eb/north/frame_007.png",
+          "animations/AldrichWalk-ca79f0eb/north/frame_008.png",
+          "animations/AldrichWalk-ca79f0eb/north/frame_009.png",
+          "animations/AldrichWalk-ca79f0eb/north/frame_010.png"
+        ],
+        "north-west": [
+          "animations/AldrichWalk-ca79f0eb/north-west/frame_000.png",
+          "animations/AldrichWalk-ca79f0eb/north-west/frame_001.png",
+          "animations/AldrichWalk-ca79f0eb/north-west/frame_002.png",
+          "animations/AldrichWalk-ca79f0eb/north-west/frame_003.png",
+          "animations/AldrichWalk-ca79f0eb/north-west/frame_004.png",
+          "animations/AldrichWalk-ca79f0eb/north-west/frame_005.png",
+          "animations/AldrichWalk-ca79f0eb/north-west/frame_006.png",
+          "animations/AldrichWalk-ca79f0eb/north-west/frame_007.png",
+          "animations/AldrichWalk-ca79f0eb/north-west/frame_008.png",
+          "animations/AldrichWalk-ca79f0eb/north-west/frame_009.png",
+          "animations/AldrichWalk-ca79f0eb/north-west/frame_010.png"
+        ],
+        "north-east": [
+          "animations/AldrichWalk-ca79f0eb/north-east/frame_000.png",
+          "animations/AldrichWalk-ca79f0eb/north-east/frame_001.png",
+          "animations/AldrichWalk-ca79f0eb/north-east/frame_002.png",
+          "animations/AldrichWalk-ca79f0eb/north-east/frame_003.png",
+          "animations/AldrichWalk-ca79f0eb/north-east/frame_004.png",
+          "animations/AldrichWalk-ca79f0eb/north-east/frame_005.png",
+          "animations/AldrichWalk-ca79f0eb/north-east/frame_006.png",
+          "animations/AldrichWalk-ca79f0eb/north-east/frame_007.png",
+          "animations/AldrichWalk-ca79f0eb/north-east/frame_008.png",
+          "animations/AldrichWalk-ca79f0eb/north-east/frame_009.png",
+          "animations/AldrichWalk-ca79f0eb/north-east/frame_010.png"
+        ],
+        "south": [
+          "animations/AldrichWalk-ca79f0eb/south/frame_000.png",
+          "animations/AldrichWalk-ca79f0eb/south/frame_001.png",
+          "animations/AldrichWalk-ca79f0eb/south/frame_002.png",
+          "animations/AldrichWalk-ca79f0eb/south/frame_003.png",
+          "animations/AldrichWalk-ca79f0eb/south/frame_004.png",
+          "animations/AldrichWalk-ca79f0eb/south/frame_005.png",
+          "animations/AldrichWalk-ca79f0eb/south/frame_006.png",
+          "animations/AldrichWalk-ca79f0eb/south/frame_007.png",
+          "animations/AldrichWalk-ca79f0eb/south/frame_008.png",
+          "animations/AldrichWalk-ca79f0eb/south/frame_009.png",
+          "animations/AldrichWalk-ca79f0eb/south/frame_010.png"
+        ],
+        "east": [
+          "animations/AldrichWalk-ca79f0eb/east/frame_000.png",
+          "animations/AldrichWalk-ca79f0eb/east/frame_001.png",
+          "animations/AldrichWalk-ca79f0eb/east/frame_002.png",
+          "animations/AldrichWalk-ca79f0eb/east/frame_003.png",
+          "animations/AldrichWalk-ca79f0eb/east/frame_004.png",
+          "animations/AldrichWalk-ca79f0eb/east/frame_005.png",
+          "animations/AldrichWalk-ca79f0eb/east/frame_006.png",
+          "animations/AldrichWalk-ca79f0eb/east/frame_007.png",
+          "animations/AldrichWalk-ca79f0eb/east/frame_008.png",
+          "animations/AldrichWalk-ca79f0eb/east/frame_009.png",
+          "animations/AldrichWalk-ca79f0eb/east/frame_010.png"
+        ],
+        "west": [
+          "animations/AldrichWalk-ca79f0eb/west/frame_000.png",
+          "animations/AldrichWalk-ca79f0eb/west/frame_001.png",
+          "animations/AldrichWalk-ca79f0eb/west/frame_002.png",
+          "animations/AldrichWalk-ca79f0eb/west/frame_003.png",
+          "animations/AldrichWalk-ca79f0eb/west/frame_004.png",
+          "animations/AldrichWalk-ca79f0eb/west/frame_005.png",
+          "animations/AldrichWalk-ca79f0eb/west/frame_006.png",
+          "animations/AldrichWalk-ca79f0eb/west/frame_007.png",
+          "animations/AldrichWalk-ca79f0eb/west/frame_008.png",
+          "animations/AldrichWalk-ca79f0eb/west/frame_009.png",
+          "animations/AldrichWalk-ca79f0eb/west/frame_010.png"
+        ],
+        "south-east": [
+          "animations/AldrichWalk-ca79f0eb/south-east/frame_000.png",
+          "animations/AldrichWalk-ca79f0eb/south-east/frame_001.png",
+          "animations/AldrichWalk-ca79f0eb/south-east/frame_002.png",
+          "animations/AldrichWalk-ca79f0eb/south-east/frame_003.png",
+          "animations/AldrichWalk-ca79f0eb/south-east/frame_004.png",
+          "animations/AldrichWalk-ca79f0eb/south-east/frame_005.png",
+          "animations/AldrichWalk-ca79f0eb/south-east/frame_006.png",
+          "animations/AldrichWalk-ca79f0eb/south-east/frame_007.png",
+          "animations/AldrichWalk-ca79f0eb/south-east/frame_008.png",
+          "animations/AldrichWalk-ca79f0eb/south-east/frame_009.png",
+          "animations/AldrichWalk-ca79f0eb/south-east/frame_010.png"
+        ]
+      },
+      "AldrichDeath-7904336b": {
+        "south": [
+          "animations/AldrichDeath-7904336b/south/frame_000.png",
+          "animations/AldrichDeath-7904336b/south/frame_001.png",
+          "animations/AldrichDeath-7904336b/south/frame_002.png",
+          "animations/AldrichDeath-7904336b/south/frame_003.png",
+          "animations/AldrichDeath-7904336b/south/frame_004.png",
+          "animations/AldrichDeath-7904336b/south/frame_005.png",
+          "animations/AldrichDeath-7904336b/south/frame_006.png",
+          "animations/AldrichDeath-7904336b/south/frame_007.png",
+          "animations/AldrichDeath-7904336b/south/frame_008.png",
+          "animations/AldrichDeath-7904336b/south/frame_009.png",
+          "animations/AldrichDeath-7904336b/south/frame_010.png"
+        ]
+      }
+    }
+  },
+  "export_version": "2.0",
+  "export_date": "2026-04-17T22:30:59.601481"
+}

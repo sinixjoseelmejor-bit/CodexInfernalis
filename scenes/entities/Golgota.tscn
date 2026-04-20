@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://golgota001"]
+
+[ext_resource type="Script" uid="uid://2rkeqk4e7plx" path="res://scenes/entities/Golgota.gd" id="1_golgota"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1upd3"]
+size = Vector2(35, 151.5)
+
+[node name="Golgota" type="CharacterBody2D" unique_id=1368035613]
+script = ExtResource("1_golgota")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1546050393]
+position = Vector2(0, -4)
+scale = Vector2(3, 3)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2101441954]
+position = Vector2(-0.5, -52.25)
+shape = SubResource("RectangleShape2D_1upd3")

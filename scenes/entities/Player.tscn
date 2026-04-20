@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://player001"]
+
+[ext_resource type="Script" path="res://scenes/entities/Player.gd" id="1_playerscript"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_body"]
+radius = 14.0
+height = 32.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_hit"]
+radius = 22.0
+
+[node name="Player" type="CharacterBody2D" unique_id=300000001]
+script = ExtResource("1_playerscript")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=300000002]
+position = Vector2(0, -4)
+scale = Vector2(1.5, 1.5)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=300000003]
+position = Vector2(0, 8)
+shape = SubResource("CapsuleShape2D_body")
+
+[node name="HitArea" type="Area2D" parent="." unique_id=300000004]
+collision_layer = 0
+collision_mask = 2
+
+[node name="HitShape" type="CollisionShape2D" parent="HitArea" unique_id=300000005]
+shape = SubResource("CircleShape2D_hit")

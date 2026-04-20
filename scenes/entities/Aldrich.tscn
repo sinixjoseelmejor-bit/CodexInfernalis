@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://ldrich001"]
+
+[ext_resource type="Script" uid="uid://mrnfvhbd5shm" path="res://scenes/entities/Aldrich.gd" id="1_aldrich"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_1"]
+radius = 16.0
+height = 36.0
+
+[node name="Aldrich" type="CharacterBody2D" unique_id=600000001]
+script = ExtResource("1_aldrich")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=600000002]
+position = Vector2(0, -4)
+scale = Vector2(1.5, 1.5)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=600000003]
+position = Vector2(0, 8)
+shape = SubResource("CapsuleShape2D_1")

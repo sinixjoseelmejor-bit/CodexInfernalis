@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://bosssoul01"]
+
+[ext_resource type="Script" path="res://scenes/entities/BossSoul.gd" id="1_soul"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_1"]
+radius = 40.0
+
+[node name="BossSoul" type="Area2D"]
+collision_layer = 0
+collision_mask = 1
+script = ExtResource("1_soul")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(1.4, 1.4)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_1")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

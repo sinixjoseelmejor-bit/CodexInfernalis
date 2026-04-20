@@ -1,0 +1,118 @@
+[gd_scene format=3 uid="uid://gameover001"]
+
+[ext_resource type="Script" path="res://scenes/ui/GameOver.gd" id="1_go"]
+[ext_resource type="FontFile" uid="uid://dppo7eddft6wh" path="res://assets/fonts/Cinzel-VariableFont_wght.ttf" id="2_cinzel"]
+[ext_resource type="FontFile" uid="uid://dm2thh3ulhwq" path="res://assets/fonts/ShareTechMono-Regular.ttf" id="3_mono"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn"]
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.72, 0.5, 1.0, 0.85)
+content_margin_left = 48.0
+content_margin_right = 48.0
+content_margin_top = 12.0
+content_margin_bottom = 12.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hover"]
+bg_color = Color(0.45, 0.2, 0.75, 0.2)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.88, 0.72, 1.0, 1.0)
+content_margin_left = 48.0
+content_margin_right = 48.0
+content_margin_top = 12.0
+content_margin_bottom = 12.0
+
+[node name="GameOver" type="CanvasLayer"]
+layer = 10
+script = ExtResource("1_go")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="BG" type="ColorRect" parent="Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.04, 0.02, 0.07, 0.88)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control"]
+layout_mode = 0
+offset_left = 710.0
+offset_top = 280.0
+offset_right = 1210.0
+offset_bottom = 800.0
+theme_override_constants/separation = 20
+
+[node name="Title" type="Label" parent="Control/VBoxContainer"]
+layout_mode = 2
+text = "VOUS ÊTES MORT"
+horizontal_alignment = 1
+theme_override_fonts/font = ExtResource("2_cinzel")
+theme_override_font_sizes/font_size = 58
+theme_override_colors/font_color = Color(0.85, 0.2, 0.3, 1.0)
+theme_override_colors/font_shadow_color = Color(0.5, 0.0, 0.1, 0.6)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_outline_size = 6
+
+[node name="Subtitle" type="Label" parent="Control/VBoxContainer"]
+layout_mode = 2
+text = "\"L'abîme a réclamé son dû.\""
+horizontal_alignment = 1
+theme_override_fonts/font = ExtResource("2_cinzel")
+theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(0.55, 0.45, 0.65, 0.85)
+
+[node name="Spacer" type="Control" parent="Control/VBoxContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 40)
+
+[node name="RestartBtn" type="Button" parent="Control/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "RECOMMENCER"
+process_mode = 3
+theme_override_fonts/font = ExtResource("3_mono")
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.88, 0.78, 1.0, 1.0)
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_hover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_btn")
+
+[node name="SelectBtn" type="Button" parent="Control/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "SÉLECTION DES PERSONNAGES"
+process_mode = 3
+theme_override_fonts/font = ExtResource("3_mono")
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.88, 0.78, 1.0, 1.0)
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_hover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_btn")
+
+[node name="QuitBtn" type="Button" parent="Control/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "QUITTER"
+process_mode = 3
+theme_override_fonts/font = ExtResource("3_mono")
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.7, 0.5, 0.8, 1.0)
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_hover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_btn")
+
+[connection signal="pressed" from="Control/VBoxContainer/RestartBtn" to="." method="_on_restart_pressed"]
+[connection signal="pressed" from="Control/VBoxContainer/SelectBtn" to="." method="_on_select_pressed"]
+[connection signal="pressed" from="Control/VBoxContainer/QuitBtn" to="." method="_on_quit_pressed"]

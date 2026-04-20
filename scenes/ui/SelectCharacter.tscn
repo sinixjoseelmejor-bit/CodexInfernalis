@@ -1,0 +1,437 @@
+[gd_scene format=3 uid="uid://bf158ilcqeewr"]
+
+[ext_resource type="Texture2D" uid="uid://vpca2wofwykk" path="res://assets/environment/BackgroundCI.png" id="1_bg"]
+[ext_resource type="Script" uid="uid://c1oearoqh8bo5" path="res://scenes/ui/SelectCharacter.gd" id="2_script"]
+[ext_resource type="FontFile" uid="uid://dppo7eddft6wh" path="res://assets/fonts/Cinzel-VariableFont_wght.ttf" id="3_cinzel"]
+[ext_resource type="FontFile" uid="uid://dm2thh3ulhwq" path="res://assets/fonts/ShareTechMono-Regular.ttf" id="4_mono"]
+[ext_resource type="Texture2D" uid="uid://s7ujimk1edlr" path="res://assets/Characters/Neophyte/NeophyteSplashart.png" id="5_splash"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_card"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.05, 0.02, 0.09, 0.82)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.55, 0.35, 0.85, 0.6)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_info"]
+content_margin_left = 32.0
+content_margin_top = 32.0
+content_margin_right = 32.0
+content_margin_bottom = 32.0
+bg_color = Color(0.04, 0.02, 0.08, 0.75)
+border_width_left = 1
+border_color = Color(0.55, 0.35, 0.85, 0.4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn"]
+content_margin_left = 40.0
+content_margin_top = 12.0
+content_margin_right = 40.0
+content_margin_bottom = 12.0
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.72, 0.5, 1, 0.85)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_hover"]
+content_margin_left = 40.0
+content_margin_top = 12.0
+content_margin_right = 40.0
+content_margin_bottom = 12.0
+bg_color = Color(0.45, 0.2, 0.75, 0.2)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.88, 0.72, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_disabled"]
+content_margin_left = 40.0
+content_margin_top = 12.0
+content_margin_right = 40.0
+content_margin_bottom = 12.0
+bg_color = Color(0.1, 0.08, 0.15, 0.5)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.35, 0.25, 0.5, 0.4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_forge_bg"]
+content_margin_left = 16.0
+content_margin_top = 12.0
+content_margin_right = 16.0
+content_margin_bottom = 12.0
+bg_color = Color(0.08, 0.05, 0.01, 0.8)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1.0, 0.75, 0.1, 0.45)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_forge_btn"]
+content_margin_left = 20.0
+content_margin_top = 8.0
+content_margin_right = 20.0
+content_margin_bottom = 8.0
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1.0, 0.75, 0.1, 0.85)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_forge_btn_hover"]
+content_margin_left = 20.0
+content_margin_top = 8.0
+content_margin_right = 20.0
+content_margin_bottom = 8.0
+bg_color = Color(0.25, 0.15, 0.0, 0.3)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1.0, 0.92, 0.3, 1.0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_reset_btn"]
+content_margin_left = 14.0
+content_margin_top = 8.0
+content_margin_right = 14.0
+content_margin_bottom = 8.0
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.8, 0.2, 0.2, 0.7)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_reset_btn_hold"]
+content_margin_left = 14.0
+content_margin_top = 8.0
+content_margin_right = 14.0
+content_margin_bottom = 8.0
+bg_color = Color(0.4, 0.05, 0.05, 0.5)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1.0, 0.3, 0.3, 1.0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nav"]
+content_margin_left = 16.0
+content_margin_top = 8.0
+content_margin_right = 16.0
+content_margin_bottom = 8.0
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.55, 0.35, 0.85, 0.5)
+
+[node name="SelectCharacter" type="Control" unique_id=870197799]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_script")
+
+[node name="BG" type="TextureRect" parent="." unique_id=100000001]
+layout_mode = 0
+offset_right = 1920.0
+offset_bottom = 1080.0
+mouse_filter = 2
+texture = ExtResource("1_bg")
+expand_mode = 1
+
+[node name="Overlay" type="ColorRect" parent="." unique_id=100000020]
+layout_mode = 0
+offset_right = 1920.0
+offset_bottom = 1080.0
+mouse_filter = 2
+color = Color(0.03, 0.01, 0.06, 0.72)
+
+[node name="Title" type="Label" parent="." unique_id=100000021]
+layout_mode = 0
+offset_left = 560.0
+offset_top = 48.0
+offset_right = 1360.0
+offset_bottom = 108.0
+theme_override_colors/font_color = Color(0.88, 0.78, 1, 1)
+theme_override_fonts/font = ExtResource("3_cinzel")
+theme_override_font_sizes/font_size = 28
+text = "CHOISIR VOTRE DESTINÉE"
+horizontal_alignment = 1
+
+[node name="Card" type="PanelContainer" parent="." unique_id=100000030]
+layout_mode = 0
+offset_left = 240.0
+offset_top = 130.0
+offset_right = 1680.0
+offset_bottom = 880.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_card")
+
+[node name="HBox" type="HBoxContainer" parent="Card" unique_id=100000031]
+layout_mode = 2
+
+[node name="PortraitContainer" type="Control" parent="Card/HBox" unique_id=100000032]
+custom_minimum_size = Vector2(560, 0)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Portrait" type="TextureRect" parent="Card/HBox/PortraitContainer" unique_id=100000033]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 560.0
+offset_bottom = 750.0
+mouse_filter = 2
+texture = ExtResource("5_splash")
+expand_mode = 3
+
+[node name="LockLabel" type="Label" parent="Card/HBox/PortraitContainer" unique_id=100000034]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 160.0
+offset_top = 300.0
+offset_right = 400.0
+offset_bottom = 400.0
+theme_override_colors/font_color = Color(0.4, 0.3, 0.55, 0.6)
+theme_override_fonts/font = ExtResource("3_cinzel")
+theme_override_font_sizes/font_size = 72
+text = "???"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="InfoPanel" type="PanelContainer" parent="Card/HBox" unique_id=100000040]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_info")
+
+[node name="VBox" type="VBoxContainer" parent="Card/HBox/InfoPanel" unique_id=100000041]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="CharName" type="Label" parent="Card/HBox/InfoPanel/VBox" unique_id=100000042]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.88, 1, 1)
+theme_override_fonts/font = ExtResource("3_cinzel")
+theme_override_font_sizes/font_size = 48
+text = "NÉOPHYTE"
+
+[node name="CharClass" type="Label" parent="Card/HBox/InfoPanel/VBox" unique_id=100000043]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 0.5, 0.8, 0.85)
+theme_override_fonts/font = ExtResource("4_mono")
+theme_override_font_sizes/font_size = 13
+text = "LA CULTISTE"
+
+[node name="Divider" type="ColorRect" parent="Card/HBox/InfoPanel/VBox" unique_id=100000044]
+custom_minimum_size = Vector2(0, 1)
+layout_mode = 2
+color = Color(0.55, 0.35, 0.85, 0.4)
+
+[node name="StatsBox" type="VBoxContainer" parent="Card/HBox/InfoPanel/VBox" unique_id=100000050]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="HPRow" type="HBoxContainer" parent="Card/HBox/InfoPanel/VBox/StatsBox" unique_id=100000051]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="StatLabel" type="Label" parent="Card/HBox/InfoPanel/VBox/StatsBox/HPRow" unique_id=100000052]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 0.5, 0.8, 0.7)
+theme_override_fonts/font = ExtResource("4_mono")
+theme_override_font_sizes/font_size = 12
+text = "VIE"
+
+[node name="StatHP" type="Label" parent="Card/HBox/InfoPanel/VBox/StatsBox/HPRow" unique_id=100000053]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.3, 0.5, 1)
+theme_override_fonts/font = ExtResource("4_mono")
+theme_override_font_sizes/font_size = 14
+text = "●●●●●"
+
+[node name="SpeedRow" type="HBoxContainer" parent="Card/HBox/InfoPanel/VBox/StatsBox" unique_id=100000054]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="StatLabel" type="Label" parent="Card/HBox/InfoPanel/VBox/StatsBox/SpeedRow" unique_id=100000055]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 0.5, 0.8, 0.7)
+theme_override_fonts/font = ExtResource("4_mono")
+theme_override_font_sizes/font_size = 12
+text = "VITESSE"
+
+[node name="StatSpeed" type="Label" parent="Card/HBox/InfoPanel/VBox/StatsBox/SpeedRow" unique_id=100000056]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4, 0.7, 1, 1)
+theme_override_fonts/font = ExtResource("4_mono")
+theme_override_font_sizes/font_size = 14
+text = "●●●○○"
+
+[node name="MagicRow" type="HBoxContainer" parent="Card/HBox/InfoPanel/VBox/StatsBox" unique_id=100000057]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="StatLabel" type="Label" parent="Card/HBox/InfoPanel/VBox/StatsBox/MagicRow" unique_id=100000058]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 0.5, 0.8, 0.7)
+theme_override_fonts/font = ExtResource("4_mono")
+theme_override_font_sizes/font_size = 12
+text = "MAGIE"
+
+[node name="StatMagic" type="Label" parent="Card/HBox/InfoPanel/VBox/StatsBox/MagicRow" unique_id=100000059]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.4, 1, 1)
+theme_override_fonts/font = ExtResource("4_mono")
+theme_override_font_sizes/font_size = 14
+text = "●●●●○"
+
+[node name="Divider2" type="ColorRect" parent="Card/HBox/InfoPanel/VBox" unique_id=100000060]
+custom_minimum_size = Vector2(0, 1)
+layout_mode = 2
+color = Color(0.55, 0.35, 0.85, 0.3)
+
+[node name="ForgePanel" type="PanelContainer" parent="Card/HBox/InfoPanel/VBox"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_forge_bg")
+
+[node name="ForgeRow" type="HBoxContainer" parent="Card/HBox/InfoPanel/VBox/ForgePanel"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="ForgeTitle" type="Label" parent="Card/HBox/InfoPanel/VBox/ForgePanel/ForgeRow"]
+layout_mode = 2
+text = "✦  GRIMOIRE ÉTERNEL"
+vertical_alignment = 1
+theme_override_fonts/font = ExtResource("4_mono")
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(1.0, 0.78, 0.2, 1.0)
+
+[node name="ForgeSpacer" type="Control" parent="Card/HBox/InfoPanel/VBox/ForgePanel/ForgeRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BossSoulsLabel" type="Label" parent="Card/HBox/InfoPanel/VBox/ForgePanel/ForgeRow"]
+unique_name_in_owner = true
+layout_mode = 2
+vertical_alignment = 1
+theme_override_fonts/font = ExtResource("4_mono")
+theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(1.0, 0.78, 0.2, 0.9)
+text = "✦ x0"
+
+[node name="GrimoireBtn" type="Button" parent="Card/HBox/InfoPanel/VBox/ForgePanel/ForgeRow"]
+unique_name_in_owner = true
+layout_mode = 2
+process_mode = 3
+text = "OUVRIR ✦"
+theme_override_fonts/font = ExtResource("4_mono")
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(1.0, 0.88, 0.3, 1.0)
+theme_override_styles/normal = SubResource("StyleBoxFlat_forge_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_forge_btn_hover")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_btn_disabled")
+theme_override_styles/focus = SubResource("StyleBoxFlat_forge_btn")
+
+[node name="CharLore" type="Label" parent="Card/HBox/InfoPanel/VBox" unique_id=100000061]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.55, 0.48, 0.68, 0.85)
+theme_override_fonts/font = ExtResource("3_cinzel")
+theme_override_font_sizes/font_size = 13
+text = "\"Appelée par l'abîme, elle a tout sacrifié
+pour maîtriser les flammes infernales.\""
+autowrap_mode = 3
+
+[node name="Spacer" type="Control" parent="Card/HBox/InfoPanel/VBox" unique_id=100000062]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ConfirmBtn" type="Button" parent="Card/HBox/InfoPanel/VBox" unique_id=100000063]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.88, 0.78, 1, 1)
+theme_override_fonts/font = ExtResource("4_mono")
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_btn_disabled")
+theme_override_styles/focus = SubResource("StyleBoxFlat_btn")
+text = "ENTRER DANS L'ABÎME"
+
+[node name="NavRow" type="HBoxContainer" parent="." unique_id=100000070]
+layout_mode = 0
+offset_left = 760.0
+offset_top = 900.0
+offset_right = 1160.0
+offset_bottom = 960.0
+theme_override_constants/separation = 24
+alignment = 1
+
+[node name="PrevBtn" type="Button" parent="NavRow" unique_id=100000071]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.55, 1, 0.9)
+theme_override_fonts/font = ExtResource("4_mono")
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_nav")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_nav")
+text = "◄"
+
+[node name="NavDots" type="Label" parent="NavRow" unique_id=100000072]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 0.5, 0.8, 0.8)
+theme_override_fonts/font = ExtResource("4_mono")
+theme_override_font_sizes/font_size = 14
+text = "◆ ◇ ◇"
+vertical_alignment = 1
+
+[node name="NextBtn" type="Button" parent="NavRow" unique_id=100000073]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.55, 1, 0.9)
+theme_override_fonts/font = ExtResource("4_mono")
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_nav")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_nav")
+text = "►"
+
+[node name="BackButton" type="Button" parent="." unique_id=100000008]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 40.0
+offset_right = 160.0
+offset_bottom = 80.0
+theme_override_colors/font_color = Color(0.6, 0.5, 0.75, 0.8)
+theme_override_fonts/font = ExtResource("4_mono")
+theme_override_font_sizes/font_size = 11
+theme_override_styles/normal = SubResource("StyleBoxFlat_nav")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_nav")
+text = "< RETOUR"
+
+[connection signal="pressed" from="Card/HBox/InfoPanel/VBox/ForgePanel/ForgeRow/GrimoireBtn" to="." method="_on_open_grimoire"]
+[connection signal="pressed" from="Card/HBox/InfoPanel/VBox/ConfirmBtn" to="." method="_on_character_selected"]
+[connection signal="pressed" from="NavRow/PrevBtn" to="." method="_on_prev_pressed"]
+[connection signal="pressed" from="NavRow/NextBtn" to="." method="_on_next_pressed"]
+[connection signal="pressed" from="BackButton" to="." method="_on_back_pressed"]

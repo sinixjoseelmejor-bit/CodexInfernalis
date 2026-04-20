@@ -1,0 +1,248 @@
+[gd_scene format=3 uid="uid://hud001"]
+
+[ext_resource type="Script" uid="uid://cglkh4lmfkb62" path="res://scenes/ui/HUD.gd" id="1_hud"]
+[ext_resource type="FontFile" uid="uid://dppo7eddft6wh" path="res://assets/fonts/Cinzel-VariableFont_wght.ttf" id="2_cinzel"]
+[ext_resource type="FontFile" uid="uid://dm2thh3ulhwq" path="res://assets/fonts/ShareTechMono-Regular.ttf" id="3_mono"]
+[ext_resource type="Texture2D" uid="uid://cmlumyem1apkf" path="res://assets/pickups/KeyChest.png" id="4_key"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+content_margin_left = 12.0
+content_margin_top = 8.0
+content_margin_right = 12.0
+content_margin_bottom = 8.0
+bg_color = Color(0.04, 0.02, 0.08, 0.72)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.5, 0.3, 0.8, 0.5)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_key"]
+content_margin_left = 8.0
+content_margin_top = 4.0
+content_margin_right = 8.0
+content_margin_bottom = 4.0
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.72, 0.5, 1, 0.9)
+
+[node name="HUD" type="CanvasLayer" unique_id=1075097417]
+layer = 2
+script = ExtResource("1_hud")
+
+[node name="Control" type="Control" parent="." unique_id=982670665]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HPHearts" type="HBoxContainer" parent="Control" unique_id=520459756]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 319.0
+offset_bottom = 82.0
+theme_override_constants/separation = 2
+
+[node name="LevelPanel" type="PanelContainer" parent="Control" unique_id=641433268]
+layout_mode = 0
+offset_left = 840.0
+offset_top = 20.0
+offset_right = 1080.0
+offset_bottom = 68.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="LevelLabel" type="Label" parent="Control/LevelPanel" unique_id=599341724]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.88, 0.78, 1, 1)
+theme_override_fonts/font = ExtResource("2_cinzel")
+theme_override_font_sizes/font_size = 20
+text = "NIVEAU  1"
+horizontal_alignment = 1
+
+[node name="TimerPanel" type="PanelContainer" parent="Control" unique_id=1517120062]
+layout_mode = 0
+offset_left = 860.0
+offset_top = 76.0
+offset_right = 1060.0
+offset_bottom = 118.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="TimerLabel" type="Label" parent="Control/TimerPanel" unique_id=263520382]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.75, 0.3, 1)
+theme_override_fonts/font = ExtResource("3_mono")
+theme_override_font_sizes/font_size = 18
+text = "1:30"
+horizontal_alignment = 1
+
+[node name="SoulsPanel" type="PanelContainer" parent="Control" unique_id=1212355652]
+layout_mode = 0
+offset_left = 1600.0
+offset_top = 20.0
+offset_right = 1900.0
+offset_bottom = 100.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="VBox" type="VBoxContainer" parent="Control/SoulsPanel" unique_id=1553583350]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="SoulsTitle" type="Label" parent="Control/SoulsPanel/VBox" unique_id=1174734493]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.55, 0.45, 0.7, 0.8)
+theme_override_fonts/font = ExtResource("3_mono")
+theme_override_font_sizes/font_size = 10
+text = "ÂMES PURIFIÉES"
+
+[node name="SoulsCount" type="Label" parent="Control/SoulsPanel/VBox" unique_id=1908693047]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.55, 1, 1)
+theme_override_fonts/font = ExtResource("2_cinzel")
+theme_override_font_sizes/font_size = 22
+text = "0"
+
+[node name="KeysCountPanel" type="PanelContainer" parent="Control" unique_id=180041947]
+layout_mode = 0
+offset_left = 1600.0
+offset_top = 108.0
+offset_right = 1900.0
+offset_bottom = 148.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="KeysHBox" type="HBoxContainer" parent="Control/KeysCountPanel" unique_id=1191596570]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="KeyIcon" type="TextureRect" parent="Control/KeysCountPanel/KeysHBox" unique_id=800790123]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+texture = ExtResource("4_key")
+stretch_mode = 5
+
+[node name="KeysCount" type="Label" parent="Control/KeysCountPanel/KeysHBox" unique_id=2000095318]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.82, 0.35, 1)
+theme_override_fonts/font = ExtResource("3_mono")
+theme_override_font_sizes/font_size = 14
+text = "x0"
+vertical_alignment = 1
+
+[node name="ItemsBar" type="PanelContainer" parent="Control" unique_id=1174722895]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_left = 20.0
+offset_top = 108.0
+offset_right = 238.0
+offset_bottom = 376.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="VBox" type="VBoxContainer" parent="Control/ItemsBar" unique_id=206050808]
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="ItemsTitle" type="Label" parent="Control/ItemsBar/VBox" unique_id=2065288141]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.55, 0.45, 0.7, 0.8)
+theme_override_fonts/font = ExtResource("3_mono")
+theme_override_font_sizes/font_size = 9
+text = "OBJETS"
+
+[node name="ItemsFlow" type="HBoxContainer" parent="Control/ItemsBar/VBox" unique_id=1297455820]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="KeysPanel" type="VBoxContainer" parent="Control" unique_id=2109952140]
+layout_mode = 0
+offset_left = 1700.0
+offset_top = 810.0
+offset_right = 1900.0
+offset_bottom = 1050.0
+theme_override_constants/separation = 10
+
+[node name="SlotA" type="HBoxContainer" parent="Control/KeysPanel" unique_id=1592209254]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="KeyBox" type="PanelContainer" parent="Control/KeysPanel/SlotA" unique_id=20976645]
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_key")
+
+[node name="Key" type="Label" parent="Control/KeysPanel/SlotA/KeyBox" unique_id=1551269396]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.88, 0.78, 1, 1)
+theme_override_fonts/font = ExtResource("3_mono")
+theme_override_font_sizes/font_size = 14
+text = "A"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label" type="Label" parent="Control/KeysPanel/SlotA" unique_id=11099070]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.62, 0.85, 0.9)
+theme_override_fonts/font = ExtResource("3_mono")
+theme_override_font_sizes/font_size = 11
+text = "ATT. FORTE"
+
+[node name="SlotR" type="HBoxContainer" parent="Control/KeysPanel" unique_id=862278430]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="KeyBox" type="PanelContainer" parent="Control/KeysPanel/SlotR" unique_id=1633047604]
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_key")
+
+[node name="Key" type="Label" parent="Control/KeysPanel/SlotR/KeyBox" unique_id=84407252]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.88, 0.78, 1, 1)
+theme_override_fonts/font = ExtResource("3_mono")
+theme_override_font_sizes/font_size = 14
+text = "R"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label" type="Label" parent="Control/KeysPanel/SlotR" unique_id=465973767]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.62, 0.85, 0.9)
+theme_override_fonts/font = ExtResource("3_mono")
+theme_override_font_sizes/font_size = 11
+text = "ULTIME"
+
+[node name="SlotF" type="HBoxContainer" parent="Control/KeysPanel" unique_id=821503372]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="KeyBox" type="PanelContainer" parent="Control/KeysPanel/SlotF" unique_id=583320387]
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_key")
+
+[node name="Key" type="Label" parent="Control/KeysPanel/SlotF/KeyBox" unique_id=966806806]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.88, 0.78, 1, 1)
+theme_override_fonts/font = ExtResource("3_mono")
+theme_override_font_sizes/font_size = 14
+text = "F"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label" type="Label" parent="Control/KeysPanel/SlotF" unique_id=673446228]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.62, 0.85, 0.9)
+theme_override_fonts/font = ExtResource("3_mono")
+theme_override_font_sizes/font_size = 11
+text = "OBJET"

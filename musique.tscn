@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://bwv8ce8k46tb0"]
+
+[ext_resource type="AudioStream" path="res://sounds/Beneath_the_Grey_Arch.mp3" id="1_qpshs"]
+
+[node name="Musique" type="Node2D" unique_id=620283829]
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=114527402]
+stream = ExtResource("1_qpshs")

@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://brutus001"]
+
+[ext_resource type="Script" path="res://scenes/entities/Brutus.gd" id="1_brutus"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_1"]
+radius = 18.0
+height = 40.0
+
+[node name="Brutus" type="CharacterBody2D"]
+script = ExtResource("1_brutus")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -4)
+scale = Vector2(1.2, 1.2)
+
+[node name="CollisionPolygon2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 8)
+shape = SubResource("CapsuleShape2D_1")

@@ -1,0 +1,130 @@
+[gd_scene format=3 uid="uid://bu4jqkl4d7swh"]
+
+[ext_resource type="Texture2D" uid="uid://vpca2wofwykk" path="res://assets/environment/BackgroundCI.png" id="1_bg"]
+[ext_resource type="Script" uid="uid://ch43h48j8wqa3" path="res://scenes/ui/MainMenu.gd" id="2_mainmenu"]
+[ext_resource type="FontFile" uid="uid://dppo7eddft6wh" path="res://assets/fonts/Cinzel-VariableFont_wght.ttf" id="3_cinzel"]
+[ext_resource type="FontFile" uid="uid://dm2thh3ulhwq" path="res://assets/fonts/ShareTechMono-Regular.ttf" id="4_mono"]
+[ext_resource type="AudioStream" uid="uid://d0qvti30ienfj" path="res://sounds/musique/Beneath_the_Grey_Arch.mp3" id="5_xpiny"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_normal"]
+content_margin_left = 48.0
+content_margin_top = 14.0
+content_margin_right = 48.0
+content_margin_bottom = 14.0
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.72, 0.5, 1, 0.85)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pressed"]
+content_margin_left = 48.0
+content_margin_top = 14.0
+content_margin_right = 48.0
+content_margin_bottom = 14.0
+bg_color = Color(0.55, 0.25, 0.9, 0.25)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 0.88, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hover"]
+content_margin_left = 48.0
+content_margin_top = 14.0
+content_margin_right = 48.0
+content_margin_bottom = 14.0
+bg_color = Color(0.45, 0.2, 0.75, 0.18)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.88, 0.72, 1, 1)
+
+[node name="Control" type="Control" unique_id=586120030]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_mainmenu")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1605426753]
+layout_mode = 0
+offset_right = 1920.0
+offset_bottom = 1080.0
+mouse_filter = 2
+texture = ExtResource("1_bg")
+expand_mode = 1
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=79820277]
+layout_mode = 0
+offset_right = 1920.0
+offset_bottom = 1080.0
+mouse_filter = 2
+color = Color(0.04, 0.02, 0.07, 0.78)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=386348491]
+layout_mode = 0
+offset_left = 460.0
+offset_top = 260.0
+offset_right = 1460.0
+offset_bottom = 720.0
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="VBoxContainer" unique_id=100000001]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.88, 1, 1)
+theme_override_colors/font_shadow_color = Color(0.6, 0.2, 1, 0.6)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/shadow_outline_size = 4
+theme_override_fonts/font = ExtResource("3_cinzel")
+theme_override_font_sizes/font_size = 68
+text = "CODEX INFERNALIS"
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="VBoxContainer" unique_id=100000002]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.62, 0.57, 0.72, 0.9)
+theme_override_fonts/font = ExtResource("4_mono")
+theme_override_font_sizes/font_size = 14
+text = "ARENA SHOOTER — ROGUE-LITE"
+horizontal_alignment = 1
+
+[node name="Tagline" type="RichTextLabel" parent="VBoxContainer" unique_id=100000003]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+theme_override_colors/default_color = Color(0.55, 0.5, 0.65, 0.85)
+theme_override_fonts/normal_font = ExtResource("3_cinzel")
+theme_override_font_sizes/normal_font_size = 13
+bbcode_enabled = true
+text = "[center][i]\"L'abîme réclame ses sacrifices.\"[/i][/center]"
+fit_content = true
+scroll_active = false
+
+[node name="Spacer" type="Control" parent="VBoxContainer" unique_id=100000004]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+
+[node name="StartButton" type="Button" parent="VBoxContainer" unique_id=100000005]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.88, 0.78, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 0.95, 1, 1)
+theme_override_fonts/font = ExtResource("4_mono")
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxFlat_normal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_hover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_normal")
+text = "ENTRER DANS L'ABÎME"
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1060384943]
+stream = ExtResource("5_xpiny")
+volume_db = -40.141
+autoplay = true
+
+[connection signal="pressed" from="VBoxContainer/StartButton" to="." method="_on_button_pressed"]

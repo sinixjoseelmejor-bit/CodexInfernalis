@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://golgotaorb01"]
+
+[ext_resource type="Script" uid="uid://07b8k45qwdko" path="res://scenes/entities/GolgotaOrb.gd" id="1_orb"]
+[ext_resource type="Texture2D" uid="uid://bao8h74bkvt8" path="res://assets/projectiles/GolgotaOrb.png" id="2_fire"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_1"]
+radius = 18.0
+
+[node name="GolgotaOrb" type="Area2D" unique_id=1008843162]
+collision_layer = 0
+script = ExtResource("1_orb")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1536060168]
+modulate = Color(0.55, 0.1, 1, 1)
+scale = Vector2(2.4, 2.4)
+texture = ExtResource("2_fire")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1924530984]
+shape = SubResource("CircleShape2D_1")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
