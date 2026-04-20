@@ -7,14 +7,14 @@ const BASE_SPAWN_INTERVAL  := 1.00
 const MIN_SPAWN_INTERVAL   := 0.60
 const BRUTUS_BASE_INTERVAL := 22.0
 const BRUTUS_MIN_INTERVAL  := 9.0
-const ROUND_DURATION       := 40.0
+const ENEMY_CAP            := 40
 
 const ARENA_CENTER := Vector2(1016, 517)
 
 var _spawn_timer  := 0.0
 var _brutus_timer := 0.0
 var _keys         := 0
-var _round_timer  := ROUND_DURATION
+var _round_timer  := 30.0
 var _level        := 1
 var _boss_spawned := false
 
@@ -73,7 +73,7 @@ func _cheat_skip_to_boss() -> void:
 		e.queue_free()
 	_level        = 7
 	_boss_spawned = false
-	_round_timer  = ROUND_DURATION
+	_round_timer  = _round_duration()
 	_spawn_timer  = 0.0
 	_brutus_timer = 0.0
 	var hud := get_tree().get_first_node_in_group("hud")
@@ -87,8 +87,9 @@ func _process(delta: float) -> void:
 		_spawn_timer += delta
 		if _spawn_timer >= _spawn_interval():
 			_spawn_timer = 0.0
-			for i in _spawn_count():
-				_spawn_aldrich()
+			if get_tree().get_nodes_in_group("enemies").size() < ENEMY_CAP:
+				for i in _spawn_count():
+					_spawn_aldrich()
 
 	if _level >= 2 and _level < 7:
 		_brutus_timer += delta
@@ -111,6 +112,15 @@ func _process(delta: float) -> void:
 	if hud:
 		hud.refresh_timer(int(ceil(_round_timer)))
 
+func _round_duration() -> float:
+	match _level:
+		1: return 30.0
+		2: return 33.0
+		3: return 36.0
+		4: return 40.0
+		5: return 44.0
+		_: return 50.0
+
 func _spawn_interval() -> float:
 	return max(MIN_SPAWN_INTERVAL, BASE_SPAWN_INTERVAL * pow(0.74, _level - 1))
 
@@ -118,6 +128,8 @@ func _brutus_interval() -> float:
 	return max(BRUTUS_MIN_INTERVAL, BRUTUS_BASE_INTERVAL - (_level - 2) * 1.5)
 
 func _spawn_count() -> int:
+	if _level >= 6: return 3
+	if _level >= 4: return 2
 	return 1
 
 func _edge_pos() -> Vector2:
@@ -130,8 +142,8 @@ func _edge_pos() -> Vector2:
 func _spawn_aldrich() -> void:
 	var a := ALDRICH.instantiate()
 	add_child(a)
-	a.key_drop_chance = max(0.03, 0.15 - (_level - 1) * 0.024)
-	a.hp = int(3 * pow(1.35, _level - 1))
+	a.key_drop_chance = max(0.08, 0.15 - (_level - 1) * 0.024)
+	a.hp = int(2 * pow(1.35, _level - 1))
 	a.died.connect(_on_enemy_died)
 	a.position = _edge_pos()
 
@@ -176,17 +188,17 @@ func _on_enemy_died() -> void:
 func _on_round_continue(remaining_keys: int) -> void:
 	_keys = remaining_keys
 	_level += 1
-	_round_timer  = ROUND_DURATION
+	_round_timer  = _round_duration()
 	_spawn_timer  = 0.0
 	_brutus_timer = 0.0
 	_boss_spawned = false
 	$Player.global_position = Vector2(1016, 517)
-	$Player.hp = PlayerData.max_hp
+	$Player.revive()
 	var hud := get_tree().get_first_node_in_group("hud")
 	if hud:
 		hud.refresh_hp(PlayerData.max_hp, PlayerData.max_hp)
 		hud.refresh_level(_level)
-		hud.refresh_timer(int(ROUND_DURATION))
+		hud.refresh_timer(int(_round_duration()))
 		hud.refresh_keys(_keys)
 		hud.refresh_souls(PlayerData.souls)
 		hud.refresh_items()

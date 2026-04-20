@@ -1,0 +1,320 @@
+CODEX INFERNALIS — DOCUMENTATION DU SYSTÈME ACTUEL
+Généré le 2026-04-20
+=======================================================
+
+
+═══════════════════════════════════════════════════════
+1. BOUCLE DE JEU
+═══════════════════════════════════════════════════════
+
+Le joueur traverse des vagues de 40 secondes (niveaux 1 à 6), puis affronte un boss au niveau 7.
+Entre chaque vague, un écran de shop permet d'acheter des items avec des clés et d'améliorer
+ses stats avec des âmes. Une run complète demande 7 niveaux.
+
+Les âmes gagnées en run sont conservées entre les runs pour upgrader les stats.
+Les items sont réinitialisés à chaque run.
+Les skills permanents (Forge Éternelle) sont débloqués avec des âmes de boss (drop du boss).
+
+
+═══════════════════════════════════════════════════════
+2. STATS DU JOUEUR
+═══════════════════════════════════════════════════════
+
+STATS DE BASE (sans aucun upgrade ni item) :
+  HP max      : 5
+  Dégâts      : 1
+  Vitesse     : 275 px/s
+  Cadence tir : 0.10s par tir (actuellement — voir note)
+
+NOTE IMPORTANT : la cadence de base a été modifiée à 0.10s (10 tirs/s) mais le plancher
+est toujours à 0.25s, ce qui rend les upgrades de cadence inutiles. À corriger.
+
+FORMULE DE CALCUL FINALE :
+  HP max  = (5 + lvl_hp×2 + flat_hp) × (1 + pct_hp)
+  Dégâts  = (1 + lvl_damage + flat_dmg) × (1 + pct_dmg)
+  Vitesse = (275 + lvl_speed×20 + flat_spd) × (1 + pct_spd)
+  Cadence = max(0.25, (base_cd + flat_cd) × (1 - pct_cd))
+
+UPGRADES DE RUN (shop entre les vagues) :
+  Coûts : 10 → 25 → 50 → 100 → 200 âmes (5 niveaux max)
+  HP      : +2 HP max par niveau
+  Dégâts  : +1 dégât par niveau
+  Vitesse : +20 px/s par niveau
+  Cadence : -0.09s par niveau
+
+INVINCIBILITÉ APRÈS COUP :
+  Durée de base : 0.5s
+  Bonus phantom_step : +1.0s par stack
+
+
+═══════════════════════════════════════════════════════
+3. SYSTÈME DE TIR DU JOUEUR
+═══════════════════════════════════════════════════════
+
+COMPORTEMENT :
+  - Tir automatique vers l'ennemi le plus proche dans un rayon de 400px
+  - Si aucun ennemi dans le rayon : le joueur ne tire pas
+  - Clic souris : override l'auto-aim vers le curseur pendant 2 secondes
+  - Les ennemis morts (dead = true) sont ignorés par l'auto-aim même avant leur disparition
+
+PROJECTILE (Fireball) :
+  Vitesse de base   : 1200 px/s
+  Vitesse vélocité  : 2020 px/s (skill Forge Éternelle)
+  Portée max        : 400 px (auto-destruction)
+  Pénétration       : 1 ennemi par défaut, 3 avec skill Pénétration
+  Dégâts            : PlayerData.damage (modifié par enrage)
+
+DÉGÂTS EFFECTIFS :
+  Normal  : PlayerData.damage × 1.0
+  Enragé  : PlayerData.damage × 1.5 (pendant 2s après un kill, si rage_ring)
+
+AFFICHAGE DU RAYON (debug) :
+  Maintenir ALT : affiche le cercle d'auto-aim en bleu translucide
+
+
+═══════════════════════════════════════════════════════
+4. COMPÉTENCES ACTIVES PASSIVES DU JOUEUR
+═══════════════════════════════════════════════════════
+
+Ces effets se déclenchent automatiquement selon les items/skills possédés :
+
+  fire_boots (item rare)
+    → Traînée de feu toutes les 0.15s quand le joueur se déplace
+    → Chaque traînée dure 2.0s, inflige 1 dégât toutes les 0.5s
+    → ~4 dégâts max si un ennemi reste dedans
+
+  auto_grenade (item épique)
+    → Grenade lancée automatiquement toutes les 8.0s
+    → Cible l'ennemi le plus proche, ou position aléatoire (±300px)
+    → Explose après 0.9s, rayon 140px, 3 dégâts
+
+  storm_ring (item épique)
+    → Salve de 8 projectiles omnidirectionnels toutes les 15.0s
+    → Se stack : 2 anneaux = 16 projectiles par salve
+
+  tempete_acier (skill Forge Éternelle — final)
+    → Salve de 12 projectiles omnidirectionnels toutes les 10.0s
+
+  thorn_shield (item rare)
+    → Renvoie ceil(dégât × 15% × stacks) à tous les ennemis dans un rayon de 280px
+
+  vampire_amulet (item rare)
+    → Soigne (dégâts_infligés × 1% × stacks) — accumulé jusqu'à 1 HP entier
+
+  phantom_step (item rare)
+    → +1.0s d'invincibilité par stack après chaque coup reçu
+
+  rage_ring (item rare)
+    → Après chaque kill ennemi : dégâts ×1.5 pendant 2.0s
+
+
+═══════════════════════════════════════════════════════
+5. FORGE ÉTERNELLE — SKILLS PERMANENTS
+═══════════════════════════════════════════════════════
+
+Coût : 1 âme de boss par nœud
+Arbre (personnage Néophyte) :
+
+  [DOUBLE TIR]           — 2 projectiles côte à côte (+18px perpendiculaire)
+       ↙               ↘
+  [PÉNÉTRATION]       [VÉLOCITÉ]
+  traverse 3 ennemis  projectiles +68% plus vite (1200→2020 px/s)
+       ↘               ↙
+  [EXPLOSION]         [RICOCHET]
+  explosion 80px      rebond vers ennemi le plus proche (<400px)
+       ↘               ↙
+      [TEMPÊTE D'ACIER]
+      12 tirs omni / 10s
+
+
+═══════════════════════════════════════════════════════
+6. ITEMS
+═══════════════════════════════════════════════════════
+
+COMMUNS (rareté 0 — 60% de chance, coût 1 clé) :
+  ampoule_vie     : +2 HP max
+  coeur_pierre    : +3 HP max
+  bouclier_bois   : +4 HP max
+  dent_loup       : +1 dégât
+  epee_courte     : +1 dégât
+  pierre_aceree   : +2 dégâts
+  plume_rapide    : +15 vitesse
+  bottes_course   : +12 vitesse
+  anneau_vitesse  : +20 vitesse
+  bague_tir       : -0.08s cadence tir (flat)
+
+RARES (rareté 1 — 30% de chance, coût 2 clés) :
+  vampire_amulet  : +8% HP max | soigne 2% des dégâts infligés
+  fire_boots      : +12% vitesse | traînée de feu
+  thorn_shield    : +8% dégâts | renvoie 15% des dégâts reçus
+  rage_ring       : +8% dégâts | +50% dégâts 2s après un kill
+  phantom_step    : +12% vitesse | +1.5s invincibilité après coup
+
+ÉPIQUES (rareté 2 — 10% de chance, coût 3 clés) :
+  auto_grenade    : +15% dégâts | grenade auto toutes les 8s
+  storm_ring      : +12% cadence | salve de 8 tirs toutes les 15s (stack)
+  soul_harvester  : +20% HP max | double les âmes gagnées par kill
+
+
+═══════════════════════════════════════════════════════
+7. ENNEMIS
+═══════════════════════════════════════════════════════
+
+─── ALDRICH (niveaux 1 à 6) ───
+  HP de base     : 3 (formule : int(3 × 1.35^(niveau-1)))
+  HP au niv. 1   : 3
+  HP au niv. 3   : ~5
+  HP au niv. 6   : ~11
+  Vitesse        : 90 px/s (errance : 45 px/s)
+  Dégâts         : 1 (contact)
+  Drop clé       : 17% au niv.1, décroit : max(3%, 15% - (niv-1)×2.4%)
+  Comportement   : Fonce vers le joueur sans limite de portée
+
+─── BRUTUS (niveaux 2 à 6) ───
+  HP de base     : 15 (formule : 15 + (niveau-2)×6)
+  HP au niv. 2   : 15
+  HP au niv. 6   : 39
+  Vitesse        : 55 px/s
+  Portée de tir  : 500 px
+  Cadence        : 0.6s
+  Dégâts         : 1 par balle (vitesse balle : 420 px/s, durée 3s)
+  Comportement   : S'approche et tire sur le joueur dans sa portée
+
+─── GOLGOTA (boss — niveau 7) ───
+  HP total       : 700
+  Dégâts laser   : 2
+  Dégâts orbes   : 1
+  Dégâts contact : 2
+
+  Phase 3 (HP > 66%) :
+    Vitesse : 35 px/s
+    Laser   : 1 (central, suit le joueur), CD 6.0s, télégraphe 1.2s
+    Orbes   : 5 par vague, CD 2.5s, vitesse 460 px/s, durée 6s
+    Spawn   : aucun
+
+  Phase 2 (HP 33–66%) :
+    Vitesse : 48 px/s
+    Lasers  : 3 (central + ±40°), CD 4.5s, télégraphe 0.9s
+    Orbes   : 8 par vague, CD 2.0s
+    Spawn   : 3 Aldrich toutes les 12s
+
+  Phase 1 (HP < 33%) :
+    Vitesse : 60 px/s
+    Lasers  : 5 (central + ±30° + ±65°), CD 3.0s, télégraphe 0.6s
+    Orbes   : 12 par vague, CD 1.5s
+    Spawn   : 5 Aldrich toutes les 7s
+
+  Détail laser :
+    - Seul le laser central (index 0) suit le joueur pendant le télégraphe
+    - Les lasers latéraux se figent dans leur direction initiale
+    - Phase active du laser : 0.5s
+    - Longueur : 950px
+
+  Détail orbes :
+    - Spawn en cercle (150–420px autour du boss)
+    - Attendent 1.8s statiques, puis foncent vers le joueur
+
+
+═══════════════════════════════════════════════════════
+8. SYSTÈME DE VAGUES ET SPAWN
+═══════════════════════════════════════════════════════
+
+Durée d'une vague : 40 secondes
+Fin de vague : tous les ennemis sont supprimés, le shop s'ouvre
+
+INTERVALLE SPAWN ALDRICH :
+  Formule  : max(0.60, 1.00 × 0.74^(niveau-1))
+  Niveau 1 : 1.00s
+  Niveau 2 : ~0.74s
+  Niveau 3 : ~0.55s
+  Niveau 4 : ~0.41s
+  Niveau 5 : ~0.30s
+  Niveau 6 : ~0.22s (≈ min 0.60s appliqué)
+  Nombre par vague : toujours 1 Aldrich à la fois (spawn_count = 1)
+
+INTERVALLE SPAWN BRUTUS :
+  Formule  : max(9.0, 22.0 - (niveau-2) × 1.5)
+  Niveau 2 : 22.0s
+  Niveau 3 : 20.5s
+  Niveau 4 : 19.0s
+  Niveau 5 : 17.5s
+  Niveau 6 : 16.0s
+
+SPAWN EN BORDURE : les ennemis apparaissent aléatoirement sur les 4 bords de l'arène
+  Haut    : x [120, 1800], y = 110
+  Bas     : x [120, 1800], y = 940
+  Gauche  : x = 115, y [110, 940]
+  Droite  : x = 1900, y [110, 940]
+
+
+═══════════════════════════════════════════════════════
+9. ÉCONOMIE — CLÉS ET ÂMES
+═══════════════════════════════════════════════════════
+
+CLÉS :
+  Source principale : drops d'Aldrich
+  Drop rate          : 17% au niv.1, décroit jusqu'à 3% au niv.6
+  Utilisation        : ouvrir des caisses au shop
+
+CAISSES (shop) :
+  Commun  : 1 clé,  60% de chance d'apparaître, 10 items dans le pool
+  Rare    : 2 clés, 30% de chance,               5 items dans le pool
+  Épique  : 3 clés, 10% de chance,               3 items dans le pool
+  Reroll  : 30 âmes (+50 à chaque reroll suivant), ne touche pas les caisses verrouillées
+
+ÂMES DE RUN :
+  Source   : 1 âme par kill ennemi (+1 par soul_harvester possédé)
+  Usage    : Upgrade stats au shop (10→25→50→100→200 par niveau)
+  Persistance : gardées entre les runs
+
+ÂMES DE BOSS :
+  Source   : drop de Golgota à sa mort
+  Usage    : déverrouiller des nœuds dans la Forge Éternelle (1 âme/nœud)
+  Persistance : permanentes
+
+
+═══════════════════════════════════════════════════════
+10. INTERFACE (HUD)
+═══════════════════════════════════════════════════════
+
+En haut à gauche  : cœurs de vie (1 icône par HP max, plein ou vide)
+En haut au centre : timer de vague (couleur jaune/orange/rouge selon urgence), niveau
+En haut à droite  : compteur de kills total "☠ X", compteur de clés, compteur d'âmes
+En bas au centre  : barre de vie du boss (visible uniquement niveau 7, violet)
+TAB               : affiche/cache la grille des items possédés
+
+
+═══════════════════════════════════════════════════════
+11. SAUVEGARDE
+═══════════════════════════════════════════════════════
+
+Fichier : user://save.json
+Données persistantes sauvegardées :
+  - boss_souls    : âmes de boss accumulées
+  - kills_total   : total de kills depuis le début
+  - perm_skills   : skills Forge Éternelle débloqués par personnage
+  - âmes de run   : NON sauvegardées (reset à chaque run)
+  - items         : NON sauvegardés (reset après boss kill)
+  - niveaux upgrade: NON sauvegardés (reset chaque run)
+
+
+═══════════════════════════════════════════════════════
+12. CHEATS DE DÉVELOPPEMENT
+═══════════════════════════════════════════════════════
+
+  Ctrl + B : Passe directement au niveau 7 (boss)
+  Ctrl + I : Donne tous les items rares/épiques + upgrades max + 999 âmes
+  Ctrl + R : Reset tous les items et upgrades
+
+
+═══════════════════════════════════════════════════════
+13. PROBLÈMES CONNUS / À CORRIGER
+═══════════════════════════════════════════════════════
+
+  1. Cadence de tir : base_cd = 0.10 alors que le plancher est 0.25s
+     → Les upgrades de cadence et les items (-0.08s, -12%) ne servent à rien
+     → Solution recommandée : remettre base_cd = 0.85, baisser le plancher à 0.10
+
+  2. Un ancien fichier Boss.gd existe (boss alternatif avec 250 HP)
+     → Ne semble plus utilisé, à supprimer si confirmé
+

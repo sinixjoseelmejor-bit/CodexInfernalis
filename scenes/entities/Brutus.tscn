@@ -3,8 +3,8 @@
 [ext_resource type="Script" path="res://scenes/entities/Brutus.gd" id="1_brutus"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_1"]
-radius = 18.0
-height = 40.0
+radius = 24.0
+height = 55.0
 
 [node name="Brutus" type="CharacterBody2D"]
 script = ExtResource("1_brutus")

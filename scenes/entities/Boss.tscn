@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://boss001"]
+[gd_scene format=3 uid="uid://cfmtemcc7t22w"]
 
 [ext_resource type="Script" path="res://scenes/entities/Boss.gd" id="1_boss"]
 
@@ -6,14 +6,14 @@
 radius = 24.0
 height = 52.0
 
-[node name="Boss" type="CharacterBody2D"]
+[node name="Boss" type="CharacterBody2D" unique_id=619196632]
 script = ExtResource("1_boss")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1563135882]
+modulate = Color(1.2, 0.4, 0.4, 1)
 position = Vector2(0, -4)
 scale = Vector2(2.5, 2.5)
-modulate = Color(1.2, 0.4, 0.4, 1.0)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1773146795]
 position = Vector2(0, 8)
 shape = SubResource("CapsuleShape2D_1")

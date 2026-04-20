@@ -67,7 +67,11 @@ func _get_aim_dir() -> Vector2:
 			nearest_dist = d
 			nearest = e
 	if nearest:
-		return nearest.global_position - global_position
+		var bullet_speed := PlayerData.has_skill("velocite") as float * (2020.0 - 1200.0) + 1200.0
+		var to_enemy := nearest.global_position - global_position
+		var travel_time := to_enemy.length() / bullet_speed
+		var predicted := nearest.global_position + (nearest as CharacterBody2D).velocity * travel_time
+		return predicted - global_position
 	return Vector2.ZERO
 
 func _setup_animations() -> void:
@@ -268,6 +272,19 @@ func on_enemy_kill() -> void:
 		return
 	_enraged = true
 	_rage_timer = RAGE_DURATION
+
+func revive() -> void:
+	_dead             = false
+	_attacking        = false
+	_waiting_to_shoot = false
+	_iframe_timer     = 0.0
+	_fire_timer       = 0.0
+	hp                = PlayerData.max_hp
+	velocity          = Vector2.ZERO
+	$CollisionShape2D.set_deferred("disabled", false)
+	$HitArea/HitShape.set_deferred("disabled", false)
+	$AnimatedSprite2D.modulate = Color(1, 1, 1, 1)
+	$AnimatedSprite2D.play("idle_south")
 
 func _on_anim_finished() -> void:
 	var anim: String = $AnimatedSprite2D.animation

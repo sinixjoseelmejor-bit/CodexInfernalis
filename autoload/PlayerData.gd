@@ -225,7 +225,7 @@ func _recompute() -> void:
 	var base_hp  := 5 + lvl_hp * 2
 	var base_dmg := 1 + lvl_damage
 	var base_spd := 275.0 + lvl_speed * 20.0
-	var base_cd  := 0.10 - lvl_fire_cd * 0.09
+	var base_cd  := 0.85 - lvl_fire_cd * 0.09
 
 	var flat_hp  := 0
 	var flat_dmg := 0
@@ -263,4 +263,4 @@ func _recompute() -> void:
 	max_hp  = int((base_hp  + flat_hp)  * (1.0 + pct_hp))
 	damage  = int((base_dmg + flat_dmg) * (1.0 + pct_dmg))
 	speed   = (base_spd + flat_spd) * (1.0 + pct_spd)
-	fire_cd = max(0.25, (base_cd + flat_cd) * (1.0 - pct_cd))
+	fire_cd = max(0.10, (base_cd + flat_cd) * (1.0 - pct_cd))

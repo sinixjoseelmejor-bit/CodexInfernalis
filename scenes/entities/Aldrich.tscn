@@ -3,8 +3,8 @@
 [ext_resource type="Script" uid="uid://mrnfvhbd5shm" path="res://scenes/entities/Aldrich.gd" id="1_aldrich"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_1"]
-radius = 16.0
-height = 36.0
+radius = 22.0
+height = 52.0
 
 [node name="Aldrich" type="CharacterBody2D" unique_id=600000001]
 script = ExtResource("1_aldrich")
