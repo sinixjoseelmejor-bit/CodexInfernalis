@@ -1,19 +1,104 @@
 [gd_scene format=3 uid="uid://bosssoul01"]
 
-[ext_resource type="Script" path="res://scenes/entities/BossSoul.gd" id="1_soul"]
+[ext_resource type="Script" uid="uid://bsnv316r0jie" path="res://scenes/entities/BossSoul.gd" id="1_soul"]
+[ext_resource type="Texture2D" uid="uid://bbs6mxogblalw" path="res://assets/Characters/Golgota/GolgotaSoul.png" id="2_6amfe"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6amfe"]
+atlas = ExtResource("2_6amfe")
+region = Rect2(0, 0, 108, 108)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xbh2x"]
+atlas = ExtResource("2_6amfe")
+region = Rect2(108, 0, 108, 108)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ewke5"]
+atlas = ExtResource("2_6amfe")
+region = Rect2(216, 0, 108, 108)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8dyi0"]
+atlas = ExtResource("2_6amfe")
+region = Rect2(0, 108, 108, 108)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vf1pt"]
+atlas = ExtResource("2_6amfe")
+region = Rect2(108, 108, 108, 108)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_38hpj"]
+atlas = ExtResource("2_6amfe")
+region = Rect2(216, 108, 108, 108)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hljww"]
+atlas = ExtResource("2_6amfe")
+region = Rect2(0, 216, 108, 108)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7tdan"]
+atlas = ExtResource("2_6amfe")
+region = Rect2(108, 216, 108, 108)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iiqf7"]
+atlas = ExtResource("2_6amfe")
+region = Rect2(216, 216, 108, 108)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_rgoi8"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6amfe")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xbh2x")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ewke5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8dyi0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vf1pt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_38hpj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hljww")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7tdan")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iiqf7")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_1"]
-radius = 40.0
+radius = 49.31
 
-[node name="BossSoul" type="Area2D"]
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_mu0gr"]
+radius = 14.450981
+height = 72.82353
+
+[node name="BossSoul" type="Area2D" unique_id=1977438066]
+scale = Vector2(0.735, 0.735)
 collision_layer = 0
-collision_mask = 1
 script = ExtResource("1_soul")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-scale = Vector2(1.4, 1.4)
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=307205364]
+position = Vector2(-4.9999995, 5.9999995)
+scale = Vector2(0.735, 0.735)
+sprite_frames = SubResource("SpriteFrames_rgoi8")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1698797938]
+position = Vector2(-5.295, 1.96)
+scale = Vector2(0.47, 0.47)
 shape = SubResource("CircleShape2D_1")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="." unique_id=1217418146]
+position = Vector2(-4.83871, 19.354834)
+scale = Vector2(0.5, 0.5)
+shape = SubResource("CapsuleShape2D_mu0gr")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

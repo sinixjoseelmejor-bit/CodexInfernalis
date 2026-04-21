@@ -11,10 +11,10 @@ const ORB          := preload("res://scenes/entities/GolgotaOrb.tscn")
 const LASER        := preload("res://scenes/entities/GolgotaLaser.tscn")
 const BOSS_SOUL    := preload("res://scenes/entities/BossSoul.tscn")
 const ALDRICH      := preload("res://scenes/entities/Aldrich.tscn")
-const MAX_HP       := 700
+const MAX_HP       := 1000
 
 var hp     := MAX_HP
-var damage := 2
+var damage := 5
 var dead   := false
 
 var player        : Node2D = null

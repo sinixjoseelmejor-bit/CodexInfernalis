@@ -1,13 +1,10 @@
 [gd_scene format=3 uid="uid://cfmtemcc7t22w"]
 
-[ext_resource type="Script" path="res://scenes/entities/Boss.gd" id="1_boss"]
-
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_1"]
 radius = 24.0
 height = 52.0
 
 [node name="Boss" type="CharacterBody2D" unique_id=619196632]
-script = ExtResource("1_boss")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1563135882]
 modulate = Color(1.2, 0.4, 0.4, 1)
