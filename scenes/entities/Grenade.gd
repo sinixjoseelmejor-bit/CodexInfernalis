@@ -1,8 +1,7 @@
 extends Area2D
 
 const FUSE_TIME    := 0.9
-const BLAST_RADIUS := 140.0
-const DAMAGE       := 3
+const BLAST_RADIUS := 220.0
 const MOVE_SPEED   := 320.0
 const ROTATE_SPEED := 6.0
 
@@ -45,7 +44,7 @@ func _explode() -> void:
 	_exploded = true
 	for body in get_tree().get_nodes_in_group("enemies"):
 		if global_position.distance_to(body.global_position) <= BLAST_RADIUS:
-			body.take_damage(DAMAGE)
+			body.take_damage(maxi(8, PlayerData.damage * 4))
 	$Visual.hide()
 	$Explosion.show()
 	$Explosion.play("explode")

@@ -63,8 +63,9 @@ func _setup_camera() -> void:
 func _input(event: InputEvent) -> void:
 	if _dead:
 		return
-	if event is InputEventMouseButton and (event as InputEventMouseButton).pressed:
-		_mouse_override_timer = MOUSE_OVERRIDE_DUR
+	if not DisplayServer.is_touchscreen_available():
+		if event is InputEventMouseButton and (event as InputEventMouseButton).pressed:
+			_mouse_override_timer = MOUSE_OVERRIDE_DUR
 
 func _get_aim_dir() -> Vector2:
 	if PlayerData.touch_shooting and PlayerData.touch_aim_world != Vector2.ZERO:
