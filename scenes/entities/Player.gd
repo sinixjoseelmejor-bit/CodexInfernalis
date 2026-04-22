@@ -47,6 +47,18 @@ func _ready() -> void:
 	_setup_animations()
 	$AnimatedSprite2D.animation_finished.connect(_on_anim_finished)
 	$HitArea.body_entered.connect(_on_body_entered)
+	_setup_camera()
+
+func _setup_camera() -> void:
+	var cam := Camera2D.new()
+	cam.zoom = Vector2(1.2, 1.2)
+	cam.limit_left   = 0
+	cam.limit_top    = 0
+	cam.limit_right  = 1920
+	cam.limit_bottom = 1080
+	cam.position_smoothing_enabled = true
+	cam.position_smoothing_speed   = 6.0
+	add_child(cam)
 
 func _input(event: InputEvent) -> void:
 	if _dead:

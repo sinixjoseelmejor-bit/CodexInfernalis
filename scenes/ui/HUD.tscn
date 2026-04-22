@@ -173,6 +173,7 @@ offset_bottom = 1050.0
 theme_override_constants/separation = 10
 
 [node name="SlotA" type="HBoxContainer" parent="Control/KeysPanel" unique_id=1592209254]
+visible = false
 layout_mode = 2
 theme_override_constants/separation = 10
 
@@ -198,6 +199,7 @@ theme_override_font_sizes/font_size = 11
 text = "ATT. FORTE"
 
 [node name="SlotR" type="HBoxContainer" parent="Control/KeysPanel" unique_id=862278430]
+visible = false
 layout_mode = 2
 theme_override_constants/separation = 10
 
@@ -223,6 +225,7 @@ theme_override_font_sizes/font_size = 11
 text = "ULTIME"
 
 [node name="SlotF" type="HBoxContainer" parent="Control/KeysPanel" unique_id=821503372]
+visible = false
 layout_mode = 2
 theme_override_constants/separation = 10
 
