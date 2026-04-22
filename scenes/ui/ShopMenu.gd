@@ -616,6 +616,12 @@ func _on_reroll_pressed() -> void:
 
 # ── Continue ───────────────────────────────────────────────────────────────────
 
+func _unhandled_input(event: InputEvent) -> void:
+	if Engine.is_editor_hint() or not visible:
+		return
+	if event.is_action_pressed("ui_cancel"):
+		get_viewport().set_input_as_handled()
+
 func _on_continue_pressed() -> void:
 	get_tree().paused = false
 	hide()

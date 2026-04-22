@@ -6,7 +6,7 @@ const BOSS                 := preload("res://scenes/entities/Golgota.tscn")
 const KEY_SCENE            := preload("res://scenes/entities/Key.tscn")
 const ENEMY_CAP            := 45
 const KEY_DROP_CHANCE_EARLY := 0.30
-const KEY_DROP_CHANCE       := 0.12
+const KEY_DROP_CHANCE       := 0.14
 
 const ARENA_CENTER := Vector2(1016, 517)
 
@@ -141,7 +141,8 @@ func _process(delta: float) -> void:
 	_round_timer -= delta
 	if _round_timer <= 0.0:
 		_round_timer = 0.0
-		_end_round()
+		if not $ShopMenu.visible:
+			_end_round()
 		return
 	if hud:
 		hud.refresh_timer(int(ceil(_round_timer)))
@@ -257,7 +258,7 @@ func _check_disperse() -> void:
 
 func _try_drop_key(enemy: Node2D) -> void:
 	_kills_this_round += 1
-	var chance := KEY_DROP_CHANCE_EARLY if (_level == 1 and _kills_this_round <= 3) else KEY_DROP_CHANCE
+	var chance := KEY_DROP_CHANCE_EARLY if (_level <= 2 and _kills_this_round <= 5) else KEY_DROP_CHANCE
 	if randf() < chance:
 		var key := KEY_SCENE.instantiate()
 		key.global_position = enemy.global_position
