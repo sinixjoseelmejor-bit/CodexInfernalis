@@ -1,0 +1,320 @@
+CODEX INFERNALIS — PROPOSITION SCALING, ITEMS & SHOP
+Version 4 — màj post-implémentation
+=======================================================
+
+
+═══════════════════════════════════════════════════════
+1. STATS DE BASE DU JOUEUR (nouveau)
+═══════════════════════════════════════════════════════
+
+  HP de base       : 50                    ✓ IMPLÉMENTÉ
+  Dégâts de base   : 2  (au lieu de 1)    ✓ IMPLÉMENTÉ
+  Vitesse de base  : 275                   ✓ inchangé
+  Cadence de base  : 0.85s (plancher 0.10) ✓ inchangé
+  Portée de base   : 400px                 ✓ inchangé
+
+UPGRADES SHOP — HP :
+  +10 HP par niveau → max +50 HP          ✓ IMPLÉMENTÉ
+  HP max avec upgrades seuls : 50 + 50 = 100 HP
+
+UPGRADES SHOP — DÉGÂTS :
+  +1 dmg par niveau → max +5 dmg
+  Dégâts max upgrades seuls : 2 + 5 = 7 dmg
+
+ITEMS HP :
+  Commun  : +5 / +8 / +10 HP flat         ✓ IMPLÉMENTÉ
+  Rare    : +15 / +20 HP flat + % bonus
+  Épique  : +25 / +35 HP flat + % bonus
+  Avec items + upgrades, HP max réaliste en fin de run : 150-250 HP
+
+
+═══════════════════════════════════════════════════════
+2. OBJECTIF — POURQUOI LES DÉGÂTS ENNEMIS DOIVENT ÊTRE ÉLEVÉS
+═══════════════════════════════════════════════════════
+
+  Avec 50 HP de base et iframes de 0.5s :
+  Si Aldrich fait 3 dégâts → 6 dégâts/s → mort en 8s en tankant
+  C'est trop lent. Le joueur peut facilement se remettre entre deux hits.
+
+  RÈGLE : tanker 3 secondes doit coûter 30-40% des HP.
+  Cela force à se déplacer, même avec 200+ HP.
+
+  CALCUL :
+  Avec iframes 0.5s, max 2 hits/s par ennemi.
+  Pour perdre 40% de 50 HP (=20 HP) en 3s → 20 HP / 3s / 2 hits = ~3-4 dmg/hit
+  Mais avec 4 Aldrich simultanés au niv.6+ → 4 × 2 hits/s × 4 dmg = 32 dmg/s
+  Avec 200 HP (build défensif max) → mort en 6s de tanking pur. Correct.
+
+
+═══════════════════════════════════════════════════════
+3. DÉGÂTS ET HP DES ENNEMIS
+═══════════════════════════════════════════════════════
+
+──────────────────────────────────────────────────────
+ALDRICH
+──────────────────────────────────────────────────────
+
+HP — courbe :                              ✓ IMPLÉMENTÉ (base ajustée à 5)
+  Niv.1 :  5     Niv.4 : 13     Niv.7 : 34
+  Niv.2 :  7     Niv.5 : 18     Niv.8 : 46
+  Niv.3 :  9     Niv.6 : 24     Niv.9 : 62
+  Formule : int(5 * pow(1.35, _level - 1))
+
+DÉGÂTS au contact — scaling par niveau :  ✓ IMPLÉMENTÉ
+  Niv.1-3 :  5 dégâts   (apprentissage — perd 10% HP par hit)
+  Niv.4-5 :  8 dégâts   (commence à faire vraiment mal)
+  Niv.6-8 : 12 dégâts   (tanker 4s = mort avec 50 HP)
+  Niv.9   : 18 dégâts   (1-2 hits et c'est critique)
+
+  Simulation niv.6, 3 Aldrich simultanés, joueur immobile :
+  3 × 12 dmg / 0.5s = 72 dmg/s → mort en moins de 1s avec 50 HP.
+  Même avec 150 HP → mort en ~2s. Tanker = impossible.
+
+──────────────────────────────────────────────────────
+BRUTUS
+──────────────────────────────────────────────────────
+
+HP — courbe :                              ✓ IMPLÉMENTÉ
+  Niv.2 : 80     Niv.6 : 220
+  Niv.3 : 110    Niv.7 : 270
+  Niv.4 : 145    Niv.8 : 325
+  Niv.5 : 180    Niv.9 : 385
+  Formule : 80 + (_level - 2) * 43
+
+DÉGÂTS des balles — scaling par niveau :  ✓ IMPLÉMENTÉ
+  Niv.2-3 :  8 dégâts par balle
+  Niv.4-5 : 12 dégâts par balle
+  Niv.6-8 : 18 dégâts par balle
+  Niv.9   : 25 dégâts par balle
+
+  3 balles de Brutus au niv.9 = 75 dégâts.
+  Avec 200 HP → dangereux mais pas instantané.
+  Avec 50 HP → une seule salve est fatale. Esquiver est obligatoire.
+
+──────────────────────────────────────────────────────
+GOLGOTA (boss)
+──────────────────────────────────────────────────────
+
+  HP              : 1000 (actuel — à calibrer après tests)
+  Laser           : 25 dégâts    ✓ IMPLÉMENTÉ
+  Orbes           : 15 dégâts    ✓ IMPLÉMENTÉ
+  Contact direct  : 30 dégâts    ✓ IMPLÉMENTÉ
+
+  Même avec 200 HP, 2 lasers = mort si pas d'esquive.
+  Les phases du boss restent menaçantes quel que soit le build.
+
+
+═══════════════════════════════════════════════════════
+4. NOUVELLE STAT — PORTÉE (flat_range)
+═══════════════════════════════════════════════════════
+
+  Portée de base : 400px | Cap : 800px     ✓ IMPLÉMENTÉ
+  Fireball utilise : MAX_DISTANCE + PlayerData.flat_range
+
+  Commun  : +50px ou +75px
+  Rare    : +100px ou +150px
+  Épique  : +150px ou +200px
+
+  ~5-8 items portée pour atteindre le cap. Build dédié.
+
+
+═══════════════════════════════════════════════════════
+5. LISTE DES 95 ITEMS
+═══════════════════════════════════════════════════════
+
+──────────────────────────────────────────────────────
+COMMUNS — 50 items (1 à 3 stats basiques)
+──────────────────────────────────────────────────────
+
+  [HP]
+  01. Ampoule de Vie       +5 HP
+  02. Cœur de Pierre       +8 HP
+  03. Bouclier de Bois     +10 HP
+  04. Relique Osseuse      +12 HP
+  05. Fiole de Moelle      +15 HP
+  06. Suaire Déchiré       +5 HP
+  07. Bandage Maudit       +5 HP, +1 dmg
+  08. Sang Coagulé         +8 HP, +1 dmg
+  09. Os Calcifié          +10 HP, +1 dmg
+  10. Chair Reconstituée   +8 HP, +5 speed
+  11. Peau d'Écorce        +10 HP, +8 speed
+  12. Dent Creuse          +8 HP, -0.03s cd
+  13. Cristal Vital        +5 HP, -0.04s cd
+  14. Fragment d'Os        +5 HP, +50px portée
+  15. Œil de Chouette      +5 HP, +75px portée
+
+  [DÉGÂTS]
+  16. Dent de Loup         +1 dmg
+  17. Épée Courte          +1 dmg
+  18. Pierre Acérée        +2 dmg
+  19. Pointe Maudite       +3 dmg
+  20. Clou Rouillé         +1 dmg
+  21. Griffes Rouillées    +1 dmg, +10 speed
+  22. Croc Brisé           +1 dmg, +5 HP
+  23. Lame Ébréchée        +1 dmg, +5 speed
+  24. Sel Infernal         +2 dmg, +5 HP
+  25. Éclat de Silex       +2 dmg, -0.03s cd
+  26. Goudron Acide        +2 dmg, +5 speed
+  27. Rasoir Brisé         +1 dmg, -0.04s cd
+  28. Ossement Tranchant   +1 dmg, +8 HP
+  29. Encre Vive           +1 dmg, -0.04s cd
+  30. Lunette Brisée       +1 dmg, +50px portée
+
+  [VITESSE]
+  31. Plume Rapide         +15 speed
+  32. Bottes de Course     +12 speed
+  33. Anneau de Vitesse    +20 speed
+  34. Foulée Spectrale     +25 speed
+  35. Vent des Cendres     +18 speed
+  36. Élan du Damné        +12 speed
+  37. Sandales Légères     +10 speed, +5 HP
+  38. Semelles Maudites    +8 speed, +1 dmg
+  39. Herbe du Diable      +12 speed, -0.03s cd
+  40. Ailes Brisées        +15 speed, +5 HP
+  41. Poussière d'Élan     +10 speed, +1 dmg
+  42. Souliers de Cendre   +20 speed, +5 HP
+
+  [CADENCE]
+  43. Bague du Tireur      -0.08s cd
+  44. Sceau du Précipice   -0.07s cd
+  45. Sablier Inversé      -0.06s cd, +5 HP
+  46. Parchemin d'Alacrité -0.05s cd
+  47. Rune de Hâte         -0.06s cd
+  48. Gemme d'Impulsion    -0.04s cd, +1 dmg
+
+  [PORTÉE]
+  49. Œil de Corbeau       +75px portée
+  50. Prisme Terne         +50px portée, -0.03s cd
+
+──────────────────────────────────────────────────────
+RARES — 30 items (3-4 stats + pouvoir actif)
+──────────────────────────────────────────────────────
+
+  [5 existants — valeurs HP ajustées]
+  01. Amulette Vampire     +8% HP | Soigne 2% des dégâts infligés
+  02. Bottes de Feu        +12% vitesse | Traînée de feu
+  03. Bouclier Épineux     +8% dmg | Renvoie 15% dégâts reçus
+  04. Anneau de Rage       +8% dmg | ×1.5 dmg 2s après un kill
+  05. Pas Fantôme          +12% vitesse | +1.5s invincibilité après coup
+
+  [25 nouveaux]
+  06. Cercle de Sang        +8% HP, +1 dmg, +15 HP
+                            | Actif : soigne 15 HP au kill (CD 30s)
+  07. Cape des Ombres       +12% vitesse, +15 HP, -0.04s cd
+                            | Actif : invisible + invincible 2s (CD 20s)
+  08. Épaulière du Bourreau +8% dmg, +1 dmg, +10 speed
+                            | Actif : prochain tir ×3 dmg (CD 15s)
+  09. Couronne d'Épines     +8% HP, +8% dmg, +1 dmg
+                            | Actif : explosion 150px 3 dmg (CD 12s)
+  10. Sceptre de l'Agonisant +1 dmg, +15 speed, +8% vitesse
+                            | Actif : ralentit tous les ennemis 2s (CD 25s)
+  11. Manteau de Braise     +12% vitesse, +20 HP, -0.05s cd
+                            | Actif : immunité dégâts 1.5s (CD 30s)
+  12. Anneau du Prédateur   +8% dmg, +10 speed, +1 dmg
+                            | Actif : téléporte vers ennemi le plus proche (CD 12s)
+  13. Griffe de Vampire     +8% HP, +1 dmg, +10 speed
+                            | Actif : drain 3 HP ennemi proche toutes les 3s
+  14. Longue-Vue Maudite    +8% dmg, +1 dmg, +150px portée
+                            | Actif : révèle ennemis hors portée 5s (CD 20s)
+  15. Cor de Chasse         +10 speed, +15 HP, +8% vitesse
+                            | Actif : sprint +200 speed 2s (CD 15s)
+  16. Pierre Lunaire        +20 HP, +8% HP, -0.04s cd
+                            | Actif : bouclier absorbant 20 dmg (CD 20s)
+  17. Anneau de Glace       +8% HP, +10 speed, +1 dmg
+                            | Actif : gèle ennemi le plus proche 2s (CD 15s)
+  18. Grimoire Déchiré      +2 dmg, -0.05s cd, +8% dmg
+                            | Actif : double les projectiles 3s (CD 20s)
+  19. Talisman de l'Exil    +1 dmg, +15 HP, -0.05s cd
+                            | Actif : repousse tous les ennemis proches (CD 12s)
+  20. Dague Fantôme         +1 dmg, +12% vitesse, +100px portée
+                            | Actif : 3 prochains tirs traversent tout (CD 20s)
+  21. Seau d'Acide          +2 dmg, +8% dmg, +10 speed
+                            | Actif : flaque acide 3s (2 dmg/s) (CD 10s)
+  22. Crâne Hurlant         +2 dmg, +15 HP, +8% dmg
+                            | Actif : projectile explosif bonus toutes les 5s
+  23. Amulette de Feu       +1 dmg, +12% vitesse, -0.04s cd
+                            | Actif : tirs enflamment ennemis 2s (CD 15s)
+  24. Pendentif de Chair    +25 HP, +8% HP, +10 speed
+                            | Actif : régénère 3 HP toutes les 8s (passif)
+  25. Signe de la Bête      +2 dmg, +12% vitesse, +15 HP
+                            | Actif : ennemis proches 1 dmg/s pendant 4s (CD 15s)
+  26. Cor du Sniper         +8% dmg, +100px portée, -0.04s cd
+                            | Actif : prochain tir ×2 dmg si ennemi à +300px (CD 10s)
+  27. Sablier Brisé         +8% dmg, -0.06s cd, +15 HP
+                            | Actif : stoppe le timer 3s (CD 40s)
+  28. Cœur de Charbon       +20 HP, +8% dmg, +1 dmg
+                            | Actif : explosion en mourant 15 dmg (1x/run)
+  29. Collier de Cendres    +15 HP, +1 dmg, +8% vitesse
+                            | Actif : traînée de feu renforcée 5s (CD 18s)
+  30. Boucle du Temps       +1 dmg, +12% vitesse, +8% dmg
+                            | Actif : annule le dernier coup reçu (1x/run)
+
+──────────────────────────────────────────────────────
+ÉPIQUES — 15 items (stats fortes + pouvoir très puissant)
+──────────────────────────────────────────────────────
+
+  [3 existants — valeurs ajustées]
+  01. La Sainte Grenade     +15% dmg | Grenade auto toutes les 8s (5 dmg)
+  02. Anneau de Tempête     +12% cadence | Salve 8 tirs / 15s (stack)
+  03. Faucheur d'Âmes       +20% HP | Double les âmes par kill
+
+  [12 nouveaux]
+  04. Œil de Gorgone        +20% HP, +15% dmg, +2 dmg
+                            | Actif : pétrifie tous les ennemis 3s (CD 30s)
+  05. Grimoire Infernal     +15% dmg, +2 dmg, -0.08s cd
+                            | Actif : cadence max 0.10s pendant 10s (CD 45s)
+  06. Couronne de l'Abîme  +20% HP, +15% vitesse, +30 HP
+                            | Actif : invincible + ×3 vitesse 5s (CD 60s)
+  07. Trident du Damné      +20% dmg, +3 dmg, +15 speed
+                            | Actif : lance 3 grenades simultanément (CD 20s)
+  08. Suaire du Martyr      +25% HP, +35 HP, +10 speed
+                            | Actif : revit 1x par run avec 50% HP
+  09. Horloge des Âmes      +20% dmg, +15% cadence, -0.06s cd
+                            | Actif : ennemis figés 3s (CD 45s)
+  10. Sceptre de l'Apocalypse +20% dmg, +3 dmg, -0.10s cd
+                            | Actif : pluie de 20 projectiles (CD 30s)
+  11. Manteau du Lich        +25% HP, +15% dmg, +30 HP
+                            | Actif : aura mort 1 dmg/s à tous les ennemis (toggle)
+  12. Télescope de l'Abîme  +20% dmg, +2 dmg, +200px portée
+                            | Actif : tir unique traverse l'arène 20 dmg (CD 20s)
+  13. Épaulière de l'Armageddon +20% vitesse, +15% dmg, +2 dmg
+                            | Actif : explosion 300px 20 dmg (CD 25s)
+  14. Lame des Mille Âmes   +20% dmg, +20% HP, +2 dmg
+                            | Actif : each kill soigne 10 HP pendant 10s (CD 30s)
+  15. Anneau de la Fin      +20% HP, +20% dmg, +15% vitesse, +15% cadence
+                            | Actif : toutes compétences actives simultanées 5s (CD 90s)
+
+
+═══════════════════════════════════════════════════════
+6. SHOP — 5 COFFRES
+═══════════════════════════════════════════════════════
+
+  Niv.1-3  → Commun 2 clés | Rare 4 clés | Épique 6 clés
+  Niv.4-6  → Commun 3 clés | Rare 6 clés | Épique 9 clés
+  Niv.7-9  → Commun 4 clés | Rare 8 clés | Épique 12 clés
+
+  5 coffres — le joueur ne peut jamais tout ouvrir en une vague.
+
+
+═══════════════════════════════════════════════════════
+7. ORDRE D'IMPLÉMENTATION
+═══════════════════════════════════════════════════════
+
+  [1]  Changer HP base joueur : 5 → 50                         ✓ FAIT
+  [2]  Dégâts de base : 1 → 2                                  ✓ FAIT
+  [3]  Upgrade HP shop : +2/niv → +10/niv                      ✓ FAIT
+  [4]  Items HP ajustés (+5/+8/+10 au lieu de +2/+3/+4)        ✓ FAIT
+  [5]  flat_range dans PlayerData + Fireball                    ✓ FAIT
+  [6]  HP Aldrich : int(5 * pow(1.35, level-1))                 ✓ FAIT
+  [7]  HP Brutus : 80 + (level-2) * 43                          ✓ FAIT
+  [8]  Scaling dégâts ennemis par niveau (Aldrich + Brutus)     ✓ FAIT
+  [9]  Dégâts Golgota (laser 25, orbes 15, contact 30)          ✓ FAIT
+  [10] Barre de vie (remplace les cœurs)                        ✓ FAIT
+  [11] Passer à 5 coffres dans ShopMenu                         À FAIRE
+  [12] Coder les 95 items dans PlayerData.ITEM_DB               À FAIRE
+  [13] Implémenter les pouvoirs actifs rares (Player.gd)        À FAIRE
+  [14] Implémenter les pouvoirs actifs épiques (Player.gd)      À FAIRE
+  [15] Réévaluer HP Golgota en test                             À FAIRE
+
+=======================================================
+FIN DE LA PROPOSITION V4

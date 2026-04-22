@@ -1,320 +1,461 @@
-CODEX INFERNALIS — DOCUMENTATION DU SYSTÈME ACTUEL
-Généré le 2026-04-20
+CODEX INFERNALIS — DOCUMENTATION COMPLÈTE DU SYSTÈME
+Mis à jour le 2026-04-21
 =======================================================
 
 
 ═══════════════════════════════════════════════════════
-1. BOUCLE DE JEU
+0. CONTEXTE TECHNIQUE & TYPE DE JEU
 ═══════════════════════════════════════════════════════
 
-Le joueur traverse des vagues de 40 secondes (niveaux 1 à 6), puis affronte un boss au niveau 7.
-Entre chaque vague, un écran de shop permet d'acheter des items avec des clés et d'améliorer
-ses stats avec des âmes. Une run complète demande 7 niveaux.
+MOTEUR      : Godot 4.6 (GDScript, pas de C#)
+RÉSOLUTION  : 1920×1080 (viewport fixe, caméra statique)
+PERSPECTIVE : Top-down 2D, vue de dessus légèrement isométrique visuellement
+GENRE       : Arena survival roguelite — boucle de vagues + shop entre chaque vague
 
-Les âmes gagnées en run sont conservées entre les runs pour upgrader les stats.
-Les items sont réinitialisés à chaque run.
-Les skills permanents (Forge Éternelle) sont débloqués avec des âmes de boss (drop du boss).
+PILIERS DE DESIGN :
+  - Survie sous pression croissante (vagues de plus en plus denses)
+  - Choix stratégiques au shop (économie de clés, construction de build)
+  - Méta-progression légère (Forge Éternelle avec âmes de boss)
+  - Accessible mais punitif : 50 HP, ennemis rapides, dégâts élevés
+  - Pas de rechargement, pas de munitions : tir automatique permanent
+
+CONDITIONS DE VICTOIRE : Tuer le boss Golgota (niveau 10)
+CONDITIONS DE DÉFAITE  : HP joueur = 0 → écran Game Over, reset de run
+LONGUEUR D'UNE RUN     : ~25-35 minutes (9 vagues + boss)
+
+PLATEFORME CIBLE : PC (Windows) + Mobile (touch controls implémentés)
 
 
 ═══════════════════════════════════════════════════════
-2. STATS DU JOUEUR
+1. ARCHITECTURE DES SCÈNES
 ═══════════════════════════════════════════════════════
 
-STATS DE BASE (sans aucun upgrade ni item) :
-  HP max      : 5
-  Dégâts      : 1
+AUTOLOAD (singleton global) :
+  PlayerData.gd  → toutes les stats, items, skills, save/load
+
+SCÈNES PRINCIPALES :
+  scenes/arenas/Arena1.tscn    → scène de jeu principale (vagues + boss)
+  scenes/ui/MainMenu.tscn      → menu principal
+  scenes/ui/SelectCharacter.tscn → sélection de personnage
+  scenes/ui/ShopMenu.tscn      → shop inter-vagues (CanvasLayer)
+  scenes/ui/HUD.tscn           → interface en jeu (CanvasLayer)
+  scenes/ui/PauseMenu.tscn     → pause
+  scenes/ui/GameOver.tscn      → écran mort
+  scenes/ui/SkillTreeOverlay.tscn → arbre de compétences (Forge Éternelle)
+  scenes/ui/TouchControls.tscn → joysticks tactiles
+  scenes/musique.tscn          → musique de fond (autoplay)
+
+ENTITÉS (instanciées dynamiquement) :
+  scenes/entities/Player.tscn      → joueur (CharacterBody2D)
+  scenes/entities/Aldrich.tscn     → ennemi basique (CharacterBody2D)
+  scenes/entities/Brutus.tscn      → ennemi tireur (CharacterBody2D)
+  scenes/entities/Golgota.tscn     → boss (CharacterBody2D)
+  scenes/entities/Fireball.tscn    → projectile joueur (Area2D)
+  scenes/entities/BrutusBullet.tscn→ projectile Brutus (Area2D)
+  scenes/entities/GolgotaLaser.tscn→ laser boss (Node2D)
+  scenes/entities/GolgotaOrb.tscn  → orbe boss (Area2D)
+  scenes/entities/Key.tscn         → clé drop (Area2D)
+  scenes/entities/BossSoul.tscn    → âme de boss drop (Area2D)
+  scenes/entities/FireTrail.tscn   → traînée de feu item (Area2D)
+  scenes/entities/Grenade.tscn     → grenade item épique (Node2D)
+  scenes/entities/BulletExplosion.tscn → explosion skill (Area2D)
+
+GROUPES GODOT utilisés :
+  "player"   → le joueur (get_first_node_in_group)
+  "enemies"  → tous les ennemis vivants/mourants
+  "hud"      → le HUD (pour appels refresh_*)
+  "arena"    → l'arène (Arena1)
+
+COUCHES DE COLLISION :
+  Layer 1 = joueur
+  Layer 2 = ennemis
+  Les ennemis ont collision_mask = 0 (ne détectent pas eux-mêmes)
+  Le joueur a un HitArea (Area2D) qui détecte les corps ennemis
+
+
+═══════════════════════════════════════════════════════
+2. BOUCLE DE JEU
+═══════════════════════════════════════════════════════
+
+FLUX :
+  MainMenu → SelectCharacter → Arena1 (niveau 1)
+    ↓ fin de vague (timer = 0)
+  ShopMenu (pause totale get_tree().paused = true)
+    ↓ continuer
+  Arena1 (niveau +1) → ... → niveau 10 → Boss → victoire ou mort
+
+VAGUES :
+  - Niveaux 1-9 : spawn continu d'Aldrich + Brutus (dès niv.2)
+  - Niveau 10   : boss Golgota, plus de spawn de vague
+  - Fin de vague : tous les ennemis sont queue_free(), shop s'ouvre
+  - Début vague suivante : joueur se téléporte au centre (1016, 517),
+    revive() appelé pour réinitialiser son état complètement
+
+DURÉE DES VAGUES :
+  Niv.1:30s  Niv.2:34s  Niv.3:38s  Niv.4:41s  Niv.5:45s
+  Niv.6:49s  Niv.7:53s  Niv.8:56s  Niv.9:60s
+
+ARÈNE :
+  Limites de jeu : x [120–1900], y [110–940]
+  Centre : (1016, 517)
+  Taille utile : ~1780×830 px
+  Décor : statique (pas de murs interactifs)
+  Boss spawn : (1016, 130) — haut de l'arène
+
+
+═══════════════════════════════════════════════════════
+3. JOUEUR
+═══════════════════════════════════════════════════════
+
+PERSONNAGE ACTUEL : "Masqued Neophyte" (seul personnage jouable)
+  Sprite animé, 8 directions (south, north, east, west + diagonales)
+  Animations : idle, run, attack (par direction), death
+  Fichier script : scenes/entities/Player.gd
+
+CONTRÔLES PC :
+  Déplacement : WASD ou flèches directionnelles
+  Visée       : automatique (ennemi le plus proche dans 400px)
+  Override    : clic souris → vise le curseur pendant 2s
+  Debug       : ALT maintenu → cercle de portée auto-aim visible
+  Pause       : Échap
+
+CONTRÔLES MOBILE (touch) :
+  Joystick gauche : PlayerData.touch_move (déplacement)
+  Joystick droit  : PlayerData.touch_aim_world + touch_shooting
+  Géré par : scenes/ui/TouchControls.tscn
+
+STATS DE BASE :
+  HP max      : 50     Cadence tir : 0.85s/tir (plancher 0.10s)
+  Dégâts      : 2      Portée      : 400px (extensible via items, cap 800px)
   Vitesse     : 275 px/s
-  Cadence tir : 0.10s par tir (actuellement — voir note)
 
-NOTE IMPORTANT : la cadence de base a été modifiée à 0.10s (10 tirs/s) mais le plancher
-est toujours à 0.25s, ce qui rend les upgrades de cadence inutiles. À corriger.
-
-FORMULE DE CALCUL FINALE :
-  HP max  = (5 + lvl_hp×2 + flat_hp) × (1 + pct_hp)
-  Dégâts  = (1 + lvl_damage + flat_dmg) × (1 + pct_dmg)
+FORMULES DE CALCUL (PlayerData._recompute()) :
+  HP max  = (50 + lvl_hp×10  + flat_hp)  × (1 + pct_hp)
+  Dégâts  = (2  + lvl_damage + flat_dmg) × (1 + pct_dmg)
   Vitesse = (275 + lvl_speed×20 + flat_spd) × (1 + pct_spd)
-  Cadence = max(0.25, (base_cd + flat_cd) × (1 - pct_cd))
+  Cadence = max(0.10, (0.85 - lvl_fire_cd×0.09 + flat_cd) × (1 - pct_cd))
+  Portée  = 400 + flat_range  (flat_range capé à 400, portée max 800px)
 
-UPGRADES DE RUN (shop entre les vagues) :
-  Coûts : 10 → 25 → 50 → 100 → 200 âmes (5 niveaux max)
-  HP      : +2 HP max par niveau
-  Dégâts  : +1 dégât par niveau
-  Vitesse : +20 px/s par niveau
-  Cadence : -0.09s par niveau
+UPGRADES DE RUN (shop entre vagues) :
+  Coûts : 10 → 25 → 50 → 100 → 200 âmes (5 niveaux max par stat)
+  HP      : +10/niv → max +50   Vitesse : +20/niv → max +100
+  Dégâts  : +1/niv  → max +5    Cadence : -0.09/niv
 
-INVINCIBILITÉ APRÈS COUP :
-  Durée de base : 0.5s
-  Bonus phantom_step : +1.0s par stack
+INVINCIBILITÉ (iframes) :
+  Durée base : 0.5s après chaque coup reçu
+  Bonus phantom_step : +1.0s par stack de l'item
+
+MORT DU JOUEUR :
+  - Animation death jouée (2.5s)
+  - Signal died émis → GameOver.show_screen()
+  - Toutes les run-stats sont reset
 
 
 ═══════════════════════════════════════════════════════
-3. SYSTÈME DE TIR DU JOUEUR
+4. SYSTÈME DE TIR
 ═══════════════════════════════════════════════════════
 
-COMPORTEMENT :
-  - Tir automatique vers l'ennemi le plus proche dans un rayon de 400px
-  - Si aucun ennemi dans le rayon : le joueur ne tire pas
-  - Clic souris : override l'auto-aim vers le curseur pendant 2 secondes
-  - Les ennemis morts (dead = true) sont ignorés par l'auto-aim même avant leur disparition
+FONCTIONNEMENT :
+  1. Chaque frame : _fire_timer -= delta
+  2. Quand _fire_timer <= 0 → _shoot() appelé, _fire_timer = PlayerData.fire_cd
+  3. _shoot() lance l'animation attack_<direction> et pose un flag _waiting_to_shoot
+  4. Quand frame 1 de l'animation atteinte → _spawn_bullet() crée la Fireball
+  5. Animation attack finie → retour idle/run
 
-PROJECTILE (Fireball) :
-  Vitesse de base   : 1200 px/s
-  Vitesse vélocité  : 2020 px/s (skill Forge Éternelle)
-  Portée max        : 400 px (auto-destruction)
-  Pénétration       : 1 ennemi par défaut, 3 avec skill Pénétration
-  Dégâts            : PlayerData.damage (modifié par enrage)
+AUTO-AIM (_get_aim_dir()) :
+  Priority 1 : touch joystick droit (mobile)
+  Priority 2 : override souris (clic dans les 2 dernières secondes)
+  Priority 3 : ennemi vivant le plus proche dans AUTO_AIM_RANGE (400+flat_range)
+               → visée prédictive : predicted = pos_ennemi + velocity × travel_time
+  Priority 4 : Vector2.ZERO → pas de tir
+
+PROJECTILE FIREBALL :
+  Vitesse  : 1200 px/s (2020 avec skill Vélocité)
+  Portée   : MAX_DISTANCE (400px) + PlayerData.flat_range
+  Collision: Area2D, détecte Layer 2 (ennemis)
+  Pénétration (sans skill) : 2 hits, dégâts pleins sur hit 1, 50% sur hit 2
+  Pénétration (avec skill) : 4 hits, dégâts pleins sur hits 1-2, 50% sur 3-4
+  Ricochet (skill) : après dernier hit, rebondit vers ennemi le plus proche (<400px)
+  Explosion (skill): à chaque impact, crée BulletExplosion (Area2D, rayon 80px)
+
+DOUBLE TIR (skill Forge Éternelle) :
+  2 fireballs simultanées, décalées de ±18px perpendiculairement à la direction
 
 DÉGÂTS EFFECTIFS :
-  Normal  : PlayerData.damage × 1.0
-  Enragé  : PlayerData.damage × 1.5 (pendant 2s après un kill, si rage_ring)
-
-AFFICHAGE DU RAYON (debug) :
-  Maintenir ALT : affiche le cercle d'auto-aim en bleu translucide
+  Normal  : PlayerData.damage
+  Enragé  : int(PlayerData.damage × 1.5)  — si item rage_ring, 2s post-kill
 
 
 ═══════════════════════════════════════════════════════
-4. COMPÉTENCES ACTIVES PASSIVES DU JOUEUR
+5. ITEMS
 ═══════════════════════════════════════════════════════
 
-Ces effets se déclenchent automatiquement selon les items/skills possédés :
+MÉCANISME :
+  - Tous les items sont dans PlayerData.ITEM_DB (dictionnaire constant)
+  - PlayerData.items (Array[String]) contient les IDs des items possédés
+  - PlayerData._recompute() recalcule toutes les stats à chaque ajout d'item
+  - Les items peuvent se stacker (plusieurs fois le même ID dans items[])
 
-  fire_boots (item rare)
-    → Traînée de feu toutes les 0.15s quand le joueur se déplace
-    → Chaque traînée dure 2.0s, inflige 1 dégât toutes les 0.5s
-    → ~4 dégâts max si un ennemi reste dedans
+STATS MODIFIABLES PAR ITEMS :
+  flat_hp, flat_damage, flat_speed, flat_fire_cd, flat_range
+  pct_hp, pct_damage, pct_speed, pct_fire_cd
 
-  auto_grenade (item épique)
-    → Grenade lancée automatiquement toutes les 8.0s
-    → Cible l'ennemi le plus proche, ou position aléatoire (±300px)
-    → Explose après 0.9s, rayon 140px, 3 dégâts
+COMMUNS (rareté 0) — passifs flat uniquement :
+  ampoule_vie (+5 HP), coeur_pierre (+8 HP), bouclier_bois (+10 HP)
+  dent_loup (+1 dmg), epee_courte (+1 dmg), pierre_aceree (+2 dmg)
+  plume_rapide (+15 spd), bottes_course (+12 spd), anneau_vitesse (+20 spd)
+  bague_tir (-0.08s cd)
 
-  storm_ring (item épique)
-    → Salve de 8 projectiles omnidirectionnels toutes les 15.0s
-    → Se stack : 2 anneaux = 16 projectiles par salve
+RARES (rareté 1) — passif % + pouvoir actif passif :
+  vampire_amulet  : +8% HP | soigne 1% des dégâts par stack (dans on_enemy_hit)
+  fire_boots      : +12% spd | traînée de feu pendant le déplacement (TRAIL_CD 0.15s)
+  thorn_shield    : +8% dmg | renvoie 15%×stacks des dégâts reçus dans 280px
+  rage_ring       : +8% dmg | ×1.5 dégâts 2s après chaque kill (on_enemy_kill)
+  phantom_step    : +12% spd | +1s iframes/stack après coup reçu
 
-  tempete_acier (skill Forge Éternelle — final)
-    → Salve de 12 projectiles omnidirectionnels toutes les 10.0s
-
-  thorn_shield (item rare)
-    → Renvoie ceil(dégât × 15% × stacks) à tous les ennemis dans un rayon de 280px
-
-  vampire_amulet (item rare)
-    → Soigne (dégâts_infligés × 1% × stacks) — accumulé jusqu'à 1 HP entier
-
-  phantom_step (item rare)
-    → +1.0s d'invincibilité par stack après chaque coup reçu
-
-  rage_ring (item rare)
-    → Après chaque kill ennemi : dégâts ×1.5 pendant 2.0s
-
-
-═══════════════════════════════════════════════════════
-5. FORGE ÉTERNELLE — SKILLS PERMANENTS
-═══════════════════════════════════════════════════════
-
-Coût : 1 âme de boss par nœud
-Arbre (personnage Néophyte) :
-
-  [DOUBLE TIR]           — 2 projectiles côte à côte (+18px perpendiculaire)
-       ↙               ↘
-  [PÉNÉTRATION]       [VÉLOCITÉ]
-  traverse 3 ennemis  projectiles +68% plus vite (1200→2020 px/s)
-       ↘               ↙
-  [EXPLOSION]         [RICOCHET]
-  explosion 80px      rebond vers ennemi le plus proche (<400px)
-       ↘               ↙
-      [TEMPÊTE D'ACIER]
-      12 tirs omni / 10s
+ÉPIQUES (rareté 2) — passif % fort + pouvoir automatique :
+  auto_grenade    : +15% dmg | grenade auto toutes les 8s (GRENADE_CD)
+                    → cible ennemi le plus proche ou aléatoire ±300px
+                    → rayon explosion 140px, 3 dégâts
+  storm_ring      : +12% cd  | 8 projectiles omni toutes les 15s (STORM_CD)
+                    → se stack : 2 anneaux = 16 projectiles
+  soul_harvester  : +20% HP  | +1 âme/kill/stack supplémentaire
 
 
 ═══════════════════════════════════════════════════════
-6. ITEMS
+6. FORGE ÉTERNELLE — MÉTA-PROGRESSION
 ═══════════════════════════════════════════════════════
 
-COMMUNS (rareté 0 — 60% de chance, coût 1 clé) :
-  ampoule_vie     : +2 HP max
-  coeur_pierre    : +3 HP max
-  bouclier_bois   : +4 HP max
-  dent_loup       : +1 dégât
-  epee_courte     : +1 dégât
-  pierre_aceree   : +2 dégâts
-  plume_rapide    : +15 vitesse
-  bottes_course   : +12 vitesse
-  anneau_vitesse  : +20 vitesse
-  bague_tir       : -0.08s cadence tir (flat)
+PRINCIPE :
+  Âmes de boss (boss_souls) = monnaie permanente inter-runs
+  Dépensées dans l'arbre de compétences (SkillTreeOverlay)
+  1 âme = 1 nœud déverrouillé
+  Les skills modifient le comportement en jeu (PlayerData.has_skill("id"))
 
-RARES (rareté 1 — 30% de chance, coût 2 clés) :
-  vampire_amulet  : +8% HP max | soigne 2% des dégâts infligés
-  fire_boots      : +12% vitesse | traînée de feu
-  thorn_shield    : +8% dégâts | renvoie 15% des dégâts reçus
-  rage_ring       : +8% dégâts | +50% dégâts 2s après un kill
-  phantom_step    : +12% vitesse | +1.5s invincibilité après coup
+ARBRE — NÉOPHYTE (seul personnage) :
+  [DOUBLE TIR]  row:0, col:1 — requires: []
+    → 2 fireballs en parallèle (±18px perpendiculaires)
+  [PÉNÉTRATION] row:1, col:0 — requires: [double_tir]
+    → 4 hits au lieu de 2 (50% dmg sur 3e-4e)
+  [VÉLOCITÉ]    row:1, col:2 — requires: [double_tir]
+    → vitesse fireball 1200→2020 px/s
+  [EXPLOSION]   row:2, col:0 — requires: [pénétration]
+    → BulletExplosion à chaque impact (rayon 80px)
+  [RICOCHET]    row:2, col:2 — requires: [vélocité]
+    → après dernier hit, rebond vers ennemi proche
+  [TEMPÊTE D'ACIER] row:3, col:1 — requires: [explosion, ricochet]
+    → 12 tirs omnidirectionnels automatiques toutes les 10s
 
-ÉPIQUES (rareté 2 — 10% de chance, coût 3 clés) :
-  auto_grenade    : +15% dégâts | grenade auto toutes les 8s
-  storm_ring      : +12% cadence | salve de 8 tirs toutes les 15s (stack)
-  soul_harvester  : +20% HP max | double les âmes gagnées par kill
+SAUVEGARDE : perm_skills_by_char[char_id] = Array de skill IDs (user://save.json)
 
 
 ═══════════════════════════════════════════════════════
 7. ENNEMIS
 ═══════════════════════════════════════════════════════
 
-─── ALDRICH (niveaux 1 à 6) ───
-  HP de base     : 3 (formule : int(3 × 1.35^(niveau-1)))
-  HP au niv. 1   : 3
-  HP au niv. 3   : ~5
-  HP au niv. 6   : ~11
-  Vitesse        : 90 px/s (errance : 45 px/s)
-  Dégâts         : 1 (contact)
-  Drop clé       : 17% au niv.1, décroit : max(3%, 15% - (niv-1)×2.4%)
-  Comportement   : Fonce vers le joueur sans limite de portée
+PROPRIÉTÉS COMMUNES :
+  - Tous dans le groupe "enemies"
+  - collision_layer = 2, collision_mask = 0
+  - variable dead : bool — flag mort (ignoré par auto-aim dès true)
+  - take_damage(amount) → flash rouge + die si hp <= 0
+  - _die() : dead=true, collision disabled, animation death, died.emit()
+  - drops kills_total++ et sauvegarde à chaque mort
 
-─── BRUTUS (niveaux 2 à 6) ───
-  HP de base     : 15 (formule : 15 + (niveau-2)×6)
-  HP au niv. 2   : 15
-  HP au niv. 6   : 39
-  Vitesse        : 55 px/s
-  Portée de tir  : 500 px
-  Cadence        : 0.6s
-  Dégâts         : 1 par balle (vitesse balle : 420 px/s, durée 3s)
-  Comportement   : S'approche et tire sur le joueur dans sa portée
+─── ALDRICH ───
+  Rôle     : ennemi basique de corps-à-corps, nombreux et rapides
+  Script   : scenes/entities/Aldrich.gd
+  Hitbox   : CapsuleShape2D radius 22, height 52
+  Vitesse  : 90 px/s (errance 45 px/s si joueur mort)
+  IA       : fonce en ligne droite vers le joueur
+  Dégâts   : via HitArea du joueur (body.get("damage"))
+  HP/dégâts: voir section 2 du doc (courbe par niveau)
+  Drop     : clé (max(8%, 15% - (niv-1)×2.4%)), sons death
+  Animations: 8 directions walk + idle + death (11 frames)
 
-─── GOLGOTA (boss — niveau 7) ───
-  HP total       : 700
-  Dégâts laser   : 2
-  Dégâts orbes   : 1
-  Dégâts contact : 2
+─── BRUTUS ───
+  Rôle     : ennemi tireur, lent mais dangereux à distance
+  Script   : scenes/entities/Brutus.gd
+  Hitbox   : CapsuleShape2D radius 24, height 55
+  Vitesse  : 55 px/s
+  Portée   : 500 px — s'approche puis tire
+  Cadence  : 0.6s par balle (BrutusBullet)
+  IA       : s'approche du joueur, tire si dans SHOOT_RANGE
+             → erre si joueur mort
+  HP/dégâts: voir section 2 du doc
+  Animations: 8 directions walk + idle + death (spritesheet 3×4 frames)
 
-  Phase 3 (HP > 66%) :
-    Vitesse : 35 px/s
-    Laser   : 1 (central, suit le joueur), CD 6.0s, télégraphe 1.2s
-    Orbes   : 5 par vague, CD 2.5s, vitesse 460 px/s, durée 6s
-    Spawn   : aucun
+─── GOLGOTA (boss) ───
+  Rôle     : boss final, 3 phases, multiples attaques
+  Script   : scenes/entities/Golgota.gd
+  HP       : 1000 (à calibrer)
+  Vitesse  : 35 / 48 / 60 px/s selon phase
+  Phases   : phase 3 (>66% HP), phase 2 (33-66%), phase 1 (<33%)
 
-  Phase 2 (HP 33–66%) :
-    Vitesse : 48 px/s
-    Lasers  : 3 (central + ±40°), CD 4.5s, télégraphe 0.9s
-    Orbes   : 8 par vague, CD 2.0s
-    Spawn   : 3 Aldrich toutes les 12s
+  ATTAQUES :
+  Laser (GolgotaLaser.tscn) :
+    - Phase 3 : 1 laser, CD 6s, télégraphe 1.2s, suivi joueur
+    - Phase 2 : 3 lasers (central + ±40°), CD 4.5s, télégraphe 0.9s
+    - Phase 1 : 5 lasers (central + ±30° + ±65°), CD 3.0s, télégraphe 0.6s
+    - Longueur 950px, hitbox height ×2.2 en phase active (0.5s)
+    - Dégâts : 25 (laser_damage)
 
-  Phase 1 (HP < 33%) :
-    Vitesse : 60 px/s
-    Lasers  : 5 (central + ±30° + ±65°), CD 3.0s, télégraphe 0.6s
-    Orbes   : 12 par vague, CD 1.5s
-    Spawn   : 5 Aldrich toutes les 7s
+  Orbes (GolgotaOrb.tscn) :
+    - Apparaissent en cercle 150-420px autour du boss
+    - Attendent 1.8s, puis foncent vers le joueur à 460 px/s
+    - Phase 3 : 5 orbes, CD 2.5s | Phase 2 : 8 orbes, CD 2.0s | Phase 1 : 12, CD 1.5s
+    - Dégâts : 15
 
-  Détail laser :
-    - Seul le laser central (index 0) suit le joueur pendant le télégraphe
-    - Les lasers latéraux se figent dans leur direction initiale
-    - Phase active du laser : 0.5s
-    - Longueur : 950px
+  Contact direct : 30 (damage var, lu par HitArea joueur)
 
-  Détail orbes :
-    - Spawn en cercle (150–420px autour du boss)
-    - Attendent 1.8s statiques, puis foncent vers le joueur
+  Spawn d'Aldrich :
+    - Phase 2 : 3 Aldrich / 12s autour du joueur
+    - Phase 1 : 5 Aldrich / 7s autour du joueur
 
-
-═══════════════════════════════════════════════════════
-8. SYSTÈME DE VAGUES ET SPAWN
-═══════════════════════════════════════════════════════
-
-Durée d'une vague : 40 secondes
-Fin de vague : tous les ennemis sont supprimés, le shop s'ouvre
-
-INTERVALLE SPAWN ALDRICH :
-  Formule  : max(0.60, 1.00 × 0.74^(niveau-1))
-  Niveau 1 : 1.00s
-  Niveau 2 : ~0.74s
-  Niveau 3 : ~0.55s
-  Niveau 4 : ~0.41s
-  Niveau 5 : ~0.30s
-  Niveau 6 : ~0.22s (≈ min 0.60s appliqué)
-  Nombre par vague : toujours 1 Aldrich à la fois (spawn_count = 1)
-
-INTERVALLE SPAWN BRUTUS :
-  Formule  : max(9.0, 22.0 - (niveau-2) × 1.5)
-  Niveau 2 : 22.0s
-  Niveau 3 : 20.5s
-  Niveau 4 : 19.0s
-  Niveau 5 : 17.5s
-  Niveau 6 : 16.0s
-
-SPAWN EN BORDURE : les ennemis apparaissent aléatoirement sur les 4 bords de l'arène
-  Haut    : x [120, 1800], y = 110
-  Bas     : x [120, 1800], y = 940
-  Gauche  : x = 115, y [110, 940]
-  Droite  : x = 1900, y [110, 940]
+  Mort : drop BossSoul → boss_souls++, PlayerData.reset_run()
+  HUD  : barre de vie violette en bas de l'écran (show_boss_bar / refresh_boss_hp)
 
 
 ═══════════════════════════════════════════════════════
-9. ÉCONOMIE — CLÉS ET ÂMES
+8. SPAWN ET VAGUES
 ═══════════════════════════════════════════════════════
 
-CLÉS :
-  Source principale : drops d'Aldrich
-  Drop rate          : 17% au niv.1, décroit jusqu'à 3% au niv.6
-  Utilisation        : ouvrir des caisses au shop
+CONTRÔLÉ PAR : Arena1.gd (_process)
+CAP ENNEMIS  : 45 simultanés (ENEMY_CAP)
 
-CAISSES (shop) :
-  Commun  : 1 clé,  60% de chance d'apparaître, 10 items dans le pool
-  Rare    : 2 clés, 30% de chance,               5 items dans le pool
-  Épique  : 3 clés, 10% de chance,               3 items dans le pool
-  Reroll  : 30 âmes (+50 à chaque reroll suivant), ne touche pas les caisses verrouillées
+ALDRICH spawn :
+  Intervalle : max(0.80, 1.40 × 0.74^(niv-1))
+  Nombre/spawn : 1 (niv.1-3) / 2 (niv.4-5) / 3 (niv.6-7) / 4 (niv.8-9)
 
-ÂMES DE RUN :
-  Source   : 1 âme par kill ennemi (+1 par soul_harvester possédé)
-  Usage    : Upgrade stats au shop (10→25→50→100→200 par niveau)
-  Persistance : gardées entre les runs
+BRUTUS spawn :
+  Actif dès niv.2
+  Intervalle : max(5.0, 15.0 - (niv-2)×1.5)
 
-ÂMES DE BOSS :
-  Source   : drop de Golgota à sa mort
-  Usage    : déverrouiller des nœuds dans la Forge Éternelle (1 âme/nœud)
-  Persistance : permanentes
+POSITIONS SPAWN (bords de l'arène) :
+  Haut  : x∈[120,1800], y=110  | Bas   : x∈[120,1800], y=940
+  Gauche: x=115, y∈[110,940]   | Droite: x=1900, y∈[110,940]
+
+FIN DE VAGUE :
+  - Tous les ennemis : queue_free()
+  - $ShopMenu.show_shop(_keys, _level) → pause
+  - Après shop : _on_round_continue(remaining_keys) → niveau++, revive()
+
+
+═══════════════════════════════════════════════════════
+9. SHOP
+═══════════════════════════════════════════════════════
+
+STRUCTURE : 3 coffres + section upgrades stats + reroll
+SCRIPT     : scenes/ui/ShopMenu.gd (extends CanvasLayer)
+
+COFFRES :
+  Chaque coffre a une rareté rollée selon le niveau (_roll_rarity())
+  Item tiré aléatoirement dans le pool de la rareté (_roll_crates_unlocked())
+  Le joueur voit l'item avant d'acheter (nom + desc affichés)
+  Lock : verrouille un coffre pour qu'il survive au reroll
+
+PROBABILITÉS DE RARETÉ :
+  Niv.1 : 90%/10%/0%    Niv.5 : 40%/45%/15%  Niv.8 : 10%/35%/55%
+  Niv.2 : 80%/18%/2%    Niv.6 : 30%/45%/25%  Niv.9+: 5%/25%/70%
+  Niv.3 : 70%/25%/5%    Niv.7 : 20%/40%/40%
+  Niv.4 : 55%/35%/10%
+
+COÛT EN CLÉS (par rareté Commun/Rare/Épique) :
+  Niv.1-3 : 2 / 4 / 6   Niv.4-6 : 3 / 6 / 9   Niv.7-9 : 4 / 8 / 12
+
+REROLL :
+  Premier : 30 âmes  Second : 80 âmes  Troisième : 130 âmes  ...
+
+UPGRADES STATS (âmes de run) :
+  Coûts : 10 → 25 → 50 → 100 → 200 (5 niveaux max)
+  HP +10/niv | Dégâts +1/niv | Vitesse +20/niv | Cadence -0.09s/niv
+
+ÉCONOMIE ÂMES :
+  Source : 1 âme/kill + soul_harvester stacks
+  Usage  : upgrades shop + reroll
+  Reset  : à chaque run (pas sauvegardées)
 
 
 ═══════════════════════════════════════════════════════
 10. INTERFACE (HUD)
 ═══════════════════════════════════════════════════════
 
-En haut à gauche  : cœurs de vie (1 icône par HP max, plein ou vide)
-En haut au centre : timer de vague (couleur jaune/orange/rouge selon urgence), niveau
-En haut à droite  : compteur de kills total "☠ X", compteur de clés, compteur d'âmes
-En bas au centre  : barre de vie du boss (visible uniquement niveau 7, violet)
-TAB               : affiche/cache la grille des items possédés
+SCRIPT : scenes/ui/HUD.gd (extends CanvasLayer, layer=2)
+
+ÉLÉMENTS :
+  Barre de vie joueur  : ProgressBar 280×26px, top-left (20, 20)
+                         Rouge >50% HP | Orange 25-50% | Rouge vif <25%
+                         Label "current / maximum" en dessous
+  Timer vague          : centre-haut, couleur jaune/orange/rouge selon urgence
+                         "∞" violet si boss (niv.10)
+  Niveau               : label "NIVEAU X", centre-haut
+  Clés                 : icône + compteur, droite
+  Âmes                 : "☽ X", droite
+  Kills total          : "☠ X", haut-droite
+  Barre boss           : VBox en bas-centre, violet, visible niv.10 uniquement
+  Items (TAB)          : grille d'icônes 40×40px avec ×count si stacké
+
+MÉTHODES IMPORTANTES :
+  refresh_hp(current, max)    refresh_souls(count)
+  refresh_level(lvl)          refresh_timer(seconds)
+  refresh_keys(count)         refresh_kills(count)
+  refresh_items()             show_boss_bar(max_hp)
+  refresh_boss_hp(current)    hide_boss_bar()
 
 
 ═══════════════════════════════════════════════════════
-11. SAUVEGARDE
+11. DONNÉES PERSISTANTES (PlayerData.gd)
 ═══════════════════════════════════════════════════════
 
-Fichier : user://save.json
-Données persistantes sauvegardées :
-  - boss_souls    : âmes de boss accumulées
-  - kills_total   : total de kills depuis le début
-  - perm_skills   : skills Forge Éternelle débloqués par personnage
-  - âmes de run   : NON sauvegardées (reset à chaque run)
-  - items         : NON sauvegardés (reset après boss kill)
-  - niveaux upgrade: NON sauvegardés (reset chaque run)
+FICHIER SAVE : user://save.json
+
+PERSISTANT (inter-runs) :
+  boss_souls          : int — âmes boss gagnées
+  kills_total         : int — kills totaux depuis le début
+  perm_skills_by_char : Dictionary {char_id: [skill_ids]}
+  selected_char       : String — "neophyte"
+
+TEMPORAIRE (reset chaque run via reset_run()) :
+  souls, lvl_hp, lvl_damage, lvl_speed, lvl_fire_cd, items[]
+
+STATS CALCULÉES (recalculées par _recompute()) :
+  max_hp, damage, speed, fire_cd, flat_range
+
+VARIABLES TOUCH (non sauvegardées) :
+  touch_move : Vector2      — direction joystick gauche
+  touch_aim_world : Vector2 — position cible joystick droit
+  touch_shooting : bool     — joystick droit actif
 
 
 ═══════════════════════════════════════════════════════
-12. CHEATS DE DÉVELOPPEMENT
+12. AUDIO
 ═══════════════════════════════════════════════════════
 
-  Ctrl + B : Passe directement au niveau 7 (boss)
-  Ctrl + I : Donne tous les items rares/épiques + upgrades max + 999 âmes
-  Ctrl + R : Reset tous les items et upgrades
+  scenes/musique.tscn        → musique de fond (autoplay)
+  sounds/sfx/Aldrich_death.mp3  → -35 dB, joué à la mort d'Aldrich
+  sounds/sfx/Brutus_Death.mp3   → -15 dB, joué à la mort de Brutus
+  (autres sons non inventoriés)
 
 
 ═══════════════════════════════════════════════════════
-13. PROBLÈMES CONNUS / À CORRIGER
+13. CHEATS DE DÉVELOPPEMENT
 ═══════════════════════════════════════════════════════
 
-  1. Cadence de tir : base_cd = 0.10 alors que le plancher est 0.25s
-     → Les upgrades de cadence et les items (-0.08s, -12%) ne servent à rien
-     → Solution recommandée : remettre base_cd = 0.85, baisser le plancher à 0.10
+  Ctrl + B : Passe directement au niveau 10 (boss)
+             (efface tous les ennemis, set _level = 10)
+  Ctrl + I : Donne fire_boots, auto_grenade, storm_ring, soul_harvester,
+             vampire_amulet, thorn_shield, rage_ring, phantom_step
+             + upgrades toutes stats au max + 999 âmes
+  Ctrl + R : reset_run() — efface items et upgrades
 
-  2. Un ancien fichier Boss.gd existe (boss alternatif avec 250 HP)
-     → Ne semble plus utilisé, à supprimer si confirmé
+
+═══════════════════════════════════════════════════════
+14. À FAIRE (prochaines implémentations)
+═══════════════════════════════════════════════════════
+
+  1. Passer à 5 coffres dans ShopMenu (UI .tscn + ShopMenu.gd)
+  2. Coder les 95 items dans PlayerData.ITEM_DB
+     (détail complet dans proposition/scaling_items_proposition.txt section 5)
+  3. Implémenter les pouvoirs actifs des items rares dans Player.gd
+  4. Implémenter les pouvoirs actifs des items épiques dans Player.gd
+  5. Calibrer HP Golgota (actuellement 1000 — à ajuster en test)
 

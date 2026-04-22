@@ -1,237 +1,130 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://xrskq6yywkcq"]
 
-[ext_resource type="Script" path="res://scenes/ui/ShopMenu.gd" id="1_shop"]
+[ext_resource type="Script" uid="uid://dvxqq66qhotba" path="res://scenes/ui/ShopMenu.gd" id="1_shop"]
 [ext_resource type="FontFile" uid="uid://dppo7eddft6wh" path="res://assets/fonts/Cinzel-VariableFont_wght.ttf" id="2_cinzel"]
 [ext_resource type="FontFile" uid="uid://dm2thh3ulhwq" path="res://assets/fonts/ShareTechMono-Regular.ttf" id="3_mono"]
-[ext_resource type="Texture2D" path="res://assets/pickups/Lootcrate1.png" id="4_crate1"]
-[ext_resource type="Texture2D" path="res://assets/pickups/Lootcrate2.png" id="5_crate2"]
-[ext_resource type="Texture2D" path="res://assets/pickups/Lootcrate3.png" id="6_crate3"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+content_margin_left = 44.0
+content_margin_top = 32.0
+content_margin_right = 44.0
+content_margin_bottom = 32.0
 bg_color = Color(0.04, 0.02, 0.09, 0.97)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
 border_color = Color(0.55, 0.35, 0.85, 0.6)
-content_margin_left = 44.0
-content_margin_right = 44.0
-content_margin_top = 32.0
-content_margin_bottom = 32.0
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_crate"]
-bg_color = Color(0.07, 0.04, 0.14, 0.85)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.95, 0.82, 0.35, 0.4)
-content_margin_left = 18.0
-content_margin_right = 18.0
-content_margin_top = 14.0
-content_margin_bottom = 14.0
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_stat"]
-bg_color = Color(0.05, 0.03, 0.10, 0.7)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.5, 0.32, 0.78, 0.35)
-content_margin_left = 14.0
-content_margin_right = 14.0
-content_margin_top = 10.0
-content_margin_bottom = 10.0
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_key"]
-bg_color = Color(0, 0, 0, 0)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.95, 0.82, 0.35, 0.85)
-content_margin_left = 18.0
-content_margin_right = 18.0
-content_margin_top = 8.0
-content_margin_bottom = 8.0
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_key_hover"]
-bg_color = Color(0.4, 0.3, 0.05, 0.25)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(1.0, 0.95, 0.5, 1.0)
-content_margin_left = 18.0
-content_margin_right = 18.0
-content_margin_top = 8.0
-content_margin_bottom = 8.0
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_disabled"]
-bg_color = Color(0.1, 0.08, 0.15, 0.4)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.3, 0.22, 0.45, 0.3)
-content_margin_left = 18.0
-content_margin_right = 18.0
-content_margin_top = 8.0
-content_margin_bottom = 8.0
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_up"]
-bg_color = Color(0, 0, 0, 0)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.55, 0.8, 0.55, 0.8)
-content_margin_left = 14.0
-content_margin_right = 14.0
-content_margin_top = 6.0
-content_margin_bottom = 6.0
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_up_hover"]
-bg_color = Color(0.1, 0.3, 0.1, 0.25)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.7, 1.0, 0.7, 1.0)
-content_margin_left = 14.0
-content_margin_right = 14.0
-content_margin_top = 6.0
-content_margin_bottom = 6.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_reroll"]
+content_margin_left = 18.0
+content_margin_top = 12.0
+content_margin_right = 18.0
+content_margin_bottom = 12.0
 bg_color = Color(0, 0, 0, 0)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
 border_color = Color(0.95, 0.65, 0.2, 0.85)
-content_margin_left = 18.0
-content_margin_right = 18.0
-content_margin_top = 12.0
-content_margin_bottom = 12.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_reroll_hover"]
+content_margin_left = 18.0
+content_margin_top = 12.0
+content_margin_right = 18.0
+content_margin_bottom = 12.0
 bg_color = Color(0.3, 0.18, 0.02, 0.3)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(1.0, 0.85, 0.4, 1.0)
+border_color = Color(1, 0.85, 0.4, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_disabled"]
 content_margin_left = 18.0
+content_margin_top = 8.0
 content_margin_right = 18.0
-content_margin_top = 12.0
-content_margin_bottom = 12.0
+content_margin_bottom = 8.0
+bg_color = Color(0.1, 0.08, 0.15, 0.4)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.3, 0.22, 0.45, 0.3)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lock"]
+content_margin_left = 18.0
+content_margin_top = 12.0
+content_margin_right = 18.0
+content_margin_bottom = 12.0
 bg_color = Color(0, 0, 0, 0)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.4, 0.75, 1.0, 0.85)
-content_margin_left = 18.0
-content_margin_right = 18.0
-content_margin_top = 12.0
-content_margin_bottom = 12.0
+border_color = Color(0.4, 0.75, 1, 0.85)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lock_hover"]
+content_margin_left = 18.0
+content_margin_top = 12.0
+content_margin_right = 18.0
+content_margin_bottom = 12.0
 bg_color = Color(0.05, 0.2, 0.35, 0.3)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.6, 0.9, 1.0, 1.0)
-content_margin_left = 18.0
-content_margin_right = 18.0
-content_margin_top = 12.0
-content_margin_bottom = 12.0
+border_color = Color(0.6, 0.9, 1, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_continue"]
+content_margin_left = 48.0
+content_margin_top = 12.0
+content_margin_right = 48.0
+content_margin_bottom = 12.0
 bg_color = Color(0.15, 0.06, 0.3, 0.4)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.88, 0.72, 1.0, 1.0)
-content_margin_left = 48.0
-content_margin_right = 48.0
-content_margin_top = 12.0
-content_margin_bottom = 12.0
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_forge_bg"]
-bg_color = Color(0.08, 0.05, 0.01, 0.8)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(1.0, 0.75, 0.1, 0.45)
-content_margin_left = 18.0
-content_margin_right = 18.0
-content_margin_top = 10.0
-content_margin_bottom = 10.0
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_forge"]
-bg_color = Color(0, 0, 0, 0)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(1.0, 0.75, 0.1, 0.85)
-content_margin_left = 18.0
-content_margin_right = 18.0
-content_margin_top = 8.0
-content_margin_bottom = 8.0
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_forge_hover"]
-bg_color = Color(0.25, 0.15, 0.0, 0.3)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(1.0, 0.92, 0.3, 1.0)
-content_margin_left = 18.0
-content_margin_right = 18.0
-content_margin_top = 8.0
-content_margin_bottom = 8.0
+border_color = Color(0.88, 0.72, 1, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_continue_hover"]
+content_margin_left = 48.0
+content_margin_top = 12.0
+content_margin_right = 48.0
+content_margin_bottom = 12.0
 bg_color = Color(0.45, 0.2, 0.75, 0.3)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(1.0, 0.88, 1.0, 1.0)
-content_margin_left = 48.0
-content_margin_right = 48.0
-content_margin_top = 12.0
-content_margin_bottom = 12.0
+border_color = Color(1, 0.88, 1, 1)
 
-[node name="ShopMenu" type="CanvasLayer"]
+[node name="ShopMenu" type="CanvasLayer" unique_id=1818980323]
+process_mode = 3
 layer = 10
-visible = false
 script = ExtResource("1_shop")
 
-[node name="Control" type="Control" parent="."]
+[node name="Control" type="Control" parent="." unique_id=2062976564]
 process_mode = 3
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="BG" type="ColorRect" parent="Control"]
+[node name="BG" type="ColorRect" parent="Control" unique_id=424687158]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
 color = Color(0.02, 0.01, 0.04, 0.92)
 
-[node name="Panel" type="PanelContainer" parent="Control"]
+[node name="Panel" type="PanelContainer" parent="Control" unique_id=663035483]
 layout_mode = 0
 offset_left = 160.0
 offset_top = 55.0
@@ -239,590 +132,128 @@ offset_right = 1760.0
 offset_bottom = 1025.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
 
-[node name="MainVBox" type="VBoxContainer" parent="Control/Panel"]
+[node name="MainVBox" type="VBoxContainer" parent="Control/Panel" unique_id=1133182633]
 layout_mode = 2
 theme_override_constants/separation = 16
 
-[node name="Title" type="Label" parent="Control/Panel/MainVBox"]
+[node name="Title" type="Label" parent="Control/Panel/MainVBox" unique_id=421747110]
 layout_mode = 2
-text = "MARCHAND DES OMBRES"
-horizontal_alignment = 1
+theme_override_colors/font_color = Color(0.88, 0.78, 1, 1)
 theme_override_fonts/font = ExtResource("2_cinzel")
 theme_override_font_sizes/font_size = 36
-theme_override_colors/font_color = Color(0.88, 0.78, 1.0, 1.0)
-
-[node name="Subtitle" type="Label" parent="Control/Panel/MainVBox"]
-layout_mode = 2
-text = "\"Entre deux batailles, l'abîme offre ses secrets.\""
+text = "MARCHAND DES OMBRES"
 horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="Control/Panel/MainVBox" unique_id=1302199776]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.52, 0.42, 0.68, 0.75)
 theme_override_fonts/font = ExtResource("2_cinzel")
 theme_override_font_sizes/font_size = 11
-theme_override_colors/font_color = Color(0.52, 0.42, 0.68, 0.75)
+text = "\"Entre deux batailles, l'abîme offre ses secrets.\""
+horizontal_alignment = 1
 
-[node name="Div1" type="ColorRect" parent="Control/Panel/MainVBox"]
-layout_mode = 2
+[node name="Div1" type="ColorRect" parent="Control/Panel/MainVBox" unique_id=33380507]
 custom_minimum_size = Vector2(0, 1)
+layout_mode = 2
 color = Color(0.55, 0.35, 0.85, 0.4)
 
-[node name="Content" type="HBoxContainer" parent="Control/Panel/MainVBox"]
+[node name="Content" type="HBoxContainer" parent="Control/Panel/MainVBox" unique_id=702909242]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 32
 
-[node name="CrateSection" type="VBoxContainer" parent="Control/Panel/MainVBox/Content"]
+[node name="CrateSection" type="VBoxContainer" parent="Control/Panel/MainVBox/Content" unique_id=279083827]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_stretch_ratio = 1.15
 theme_override_constants/separation = 14
 
-[node name="CrateTitle" type="Label" parent="Control/Panel/MainVBox/Content/CrateSection"]
+[node name="CrateTitle" type="Label" parent="Control/Panel/MainVBox/Content/CrateSection" unique_id=432473417]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.82, 0.35, 1)
+theme_override_fonts/font = ExtResource("3_mono")
+theme_override_font_sizes/font_size = 12
 text = "▸  CAISSES MAUDITES"
-theme_override_fonts/font = ExtResource("3_mono")
-theme_override_font_sizes/font_size = 12
-theme_override_colors/font_color = Color(0.95, 0.82, 0.35, 1.0)
 
-[node name="CrateList" type="VBoxContainer" parent="Control/Panel/MainVBox/Content/CrateSection"]
+[node name="CrateList" type="VBoxContainer" parent="Control/Panel/MainVBox/Content/CrateSection" unique_id=320009359]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 10
 
-[node name="Crate1" type="PanelContainer" parent="Control/Panel/MainVBox/Content/CrateSection/CrateList"]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_crate")
-
-[node name="Row" type="HBoxContainer" parent="Control/Panel/MainVBox/Content/CrateSection/CrateList/Crate1"]
-layout_mode = 2
-theme_override_constants/separation = 16
-
-[node name="Crate1Image" type="TextureRect" parent="Control/Panel/MainVBox/Content/CrateSection/CrateList/Crate1/Row"]
-unique_name_in_owner = true
-layout_mode = 2
-custom_minimum_size = Vector2(80, 80)
-size_flags_vertical = 4
-texture = ExtResource("4_crate1")
-expand_mode = 0
-stretch_mode = 5
-
-[node name="Info" type="VBoxContainer" parent="Control/Panel/MainVBox/Content/CrateSection/CrateList/Crate1/Row"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 4
-
-[node name="Crate1Rarity" type="Label" parent="Control/Panel/MainVBox/Content/CrateSection/CrateList/Crate1/Row/Info"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "COMMUN"
-theme_override_fonts/font = ExtResource("3_mono")
-theme_override_font_sizes/font_size = 9
-theme_override_colors/font_color = Color(0.75, 0.75, 0.75, 0.8)
-
-[node name="Crate1Name" type="Label" parent="Control/Panel/MainVBox/Content/CrateSection/CrateList/Crate1/Row/Info"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "..."
-theme_override_fonts/font = ExtResource("2_cinzel")
-theme_override_font_sizes/font_size = 15
-theme_override_colors/font_color = Color(0.92, 0.85, 1.0, 1.0)
-
-[node name="Crate1Desc" type="Label" parent="Control/Panel/MainVBox/Content/CrateSection/CrateList/Crate1/Row/Info"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "..."
-theme_override_fonts/font = ExtResource("3_mono")
-theme_override_font_sizes/font_size = 11
-theme_override_colors/font_color = Color(0.58, 0.5, 0.72, 0.85)
-
-[node name="Crate1Btn" type="Button" parent="Control/Panel/MainVBox/Content/CrateSection/CrateList/Crate1/Row"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_vertical = 4
-process_mode = 3
-text = "🗝  OUVRIR"
-theme_override_fonts/font = ExtResource("3_mono")
-theme_override_font_sizes/font_size = 12
-theme_override_colors/font_color = Color(0.95, 0.82, 0.35, 1.0)
-theme_override_styles/normal = SubResource("StyleBoxFlat_btn_key")
-theme_override_styles/hover = SubResource("StyleBoxFlat_btn_key_hover")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_btn_disabled")
-theme_override_styles/focus = SubResource("StyleBoxFlat_btn_key")
-
-[node name="LockBtn1" type="Button" parent="Control/Panel/MainVBox/Content/CrateSection/CrateList/Crate1/Row"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_vertical = 4
-process_mode = 3
-text = "🔓"
-theme_override_fonts/font = ExtResource("3_mono")
-theme_override_font_sizes/font_size = 14
-theme_override_styles/normal = SubResource("StyleBoxFlat_lock")
-theme_override_styles/hover = SubResource("StyleBoxFlat_lock_hover")
-theme_override_styles/focus = SubResource("StyleBoxFlat_lock")
-
-[node name="Crate2" type="PanelContainer" parent="Control/Panel/MainVBox/Content/CrateSection/CrateList"]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_crate")
-
-[node name="Row" type="HBoxContainer" parent="Control/Panel/MainVBox/Content/CrateSection/CrateList/Crate2"]
-layout_mode = 2
-theme_override_constants/separation = 16
-
-[node name="Crate2Image" type="TextureRect" parent="Control/Panel/MainVBox/Content/CrateSection/CrateList/Crate2/Row"]
-unique_name_in_owner = true
-layout_mode = 2
-custom_minimum_size = Vector2(80, 80)
-size_flags_vertical = 4
-texture = ExtResource("4_crate1")
-expand_mode = 0
-stretch_mode = 5
-
-[node name="Info" type="VBoxContainer" parent="Control/Panel/MainVBox/Content/CrateSection/CrateList/Crate2/Row"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 4
-
-[node name="Crate2Rarity" type="Label" parent="Control/Panel/MainVBox/Content/CrateSection/CrateList/Crate2/Row/Info"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "COMMUN"
-theme_override_fonts/font = ExtResource("3_mono")
-theme_override_font_sizes/font_size = 9
-theme_override_colors/font_color = Color(0.75, 0.75, 0.75, 0.8)
-
-[node name="Crate2Name" type="Label" parent="Control/Panel/MainVBox/Content/CrateSection/CrateList/Crate2/Row/Info"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "..."
-theme_override_fonts/font = ExtResource("2_cinzel")
-theme_override_font_sizes/font_size = 15
-theme_override_colors/font_color = Color(0.92, 0.85, 1.0, 1.0)
-
-[node name="Crate2Desc" type="Label" parent="Control/Panel/MainVBox/Content/CrateSection/CrateList/Crate2/Row/Info"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "..."
-theme_override_fonts/font = ExtResource("3_mono")
-theme_override_font_sizes/font_size = 11
-theme_override_colors/font_color = Color(0.58, 0.5, 0.72, 0.85)
-
-[node name="Crate2Btn" type="Button" parent="Control/Panel/MainVBox/Content/CrateSection/CrateList/Crate2/Row"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_vertical = 4
-process_mode = 3
-text = "🗝  OUVRIR"
-theme_override_fonts/font = ExtResource("3_mono")
-theme_override_font_sizes/font_size = 12
-theme_override_colors/font_color = Color(0.95, 0.82, 0.35, 1.0)
-theme_override_styles/normal = SubResource("StyleBoxFlat_btn_key")
-theme_override_styles/hover = SubResource("StyleBoxFlat_btn_key_hover")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_btn_disabled")
-theme_override_styles/focus = SubResource("StyleBoxFlat_btn_key")
-
-[node name="LockBtn2" type="Button" parent="Control/Panel/MainVBox/Content/CrateSection/CrateList/Crate2/Row"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_vertical = 4
-process_mode = 3
-text = "🔓"
-theme_override_fonts/font = ExtResource("3_mono")
-theme_override_font_sizes/font_size = 14
-theme_override_styles/normal = SubResource("StyleBoxFlat_lock")
-theme_override_styles/hover = SubResource("StyleBoxFlat_lock_hover")
-theme_override_styles/focus = SubResource("StyleBoxFlat_lock")
-
-[node name="Crate3" type="PanelContainer" parent="Control/Panel/MainVBox/Content/CrateSection/CrateList"]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_crate")
-
-[node name="Row" type="HBoxContainer" parent="Control/Panel/MainVBox/Content/CrateSection/CrateList/Crate3"]
-layout_mode = 2
-theme_override_constants/separation = 16
-
-[node name="Crate3Image" type="TextureRect" parent="Control/Panel/MainVBox/Content/CrateSection/CrateList/Crate3/Row"]
-unique_name_in_owner = true
-layout_mode = 2
-custom_minimum_size = Vector2(80, 80)
-size_flags_vertical = 4
-texture = ExtResource("4_crate1")
-expand_mode = 0
-stretch_mode = 5
-
-[node name="Info" type="VBoxContainer" parent="Control/Panel/MainVBox/Content/CrateSection/CrateList/Crate3/Row"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 4
-
-[node name="Crate3Rarity" type="Label" parent="Control/Panel/MainVBox/Content/CrateSection/CrateList/Crate3/Row/Info"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "COMMUN"
-theme_override_fonts/font = ExtResource("3_mono")
-theme_override_font_sizes/font_size = 9
-theme_override_colors/font_color = Color(0.75, 0.75, 0.75, 0.8)
-
-[node name="Crate3Name" type="Label" parent="Control/Panel/MainVBox/Content/CrateSection/CrateList/Crate3/Row/Info"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "..."
-theme_override_fonts/font = ExtResource("2_cinzel")
-theme_override_font_sizes/font_size = 15
-theme_override_colors/font_color = Color(0.92, 0.85, 1.0, 1.0)
-
-[node name="Crate3Desc" type="Label" parent="Control/Panel/MainVBox/Content/CrateSection/CrateList/Crate3/Row/Info"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "..."
-theme_override_fonts/font = ExtResource("3_mono")
-theme_override_font_sizes/font_size = 11
-theme_override_colors/font_color = Color(0.58, 0.5, 0.72, 0.85)
-
-[node name="Crate3Btn" type="Button" parent="Control/Panel/MainVBox/Content/CrateSection/CrateList/Crate3/Row"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_vertical = 4
-process_mode = 3
-text = "🗝  OUVRIR"
-theme_override_fonts/font = ExtResource("3_mono")
-theme_override_font_sizes/font_size = 12
-theme_override_colors/font_color = Color(0.95, 0.82, 0.35, 1.0)
-theme_override_styles/normal = SubResource("StyleBoxFlat_btn_key")
-theme_override_styles/hover = SubResource("StyleBoxFlat_btn_key_hover")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_btn_disabled")
-theme_override_styles/focus = SubResource("StyleBoxFlat_btn_key")
-
-[node name="LockBtn3" type="Button" parent="Control/Panel/MainVBox/Content/CrateSection/CrateList/Crate3/Row"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_vertical = 4
-process_mode = 3
-text = "🔓"
-theme_override_fonts/font = ExtResource("3_mono")
-theme_override_font_sizes/font_size = 14
-theme_override_styles/normal = SubResource("StyleBoxFlat_lock")
-theme_override_styles/hover = SubResource("StyleBoxFlat_lock_hover")
-theme_override_styles/focus = SubResource("StyleBoxFlat_lock")
-
-[node name="VSep" type="ColorRect" parent="Control/Panel/MainVBox/Content"]
-layout_mode = 2
+[node name="VSep" type="ColorRect" parent="Control/Panel/MainVBox/Content" unique_id=820895721]
 custom_minimum_size = Vector2(1, 0)
+layout_mode = 2
 size_flags_vertical = 3
 color = Color(0.55, 0.35, 0.85, 0.3)
 
-[node name="StatsSection" type="VBoxContainer" parent="Control/Panel/MainVBox/Content"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 14
-
-[node name="StatsTitle" type="Label" parent="Control/Panel/MainVBox/Content/StatsSection"]
-layout_mode = 2
-text = "▸  AMÉLIORATIONS"
-theme_override_fonts/font = ExtResource("3_mono")
-theme_override_font_sizes/font_size = 12
-theme_override_colors/font_color = Color(0.55, 0.78, 0.55, 1.0)
-
-[node name="StatRows" type="VBoxContainer" parent="Control/Panel/MainVBox/Content/StatsSection"]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_constants/separation = 10
-
-[node name="HPRow" type="PanelContainer" parent="Control/Panel/MainVBox/Content/StatsSection/StatRows"]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_stat")
-
-[node name="RowHBox" type="HBoxContainer" parent="Control/Panel/MainVBox/Content/StatsSection/StatRows/HPRow"]
-layout_mode = 2
-theme_override_constants/separation = 10
-
-[node name="Name" type="Label" parent="Control/Panel/MainVBox/Content/StatsSection/StatRows/HPRow/RowHBox"]
-layout_mode = 2
-custom_minimum_size = Vector2(150, 0)
-text = "♥  VIE MAX"
-theme_override_fonts/font = ExtResource("3_mono")
-theme_override_font_sizes/font_size = 13
-theme_override_colors/font_color = Color(0.9, 0.35, 0.5, 1.0)
-
-[node name="Spacer" type="Control" parent="Control/Panel/MainVBox/Content/StatsSection/StatRows/HPRow/RowHBox"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="HPLevel" type="Label" parent="Control/Panel/MainVBox/Content/StatsSection/StatRows/HPRow/RowHBox"]
-unique_name_in_owner = true
-layout_mode = 2
-custom_minimum_size = Vector2(80, 0)
-text = "○○○○○"
-horizontal_alignment = 1
-theme_override_fonts/font = ExtResource("3_mono")
-theme_override_font_sizes/font_size = 13
-theme_override_colors/font_color = Color(0.9, 0.35, 0.5, 0.9)
-
-[node name="HPCost" type="Label" parent="Control/Panel/MainVBox/Content/StatsSection/StatRows/HPRow/RowHBox"]
-unique_name_in_owner = true
-layout_mode = 2
-custom_minimum_size = Vector2(70, 0)
-text = "10 ☽"
-horizontal_alignment = 2
-theme_override_fonts/font = ExtResource("3_mono")
-theme_override_font_sizes/font_size = 12
-theme_override_colors/font_color = Color(0.7, 0.6, 0.9, 0.85)
-
-[node name="HPBtn" type="Button" parent="Control/Panel/MainVBox/Content/StatsSection/StatRows/HPRow/RowHBox"]
-unique_name_in_owner = true
-layout_mode = 2
-process_mode = 3
-text = "AMÉLIORER"
-theme_override_fonts/font = ExtResource("3_mono")
-theme_override_font_sizes/font_size = 11
-theme_override_colors/font_color = Color(0.7, 1.0, 0.7, 1.0)
-theme_override_styles/normal = SubResource("StyleBoxFlat_btn_up")
-theme_override_styles/hover = SubResource("StyleBoxFlat_btn_up_hover")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_btn_disabled")
-theme_override_styles/focus = SubResource("StyleBoxFlat_btn_up")
-
-[node name="DmgRow" type="PanelContainer" parent="Control/Panel/MainVBox/Content/StatsSection/StatRows"]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_stat")
-
-[node name="RowHBox" type="HBoxContainer" parent="Control/Panel/MainVBox/Content/StatsSection/StatRows/DmgRow"]
-layout_mode = 2
-theme_override_constants/separation = 10
-
-[node name="Name" type="Label" parent="Control/Panel/MainVBox/Content/StatsSection/StatRows/DmgRow/RowHBox"]
-layout_mode = 2
-custom_minimum_size = Vector2(150, 0)
-text = "⚔  DÉGÂTS"
-theme_override_fonts/font = ExtResource("3_mono")
-theme_override_font_sizes/font_size = 13
-theme_override_colors/font_color = Color(1.0, 0.55, 0.3, 1.0)
-
-[node name="Spacer" type="Control" parent="Control/Panel/MainVBox/Content/StatsSection/StatRows/DmgRow/RowHBox"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="DmgLevel" type="Label" parent="Control/Panel/MainVBox/Content/StatsSection/StatRows/DmgRow/RowHBox"]
-unique_name_in_owner = true
-layout_mode = 2
-custom_minimum_size = Vector2(80, 0)
-text = "○○○○○"
-horizontal_alignment = 1
-theme_override_fonts/font = ExtResource("3_mono")
-theme_override_font_sizes/font_size = 13
-theme_override_colors/font_color = Color(1.0, 0.55, 0.3, 0.9)
-
-[node name="DmgCost" type="Label" parent="Control/Panel/MainVBox/Content/StatsSection/StatRows/DmgRow/RowHBox"]
-unique_name_in_owner = true
-layout_mode = 2
-custom_minimum_size = Vector2(70, 0)
-text = "10 ☽"
-horizontal_alignment = 2
-theme_override_fonts/font = ExtResource("3_mono")
-theme_override_font_sizes/font_size = 12
-theme_override_colors/font_color = Color(0.7, 0.6, 0.9, 0.85)
-
-[node name="DmgBtn" type="Button" parent="Control/Panel/MainVBox/Content/StatsSection/StatRows/DmgRow/RowHBox"]
-unique_name_in_owner = true
-layout_mode = 2
-process_mode = 3
-text = "AMÉLIORER"
-theme_override_fonts/font = ExtResource("3_mono")
-theme_override_font_sizes/font_size = 11
-theme_override_colors/font_color = Color(0.7, 1.0, 0.7, 1.0)
-theme_override_styles/normal = SubResource("StyleBoxFlat_btn_up")
-theme_override_styles/hover = SubResource("StyleBoxFlat_btn_up_hover")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_btn_disabled")
-theme_override_styles/focus = SubResource("StyleBoxFlat_btn_up")
-
-[node name="SpdRow" type="PanelContainer" parent="Control/Panel/MainVBox/Content/StatsSection/StatRows"]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_stat")
-
-[node name="RowHBox" type="HBoxContainer" parent="Control/Panel/MainVBox/Content/StatsSection/StatRows/SpdRow"]
-layout_mode = 2
-theme_override_constants/separation = 10
-
-[node name="Name" type="Label" parent="Control/Panel/MainVBox/Content/StatsSection/StatRows/SpdRow/RowHBox"]
-layout_mode = 2
-custom_minimum_size = Vector2(150, 0)
-text = "◈  VITESSE"
-theme_override_fonts/font = ExtResource("3_mono")
-theme_override_font_sizes/font_size = 13
-theme_override_colors/font_color = Color(0.4, 0.75, 1.0, 1.0)
-
-[node name="Spacer" type="Control" parent="Control/Panel/MainVBox/Content/StatsSection/StatRows/SpdRow/RowHBox"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="SpdLevel" type="Label" parent="Control/Panel/MainVBox/Content/StatsSection/StatRows/SpdRow/RowHBox"]
-unique_name_in_owner = true
-layout_mode = 2
-custom_minimum_size = Vector2(80, 0)
-text = "○○○○○"
-horizontal_alignment = 1
-theme_override_fonts/font = ExtResource("3_mono")
-theme_override_font_sizes/font_size = 13
-theme_override_colors/font_color = Color(0.4, 0.75, 1.0, 0.9)
-
-[node name="SpdCost" type="Label" parent="Control/Panel/MainVBox/Content/StatsSection/StatRows/SpdRow/RowHBox"]
-unique_name_in_owner = true
-layout_mode = 2
-custom_minimum_size = Vector2(70, 0)
-text = "10 ☽"
-horizontal_alignment = 2
-theme_override_fonts/font = ExtResource("3_mono")
-theme_override_font_sizes/font_size = 12
-theme_override_colors/font_color = Color(0.7, 0.6, 0.9, 0.85)
-
-[node name="SpdBtn" type="Button" parent="Control/Panel/MainVBox/Content/StatsSection/StatRows/SpdRow/RowHBox"]
-unique_name_in_owner = true
-layout_mode = 2
-process_mode = 3
-text = "AMÉLIORER"
-theme_override_fonts/font = ExtResource("3_mono")
-theme_override_font_sizes/font_size = 11
-theme_override_colors/font_color = Color(0.7, 1.0, 0.7, 1.0)
-theme_override_styles/normal = SubResource("StyleBoxFlat_btn_up")
-theme_override_styles/hover = SubResource("StyleBoxFlat_btn_up_hover")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_btn_disabled")
-theme_override_styles/focus = SubResource("StyleBoxFlat_btn_up")
-
-[node name="CdRow" type="PanelContainer" parent="Control/Panel/MainVBox/Content/StatsSection/StatRows"]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_stat")
-
-[node name="RowHBox" type="HBoxContainer" parent="Control/Panel/MainVBox/Content/StatsSection/StatRows/CdRow"]
-layout_mode = 2
-theme_override_constants/separation = 10
-
-[node name="Name" type="Label" parent="Control/Panel/MainVBox/Content/StatsSection/StatRows/CdRow/RowHBox"]
-layout_mode = 2
-custom_minimum_size = Vector2(150, 0)
-text = "◉  CADENCE"
-theme_override_fonts/font = ExtResource("3_mono")
-theme_override_font_sizes/font_size = 13
-theme_override_colors/font_color = Color(0.75, 0.45, 1.0, 1.0)
-
-[node name="Spacer" type="Control" parent="Control/Panel/MainVBox/Content/StatsSection/StatRows/CdRow/RowHBox"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="CdLevel" type="Label" parent="Control/Panel/MainVBox/Content/StatsSection/StatRows/CdRow/RowHBox"]
-unique_name_in_owner = true
-layout_mode = 2
-custom_minimum_size = Vector2(80, 0)
-text = "○○○○○"
-horizontal_alignment = 1
-theme_override_fonts/font = ExtResource("3_mono")
-theme_override_font_sizes/font_size = 13
-theme_override_colors/font_color = Color(0.75, 0.45, 1.0, 0.9)
-
-[node name="CdCost" type="Label" parent="Control/Panel/MainVBox/Content/StatsSection/StatRows/CdRow/RowHBox"]
-unique_name_in_owner = true
-layout_mode = 2
-custom_minimum_size = Vector2(70, 0)
-text = "10 ☽"
-horizontal_alignment = 2
-theme_override_fonts/font = ExtResource("3_mono")
-theme_override_font_sizes/font_size = 12
-theme_override_colors/font_color = Color(0.7, 0.6, 0.9, 0.85)
-
-[node name="CdBtn" type="Button" parent="Control/Panel/MainVBox/Content/StatsSection/StatRows/CdRow/RowHBox"]
-unique_name_in_owner = true
-layout_mode = 2
-process_mode = 3
-text = "AMÉLIORER"
-theme_override_fonts/font = ExtResource("3_mono")
-theme_override_font_sizes/font_size = 11
-theme_override_colors/font_color = Color(0.7, 1.0, 0.7, 1.0)
-theme_override_styles/normal = SubResource("StyleBoxFlat_btn_up")
-theme_override_styles/hover = SubResource("StyleBoxFlat_btn_up_hover")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_btn_disabled")
-theme_override_styles/focus = SubResource("StyleBoxFlat_btn_up")
-
-[node name="Div2" type="ColorRect" parent="Control/Panel/MainVBox"]
-layout_mode = 2
+[node name="Div2" type="ColorRect" parent="Control/Panel/MainVBox" unique_id=724339566]
 custom_minimum_size = Vector2(0, 1)
+layout_mode = 2
 color = Color(0.55, 0.35, 0.85, 0.3)
 
-[node name="BottomRow" type="HBoxContainer" parent="Control/Panel/MainVBox"]
+[node name="BottomRow" type="HBoxContainer" parent="Control/Panel/MainVBox" unique_id=395229057]
 layout_mode = 2
 theme_override_constants/separation = 20
 
-[node name="SoulsLabel" type="Label" parent="Control/Panel/MainVBox/BottomRow"]
+[node name="SoulsLabel" type="Label" parent="Control/Panel/MainVBox/BottomRow" unique_id=919053064]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.6, 0.9, 1)
+theme_override_fonts/font = ExtResource("3_mono")
+theme_override_font_sizes/font_size = 16
 text = "☽  0 âmes"
 vertical_alignment = 1
-theme_override_fonts/font = ExtResource("3_mono")
-theme_override_font_sizes/font_size = 16
-theme_override_colors/font_color = Color(0.7, 0.6, 0.9, 1.0)
 
-[node name="KeysLabel" type="Label" parent="Control/Panel/MainVBox/BottomRow"]
+[node name="KeysLabel" type="Label" parent="Control/Panel/MainVBox/BottomRow" unique_id=926183108]
 unique_name_in_owner = true
 layout_mode = 2
-text = "🗝  x0"
-vertical_alignment = 1
+theme_override_colors/font_color = Color(0.95, 0.82, 0.35, 1)
 theme_override_fonts/font = ExtResource("3_mono")
 theme_override_font_sizes/font_size = 16
-theme_override_colors/font_color = Color(0.95, 0.82, 0.35, 1.0)
+text = "x3"
+vertical_alignment = 1
 
-[node name="Spacer" type="Control" parent="Control/Panel/MainVBox/BottomRow"]
+[node name="Spacer" type="Control" parent="Control/Panel/MainVBox/BottomRow" unique_id=1404324610]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="RerollBtn" type="Button" parent="Control/Panel/MainVBox/BottomRow"]
+[node name="RerollBtn" type="Button" parent="Control/Panel/MainVBox/BottomRow" unique_id=120155755]
 unique_name_in_owner = true
-layout_mode = 2
 process_mode = 3
-text = "↺  RECHARGER  50 ☽"
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.75, 0.3, 1)
 theme_override_fonts/font = ExtResource("3_mono")
 theme_override_font_sizes/font_size = 13
-theme_override_colors/font_color = Color(0.95, 0.75, 0.3, 1.0)
 theme_override_styles/normal = SubResource("StyleBoxFlat_reroll")
 theme_override_styles/hover = SubResource("StyleBoxFlat_reroll_hover")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_btn_disabled")
 theme_override_styles/focus = SubResource("StyleBoxFlat_reroll")
+text = "↺  RECHARGER  20 ☽"
 
-[node name="LockBtn" type="Button" parent="Control/Panel/MainVBox/BottomRow"]
+[node name="LockBtn" type="Button" parent="Control/Panel/MainVBox/BottomRow" unique_id=1488666345]
 unique_name_in_owner = true
-layout_mode = 2
 process_mode = 3
-text = "🔓  VERROUILLER"
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5, 0.85, 1, 1)
 theme_override_fonts/font = ExtResource("3_mono")
 theme_override_font_sizes/font_size = 13
-theme_override_colors/font_color = Color(0.5, 0.85, 1.0, 1.0)
 theme_override_styles/normal = SubResource("StyleBoxFlat_lock")
 theme_override_styles/hover = SubResource("StyleBoxFlat_lock_hover")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_btn_disabled")
 theme_override_styles/focus = SubResource("StyleBoxFlat_lock")
+text = "🔓  VERROUILLER"
 
-[node name="ContinueBtn" type="Button" parent="Control/Panel/MainVBox/BottomRow"]
+[node name="ContinueBtn" type="Button" parent="Control/Panel/MainVBox/BottomRow" unique_id=395968039]
 unique_name_in_owner = true
-layout_mode = 2
 process_mode = 3
-text = "CONTINUER  ►"
+layout_mode = 2
+theme_override_colors/font_color = Color(0.88, 0.78, 1, 1)
 theme_override_fonts/font = ExtResource("3_mono")
 theme_override_font_sizes/font_size = 14
-theme_override_colors/font_color = Color(0.88, 0.78, 1.0, 1.0)
 theme_override_styles/normal = SubResource("StyleBoxFlat_continue")
 theme_override_styles/hover = SubResource("StyleBoxFlat_continue_hover")
 theme_override_styles/focus = SubResource("StyleBoxFlat_continue")
+text = "CONTINUER  ►"
 
-[connection signal="pressed" from="Control/Panel/MainVBox/Content/CrateSection/CrateList/Crate1/Row/Crate1Btn" to="." method="_on_crate1_pressed"]
-[connection signal="pressed" from="Control/Panel/MainVBox/Content/CrateSection/CrateList/Crate2/Row/Crate2Btn" to="." method="_on_crate2_pressed"]
-[connection signal="pressed" from="Control/Panel/MainVBox/Content/CrateSection/CrateList/Crate3/Row/Crate3Btn" to="." method="_on_crate3_pressed"]
-[connection signal="pressed" from="Control/Panel/MainVBox/Content/StatsSection/StatRows/HPRow/RowHBox/HPBtn" to="." method="_on_hp_upgrade_pressed"]
-[connection signal="pressed" from="Control/Panel/MainVBox/Content/StatsSection/StatRows/DmgRow/RowHBox/DmgBtn" to="." method="_on_dmg_upgrade_pressed"]
-[connection signal="pressed" from="Control/Panel/MainVBox/Content/StatsSection/StatRows/SpdRow/RowHBox/SpdBtn" to="." method="_on_spd_upgrade_pressed"]
-[connection signal="pressed" from="Control/Panel/MainVBox/Content/StatsSection/StatRows/CdRow/RowHBox/CdBtn" to="." method="_on_cd_upgrade_pressed"]
-[connection signal="pressed" from="Control/Panel/MainVBox/Content/CrateSection/CrateList/Crate1/Row/LockBtn1" to="." method="_on_lock1_pressed"]
-[connection signal="pressed" from="Control/Panel/MainVBox/Content/CrateSection/CrateList/Crate2/Row/LockBtn2" to="." method="_on_lock2_pressed"]
-[connection signal="pressed" from="Control/Panel/MainVBox/Content/CrateSection/CrateList/Crate3/Row/LockBtn3" to="." method="_on_lock3_pressed"]
 [connection signal="pressed" from="Control/Panel/MainVBox/BottomRow/RerollBtn" to="." method="_on_reroll_pressed"]
 [connection signal="pressed" from="Control/Panel/MainVBox/BottomRow/ContinueBtn" to="." method="_on_continue_pressed"]

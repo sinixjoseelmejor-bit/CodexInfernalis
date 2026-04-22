@@ -1,0 +1,153 @@
+═══════════════════════════════════════════════════════════
+  CODEX INFERNALIS — LISTE DES ITEMS R1
+═══════════════════════════════════════════════════════════
+
+──────────────────────────────────────────────────────────
+  COMMUNS  (coût : 1 clé | max 5 stacks)
+──────────────────────────────────────────────────────────
+
+[coeur_pierre] Cœur de Pierre
+  Stats    : +8 HP max | +2 armure à 3 stacks
+  Bonus    : flat_hp +8 | flat_armor +2 (conditionnel)
+  Résumé   : Item de survie pur. Empiler 3 copies débloque
+             un bonus d'armure qui réduit chaque coup reçu.
+
+[ampoule_vie] Ampoule de Vie
+  Stats    : +5 HP max | +0.3 regen/s par stack
+  Bonus    : flat_hp +5 | flat_regen +0.3
+  Résumé   : Combine volume de vie et régénération passive.
+             Très efficace en multi-stacks sur les longues runs.
+
+[amulette_foi] Amulette de Foi
+  Stats    : +4 HP max | +3% esquive
+  Bonus    : flat_hp +4 | pct_dodge +3%
+  Résumé   : Donne une chance d'éviter totalement un coup.
+             Stacker augmente l'esquive jusqu'à 60% max global.
+
+[dent_loup] Dent de Loup
+  Stats    : +1 dégât | +3% critique
+  Bonus    : flat_damage +1 | pct_crit +3%
+  Résumé   : Item offensif polyvalent. Chaque stack améliore
+             à la fois les dégâts bruts et la chance de crit.
+
+[pierre_aceree] Pierre Acérée
+  Stats    : +2 dégâts | +5% vitesse projectile
+  Bonus    : flat_damage +2 | flat_proj_speed +5%
+  Résumé   : Pur DPS. Les projectiles plus rapides touchent
+             plus facilement les ennemis qui bougent.
+
+[marteau_fissure] Marteau Fissure
+  Stats    : +2 dégâts | Crit → saignement 3s
+  Bonus    : flat_damage +2 | trigger: crit applique bleed
+  Résumé   : Les coups critiques infligent un saignement qui
+             fait des dégâts dans le temps. Synergise avec
+             les items qui augmentent le taux de critique.
+
+[plume_rapide] Plume Rapide
+  Stats    : +15 vitesse | +0.1s iframes par stack
+  Bonus    : flat_speed +15
+  Résumé   : Mobilité accrue. Les iframes supplémentaires
+             permettent de traverser les groupes ennemis
+             plus souvent sans prendre de dégâts.
+
+[bague_tir] Bague du Tireur
+  Stats    : Cadence -0.08s (tir 8% plus rapide)
+  Bonus    : flat_fire_cd -0.08
+  Résumé   : Réduit directement le temps entre chaque tir.
+             Simple mais efficace, surtout avec plusieurs stacks.
+
+[sac_trou] Sac sans Fond
+  Stats    : +40 portée ramassage | +5% âmes bonus
+  Bonus    : flat_pickup +40 | bonus_soul_rate +5%
+  Résumé   : Augmente le rayon magnétique des clés et âmes.
+             Le bonus d'âmes accélère l'accumulation de souls
+             pour les rerolls au shop.
+
+[pendentif_chance] Pendentif Chance
+  Stats    : +2% crit | +1% esquive | +10 portée ramassage
+  Bonus    : pct_crit +2% | pct_dodge +1% | flat_pickup +10
+  Résumé   : Item généraliste qui touche à tout. Utile pour
+             compléter des builds sans slot libre pour un
+             item spécialisé.
+
+──────────────────────────────────────────────────────────
+  RARES  (coût : 4 clés | max 3 stacks)
+──────────────────────────────────────────────────────────
+
+[vampire_amulet] Amulette Vampire
+  Stats    : +8% HP max | +2% vol de vie par stack
+  Bonus    : pct_hp +8% | pct_lifesteal +2%
+  Résumé   : Survie active — chaque tir qui touche restaure
+             un % des dégâts infligés en HP. Plus efficace
+             avec un dégât élevé.
+
+[fire_boots] Bottes de Feu
+  Stats    : +12% vitesse | Traînée de feu au sol
+  Bonus    : pct_speed +12%
+  Résumé   : Mobilité et zone de contrôle. La traînée de
+             feu laissée derrière le joueur inflige des
+             dégâts aux ennemis qui la traversent.
+
+[thorn_shield] Bouclier Épineux
+  Stats    : +8% dégâts | Renvoie 15% des dégâts reçus × stacks
+  Bonus    : pct_damage +8%
+  Résumé   : Les ennemis en mêlée se blessent en attaquant.
+             Plus efficace aux niveaux élevés où les ennemis
+             font beaucoup de dégâts.
+
+[rage_ring] Anneau de Rage
+  Stats    : +8% dégâts | Enragé 2s après chaque kill
+  Bonus    : pct_damage +8%
+  Résumé   : Buff temporaire déclenché à chaque mort ennemie.
+             Très puissant dans les vagues denses où les kills
+             s'enchaînent rapidement.
+
+[phantom_step] Pas Fantôme
+  Stats    : +12% vitesse | +0.4s iframes par stack
+  Bonus    : pct_speed +12%
+  Résumé   : Version rare de la plume rapide. Les iframes
+             prolongées permettent une mobilité quasi-totale
+             à travers les packs ennemis.
+
+[oeil_gele] Œil Gelé
+  Stats    : +8% dégâts | Le 7e tir ralentit les ennemis 40% pendant 2s
+  Bonus    : pct_damage +8% | trigger: slow tous les 7 tirs
+  Résumé   : Contrôle de foule périodique. Le ralentissement
+             donne le temps de se repositionner face aux
+             gros groupes.
+
+[orbe_mana] Orbe de Mana
+  Stats    : +10% dégâts | Le 10e tir lance un projectile bonus
+  Bonus    : pct_damage +10% | trigger: proj bonus tous les 10 tirs
+  Résumé   : Augmente le DPS global avec un tir supplémentaire
+             automatique. Le projectile bonus suit la même
+             direction que le tir principal.
+
+[cor_guerre] Cor de Guerre
+  Stats    : +6% dégâts | +30% dégâts pendant 5s au début de chaque vague
+  Bonus    : pct_damage +6%
+  Résumé   : Burst de dégâts au début de chaque round.
+             Idéal pour éliminer rapidement les premiers
+             ennemis et sécuriser des drops de clés.
+
+──────────────────────────────────────────────────────────
+  ÉPIQUES  (coût : 8 clés | max 2 stacks)
+──────────────────────────────────────────────────────────
+
+[auto_grenade] Grenade Automatique
+  Stats    : +15% dégâts | Grenade automatique toutes les 6s
+  Bonus    : pct_damage +15%
+  Résumé   : Lance une grenade à explosion de zone toutes
+             les 6 secondes indépendamment du joueur.
+             Excellent pour le nettoyage des groupes denses.
+
+[double_canon] Double Canon
+  Stats    : +1 projectile simultané | +5% dégâts
+  Bonus    : flat_projectiles +1 | pct_damage +5%
+  Résumé   : Double la couverture de tir. Avec la dispersion
+             en cône, chaque tir couvre un angle plus large.
+             Synergise fortement avec tous les items de dégâts.
+
+══════════════════════════════════════════════════════════
+  TOTAUX : 10 communs | 8 rares | 2 épiques = 20 items
+══════════════════════════════════════════════════════════

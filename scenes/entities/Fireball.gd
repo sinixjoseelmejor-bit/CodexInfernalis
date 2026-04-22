@@ -11,9 +11,11 @@ var _damage      := 1
 var _hits_left   := 1
 var _hit_count   := 0
 var _bounced     := false
+var _is_crit     := false
 
-func init(dir: Vector2, dmg: int = 1) -> void:
+func init(dir: Vector2, dmg: int = 1, is_crit: bool = false) -> void:
 	_damage    = dmg
+	_is_crit   = is_crit
 	direction  = dir.normalized()
 	rotation   = direction.angle()
 	_hits_left = 4 if PlayerData.has_skill("penetration") else 2
@@ -23,7 +25,7 @@ func _process(delta: float) -> void:
 	var move := direction * spd * delta
 	position += move
 	_traveled += move.length()
-	if _traveled >= MAX_DISTANCE:
+	if _traveled >= MAX_DISTANCE + PlayerData.flat_range:
 		queue_free()
 
 func _on_body_entered(body: Node) -> void:
@@ -32,12 +34,12 @@ func _on_body_entered(body: Node) -> void:
 	var threshold := 2 if PlayerData.has_skill("penetration") else 1
 	var actual_dmg := _damage
 	if _hit_count >= threshold:
-		actual_dmg = maxi(1, _damage / 2)
+		actual_dmg = maxi(1, _damage >> 1)
 	_hit_count += 1
 	body.take_damage(actual_dmg)
 	var player := get_tree().get_first_node_in_group("player")
 	if player and player.has_method("on_enemy_hit"):
-		player.on_enemy_hit(actual_dmg)
+		player.on_enemy_hit(body, actual_dmg, _is_crit)
 
 	if PlayerData.has_skill("explosion"):
 		var blast := EXPLOSION.instantiate()

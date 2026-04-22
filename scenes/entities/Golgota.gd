@@ -11,11 +11,15 @@ const ORB          := preload("res://scenes/entities/GolgotaOrb.tscn")
 const LASER        := preload("res://scenes/entities/GolgotaLaser.tscn")
 const BOSS_SOUL    := preload("res://scenes/entities/BossSoul.tscn")
 const ALDRICH      := preload("res://scenes/entities/Aldrich.tscn")
-const MAX_HP       := 1000
+const SHOCKWAVE    := preload("res://scenes/entities/GolgotaShockwave.gd")
+const MAX_HP       := 1800
+const SHOCKWAVE_CD := 8.0
+const SHOCKWAVE_DMG := 20
 
-var hp     := MAX_HP
-var damage := 5
-var dead   := false
+var hp            := MAX_HP
+var damage        := 30
+var laser_damage  := 25
+var dead          := false
 
 var player        : Node2D = null
 var _last_dir     := "south"
@@ -34,6 +38,7 @@ var _cur_speed       := 35.0
 var _cur_telegraph   := 1.2
 var _spawn_cd        := 0.0
 var _spawn_timer     := 0.0
+var _shockwave_timer := SHOCKWAVE_CD
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_PAUSABLE
@@ -102,6 +107,12 @@ func _physics_process(delta: float) -> void:
 		if _spawn_cd > 0.0 and _spawn_timer <= 0.0:
 			_spawn_enemies()
 			_spawn_timer = _spawn_cd
+
+		if _phase == 1:
+			_shockwave_timer -= delta
+			if _shockwave_timer <= 0.0:
+				_fire_shockwave()
+				_shockwave_timer = SHOCKWAVE_CD
 	else:
 		velocity = Vector2.ZERO
 		$AnimatedSprite2D.play("idle_" + _last_dir)
@@ -122,7 +133,7 @@ func _fire_lasers(base_dir: Vector2) -> void:
 		var lsr := LASER.instantiate()
 		lsr.global_position = global_position
 		# Only the center laser (i==0) tracks the player; others keep their fixed spread angle
-		lsr.init(base_dir.rotated(angles[i]), damage, _cur_telegraph, i == 0)
+		lsr.init(base_dir.rotated(angles[i]), laser_damage, _cur_telegraph, i == 0)
 		get_parent().call_deferred("add_child", lsr)
 	# Reset via timer — avoids fragile signal counting across deferred nodes
 	var reset_delay := _cur_telegraph + LASER_ACTIVE_DUR + 0.1
@@ -141,6 +152,14 @@ func _spawn_orbs() -> void:
 		var dist  := randf_range(150.0, 420.0)
 		orb.global_position = (global_position + Vector2(cos(angle), sin(angle)) * dist).clamp(ARENA_MIN, ARENA_MAX)
 		get_parent().call_deferred("add_child", orb)
+
+# ── Shockwave (phase 1) ──────────────────────────────────────────────────────
+
+func _fire_shockwave() -> void:
+	var shock := SHOCKWAVE.new()
+	shock.global_position = global_position
+	shock.damage = SHOCKWAVE_DMG
+	get_parent().call_deferred("add_child", shock)
 
 # ── Enemy spawn attack ────────────────────────────────────────────────────────
 

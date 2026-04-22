@@ -31,5 +31,5 @@ func _launch() -> void:
 
 func _on_body_entered(body: Node) -> void:
 	if _launched and body.is_in_group("player"):
-		body.take_damage(1)
+		body.take_damage(15)
 		queue_free()

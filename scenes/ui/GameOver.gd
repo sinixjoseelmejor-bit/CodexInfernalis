@@ -5,13 +5,16 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 
 func show_screen() -> void:
+	get_tree().paused = true
 	show()
 
 func _on_restart_pressed() -> void:
+	get_tree().paused = false
 	PlayerData.reset_run()
 	get_tree().change_scene_to_file("res://scenes/arenas/Arena1.tscn")
 
 func _on_select_pressed() -> void:
+	get_tree().paused = false
 	PlayerData.reset_run()
 	get_tree().change_scene_to_file("res://scenes/ui/SelectCharacter.tscn")
 
