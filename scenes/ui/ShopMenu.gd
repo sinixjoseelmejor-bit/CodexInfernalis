@@ -464,14 +464,18 @@ func _roll_3_items(rarity: int) -> Array:
 	return choices
 
 func _roll_crates_unlocked() -> void:
+	var prev_items := _crate_items.duplicate()
 	_crate_items = []
 	for _i in _num_slots:
 		_crate_items.append([])
 	for i in _num_slots:
 		if _locked[i]:
+			if i < prev_items.size() and not (prev_items[i] as Array).is_empty():
+				_crate_items[i] = prev_items[i]
+			else:
+				_crate_items[i] = _roll_3_items(_slot_rarities_arr[i])
 			continue
-		var rarity: int = _slot_rarities_arr[i]
-		_crate_items[i] = _roll_3_items(rarity)
+		_crate_items[i] = _roll_3_items(_slot_rarities_arr[i])
 
 # ── Refresh ────────────────────────────────────────────────────────────────────
 
