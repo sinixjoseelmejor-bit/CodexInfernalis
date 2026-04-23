@@ -20,6 +20,9 @@ const ITEM_DB: Dictionary = {
 	"bague_tir":        {"rarity":0,"name":"Bague du Tireur",   "desc":"Tir 8% plus rapide",                     "flat_fire_cd":-0.08},
 	"sac_trou":         {"rarity":0,"name":"Sac sans Fond",     "desc":"+40 portée ramassage\n+5% âmes bonus",   "flat_pickup":40.0, "bonus_soul_rate":0.05},
 	"pendentif_chance": {"rarity":0,"name":"Pendentif Chance",  "desc":"+2% crit\n+1% esquive\n+10 portée",      "pct_crit":0.02, "pct_dodge":0.01, "flat_pickup":10.0},
+	"bandage_sang":     {"rarity":0,"name":"Bandage Sanglant", "desc":"+5 HP max\n+1.5% vol de vie",             "flat_hp":5, "pct_lifesteal":0.015},
+	"fiole_sangsue":    {"rarity":0,"name":"Fiole Sangsue",    "desc":"+1 dégât\n+2% vol de vie",                "flat_damage":1, "pct_lifesteal":0.02},
+	"ceinture_aimant":  {"rarity":0,"name":"Ceinture Aimant",  "desc":"+60 portée ramassage\n+2% esquive",       "flat_pickup":60.0, "pct_dodge":0.02},
 	# ─── RARES R1 (rarity 1, max_stacks 3) ──────────────────────────────────
 	"vampire_amulet":   {"rarity":1,"name":"Amulette Vampire",  "desc":"+8% HP max\n+2% vol de vie/stack",       "pct_hp":0.08, "pct_lifesteal":0.02},
 	"fire_boots":       {"rarity":1,"name":"Bottes de Feu",     "desc":"+12% vitesse\nTraînée de feu",           "pct_speed":0.12},
@@ -29,9 +32,13 @@ const ITEM_DB: Dictionary = {
 	"oeil_gele":        {"rarity":1,"name":"Œil Gelé",          "desc":"+8% dégâts\n7e tir ralentit 40% (2s)",   "pct_damage":0.08},
 	"orbe_mana":        {"rarity":1,"name":"Orbe de Mana",      "desc":"+10% dégâts\n10e tir = proj bonus",      "pct_damage":0.10},
 	"cor_guerre":       {"rarity":1,"name":"Cor de Guerre",     "desc":"+6% dégâts\n+30% dmg 5s début vague",    "pct_damage":0.06},
+	"lame_assoiffee":   {"rarity":1,"name":"Lame Assoiffée",   "desc":"+8% dégâts\n+3% vol de vie",             "pct_damage":0.08, "pct_lifesteal":0.03},
+	"cape_predateur":   {"rarity":1,"name":"Cape Prédateur",   "desc":"+10% vitesse\n+70 portée ramassage",     "pct_speed":0.10, "flat_pickup":70.0},
+	"couronne_sang":    {"rarity":1,"name":"Couronne de Sang",  "desc":"+10% HP max\n+4% vol de vie",            "pct_hp":0.10, "pct_lifesteal":0.04},
 	# ─── ÉPIQUES R1 (rarity 2, max_stacks 2) ────────────────────────────────
 	"auto_grenade":     {"rarity":2,"name":"Grenade Automatique","desc":"Grenade toutes les 6s\n+15% dégâts",    "pct_damage":0.15, "icon":"res://assets/items/HolyGrenade1.png"},
 	"double_canon":     {"rarity":2,"name":"Double Canon",      "desc":"+1 projectile simultané\n+5% dégâts",    "flat_projectiles":1, "pct_damage":0.05},
+	"faux_ames":        {"rarity":2,"name":"Faux des Âmes",    "desc":"+1 projectile\n+15% dégâts\n+3% vol de vie", "flat_projectiles":1, "pct_damage":0.15, "pct_lifesteal":0.03},
 }
 
 const SKILL_TREES: Dictionary = {

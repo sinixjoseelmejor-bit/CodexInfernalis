@@ -179,11 +179,15 @@ func _spawn_count() -> int:
 	return 1
 
 func _edge_pos() -> Vector2:
+	var player := get_tree().get_first_node_in_group("player")
+	var c := ARENA_CENTER if player == null else (player as Node2D).global_position
+	const OX := 980.0
+	const OY := 580.0
 	match randi() % 4:
-		0: return Vector2(randf_range(120, 1800), 110)
-		1: return Vector2(randf_range(120, 1800), 940)
-		2: return Vector2(115, randf_range(110, 940))
-		_: return Vector2(1900, randf_range(110, 940))
+		0: return Vector2(randf_range(c.x - OX, c.x + OX), c.y - OY)
+		1: return Vector2(randf_range(c.x - OX, c.x + OX), c.y + OY)
+		2: return Vector2(c.x - OX, randf_range(c.y - OY, c.y + OY))
+		_: return Vector2(c.x + OX, randf_range(c.y - OY, c.y + OY))
 
 func _spawn_aldrich() -> void:
 	var lvl: int = clampi(_level, 1, 9)

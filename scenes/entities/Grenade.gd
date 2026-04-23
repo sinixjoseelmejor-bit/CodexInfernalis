@@ -46,5 +46,11 @@ func _explode() -> void:
 		if global_position.distance_to(body.global_position) <= BLAST_RADIUS:
 			body.take_damage(maxi(8, PlayerData.damage * 4))
 	$Visual.hide()
+	var final_scale := BLAST_RADIUS * 2.0 * 0.6 / 64.0
+	var frame_count : int = $Explosion.sprite_frames.get_frame_count("explode")
+	var anim_duration : float = float(frame_count) / float($Explosion.sprite_frames.get_animation_speed("explode"))
+	$Explosion.scale = Vector2.ONE
 	$Explosion.show()
 	$Explosion.play("explode")
+	var tween := create_tween()
+	tween.tween_property($Explosion, "scale", Vector2.ONE * final_scale, anim_duration)

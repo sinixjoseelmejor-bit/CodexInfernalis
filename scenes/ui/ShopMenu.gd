@@ -424,6 +424,7 @@ func _build_choice_overlay() -> void:
 func show_shop(keys: int, level: int = 1) -> void:
 	_keys  = keys
 	_level = level
+	var prev_rarities := _slot_rarities_arr.duplicate()
 	_slot_rarities_arr = _get_slot_rarities(level)
 	_num_slots = _slot_rarities_arr.size()
 	# Resize _locked preserving existing values
@@ -431,6 +432,10 @@ func show_shop(keys: int, level: int = 1) -> void:
 		_locked.append(false)
 	while _locked.size() > _num_slots:
 		_locked.pop_back()
+	# Restore rarity for locked slots
+	for i in _num_slots:
+		if _locked[i] and i < prev_rarities.size():
+			_slot_rarities_arr[i] = prev_rarities[i]
 	_crate_opened = []
 	_crate_chosen = []
 	for _i in _num_slots:
@@ -609,8 +614,8 @@ func _on_reroll_pressed() -> void:
 	for i in _num_slots:
 		if _crate_opened[i] or _locked[i]:
 			continue
-		var rarity: int = _slot_rarities_arr[i]
-		_crate_items[i] = _roll_3_items(rarity)
+		_slot_rarities_arr[i] = _roll_slot_rarity()
+		_crate_items[i] = _roll_3_items(_slot_rarities_arr[i])
 	_refresh_all()
 	_refresh_lock_btns()
 	_refresh_shop_btns()

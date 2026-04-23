@@ -1,6 +1,134 @@
 [gd_scene format=3 uid="uid://golgota001"]
 
 [ext_resource type="Script" uid="uid://2rkeqk4e7plx" path="res://scenes/entities/Golgota.gd" id="1_golgota"]
+[ext_resource type="Texture2D" uid="uid://btpruxs38008c" path="res://assets/Characters/Golgota/animations/Golgota Death.png" id="2_j4jvk"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s2eoq"]
+atlas = ExtResource("2_j4jvk")
+region = Rect2(0, 0, 160, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bv3l4"]
+atlas = ExtResource("2_j4jvk")
+region = Rect2(160, 0, 160, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_84fe2"]
+atlas = ExtResource("2_j4jvk")
+region = Rect2(320, 0, 160, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h3ohf"]
+atlas = ExtResource("2_j4jvk")
+region = Rect2(480, 0, 160, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2wflc"]
+atlas = ExtResource("2_j4jvk")
+region = Rect2(640, 0, 160, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hkald"]
+atlas = ExtResource("2_j4jvk")
+region = Rect2(0, 160, 160, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ryi76"]
+atlas = ExtResource("2_j4jvk")
+region = Rect2(160, 160, 160, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bqcgg"]
+atlas = ExtResource("2_j4jvk")
+region = Rect2(320, 160, 160, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ch13c"]
+atlas = ExtResource("2_j4jvk")
+region = Rect2(480, 160, 160, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t2el8"]
+atlas = ExtResource("2_j4jvk")
+region = Rect2(640, 160, 160, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2c7xe"]
+atlas = ExtResource("2_j4jvk")
+region = Rect2(0, 320, 160, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rvvcf"]
+atlas = ExtResource("2_j4jvk")
+region = Rect2(160, 320, 160, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_146xb"]
+atlas = ExtResource("2_j4jvk")
+region = Rect2(320, 320, 160, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nhfkt"]
+atlas = ExtResource("2_j4jvk")
+region = Rect2(480, 320, 160, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ieh2s"]
+atlas = ExtResource("2_j4jvk")
+region = Rect2(640, 320, 160, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cxwj7"]
+atlas = ExtResource("2_j4jvk")
+region = Rect2(0, 480, 160, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lbvb1"]
+atlas = ExtResource("2_j4jvk")
+region = Rect2(160, 480, 160, 160)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_v1q7o"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s2eoq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bv3l4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_84fe2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h3ohf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2wflc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hkald")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ryi76")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bqcgg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ch13c")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_t2el8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2c7xe")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rvvcf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_146xb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nhfkt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ieh2s")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cxwj7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lbvb1")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1upd3"]
 size = Vector2(35, 151.5)
@@ -11,6 +139,13 @@ script = ExtResource("1_golgota")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1546050393]
 position = Vector2(0, -4)
 scale = Vector2(3, 3)
+
+[node name="Golgota Death" type="AnimatedSprite2D" parent="." unique_id=872481570]
+visible = false
+position = Vector2(0, -4)
+rotation = -0.00091825775
+scale = Vector2(3, 3)
+sprite_frames = SubResource("SpriteFrames_v1q7o")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2101441954]
 position = Vector2(-0.5, -52.25)

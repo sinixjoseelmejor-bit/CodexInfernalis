@@ -65,6 +65,16 @@ func _setup_animations() -> void:
 		frames.set_animation_speed(idle, 1.0)
 		frames.add_frame(idle, load(ROT_BASE + dir + ".png"))
 
+	var death_sheet := load("res://assets/Characters/Golgota/animations/Golgota Death.png") as Texture2D
+	frames.add_animation("death")
+	frames.set_animation_speed("death", 10.0)
+	frames.set_animation_loop("death", false)
+	for i in 17:
+		var atlas := AtlasTexture.new()
+		atlas.atlas = death_sheet
+		atlas.region = Rect2(float(i % 5) * 160.0, float(i / 5) * 160.0, 160.0, 160.0)
+		frames.add_frame("death", atlas)
+
 	$AnimatedSprite2D.sprite_frames = frames
 	$AnimatedSprite2D.play("idle_south")
 
@@ -233,6 +243,7 @@ func _die() -> void:
 	dead = true
 	velocity = Vector2.ZERO
 	$CollisionShape2D.set_deferred("disabled", true)
+	$AnimatedSprite2D.modulate = Color(1, 1, 1, 1)
 	var hud := get_tree().get_first_node_in_group("hud")
 	if hud:
 		hud.hide_boss_bar()
@@ -240,4 +251,6 @@ func _die() -> void:
 	soul.global_position = global_position
 	get_parent().call_deferred("add_child", soul)
 	died.emit()
+	$AnimatedSprite2D.play("death")
+	await $AnimatedSprite2D.animation_finished
 	queue_free()
