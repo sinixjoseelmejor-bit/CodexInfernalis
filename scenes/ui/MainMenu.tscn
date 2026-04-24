@@ -1,10 +1,10 @@
-[gd_scene format=3 uid="uid://bu4jqkl4d7swh"]
+[gd_scene format=3 uid="uid://ww62rcaqneap"]
 
-[ext_resource type="Texture2D" uid="uid://vpca2wofwykk" path="res://assets/environment/BackgroundCI.png" id="1_bg"]
-[ext_resource type="Script" uid="uid://ch43h48j8wqa3" path="res://scenes/ui/MainMenu.gd" id="2_mainmenu"]
+[ext_resource type="Script" uid="uid://coei72qebyhhc" path="res://scenes/ui/MainMenu.gd" id="1_mainmenu"]
+[ext_resource type="Texture2D" uid="uid://vpca2wofwykk" path="res://assets/environment/BackgroundCI.png" id="2_bg"]
 [ext_resource type="FontFile" uid="uid://dppo7eddft6wh" path="res://assets/fonts/Cinzel-VariableFont_wght.ttf" id="3_cinzel"]
 [ext_resource type="FontFile" uid="uid://dm2thh3ulhwq" path="res://assets/fonts/ShareTechMono-Regular.ttf" id="4_mono"]
-[ext_resource type="AudioStream" uid="uid://d0qvti30ienfj" path="res://sounds/musique/Beneath_the_Grey_Arch.mp3" id="5_xpiny"]
+[ext_resource type="AudioStream" uid="uid://d0qvti30ienfj" path="res://sounds/musique/Beneath_the_Grey_Arch.mp3" id="5_music"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_normal"]
 content_margin_left = 48.0
@@ -42,39 +42,68 @@ border_width_right = 1
 border_width_bottom = 1
 border_color = Color(0.88, 0.72, 1, 1)
 
-[node name="Control" type="Control" unique_id=586120030]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_disabled"]
+content_margin_left = 48.0
+content_margin_top = 14.0
+content_margin_right = 48.0
+content_margin_bottom = 14.0
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.4, 0.35, 0.5, 0.4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.06, 0.03, 0.1, 0.95)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.72, 0.5, 1, 0.6)
+
+[node name="MainMenu" type="Control" unique_id=476274767]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("2_mainmenu")
+script = ExtResource("1_mainmenu")
 
-[node name="TextureRect" type="TextureRect" parent="." unique_id=1605426753]
+[node name="VideoStreamPlayer" type="VideoStreamPlayer" parent="." unique_id=692150783]
 layout_mode = 0
 offset_right = 1920.0
 offset_bottom = 1080.0
 mouse_filter = 2
-texture = ExtResource("1_bg")
+volume_db = -80.0
+expand = true
+loop = false
+
+[node name="FallbackBG" type="TextureRect" parent="." unique_id=451974086]
+layout_mode = 0
+offset_right = 1920.0
+offset_bottom = 1080.0
+mouse_filter = 2
+texture = ExtResource("2_bg")
 expand_mode = 1
 
-[node name="ColorRect" type="ColorRect" parent="." unique_id=79820277]
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1548953101]
 layout_mode = 0
 offset_right = 1920.0
 offset_bottom = 1080.0
 mouse_filter = 2
 color = Color(0.04, 0.02, 0.07, 0.78)
 
-[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=386348491]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1957073825]
 layout_mode = 0
 offset_left = 460.0
-offset_top = 260.0
+offset_top = 220.0
 offset_right = 1460.0
-offset_bottom = 720.0
-theme_override_constants/separation = 10
+offset_bottom = 780.0
+theme_override_constants/separation = 12
 
-[node name="Title" type="Label" parent="VBoxContainer" unique_id=100000001]
+[node name="Title" type="Label" parent="VBoxContainer" unique_id=1093629443]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.95, 0.88, 1, 1)
 theme_override_colors/font_shadow_color = Color(0.6, 0.2, 1, 0.6)
@@ -86,7 +115,7 @@ theme_override_font_sizes/font_size = 68
 text = "CODEX INFERNALIS"
 horizontal_alignment = 1
 
-[node name="Subtitle" type="Label" parent="VBoxContainer" unique_id=100000002]
+[node name="Subtitle" type="Label" parent="VBoxContainer" unique_id=2064668302]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.62, 0.57, 0.72, 0.9)
 theme_override_fonts/font = ExtResource("4_mono")
@@ -94,7 +123,7 @@ theme_override_font_sizes/font_size = 14
 text = "ARENA SHOOTER — ROGUE-LITE"
 horizontal_alignment = 1
 
-[node name="Tagline" type="RichTextLabel" parent="VBoxContainer" unique_id=100000003]
+[node name="Tagline" type="RichTextLabel" parent="VBoxContainer" unique_id=1745417433]
 custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
 theme_override_colors/default_color = Color(0.55, 0.5, 0.65, 0.85)
@@ -105,11 +134,11 @@ text = "[center][i]\"L'abîme réclame ses sacrifices.\"[/i][/center]"
 fit_content = true
 scroll_active = false
 
-[node name="Spacer" type="Control" parent="VBoxContainer" unique_id=100000004]
+[node name="Spacer" type="Control" parent="VBoxContainer" unique_id=1686901429]
 custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 
-[node name="StartButton" type="Button" parent="VBoxContainer" unique_id=100000005]
+[node name="NewGameButton" type="Button" parent="VBoxContainer" unique_id=100000010]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_colors/font_color = Color(0.88, 0.78, 1, 1)
@@ -120,11 +149,239 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_normal")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_pressed")
 theme_override_styles/hover = SubResource("StyleBoxFlat_hover")
 theme_override_styles/focus = SubResource("StyleBoxFlat_normal")
-text = "ENTRER DANS L'ABÎME"
+text = "NOUVELLE PARTIE"
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1060384943]
-stream = ExtResource("5_xpiny")
+[node name="ContinueButton" type="Button" parent="VBoxContainer" unique_id=100000011]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.88, 0.78, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 0.95, 1, 1)
+theme_override_colors/font_disabled_color = Color(0.4, 0.35, 0.5, 0.5)
+theme_override_fonts/font = ExtResource("4_mono")
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxFlat_normal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_hover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_normal")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_disabled")
+text = "CONTINUER"
+
+[node name="OptionsButton" type="Button" parent="VBoxContainer" unique_id=100000012]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.88, 0.78, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 0.95, 1, 1)
+theme_override_fonts/font = ExtResource("4_mono")
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxFlat_normal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_hover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_normal")
+text = "OPTIONS"
+
+[node name="ProfileOverlay" type="Control" parent="." unique_id=300000001]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+visible = false
+
+[node name="Dim" type="ColorRect" parent="ProfileOverlay" unique_id=300000002]
+layout_mode = 0
+offset_right = 1920.0
+offset_bottom = 1080.0
+mouse_filter = 0
+color = Color(0, 0, 0, 0.75)
+
+[node name="Panel" type="Panel" parent="ProfileOverlay" unique_id=300000003]
+layout_mode = 0
+offset_left = 360.0
+offset_top = 280.0
+offset_right = 1560.0
+offset_bottom = 800.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="VBox" type="VBoxContainer" parent="ProfileOverlay/Panel" unique_id=300000004]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 30.0
+offset_right = 1160.0
+offset_bottom = 480.0
+theme_override_constants/separation = 20
+
+[node name="ProfileTitle" type="Label" parent="ProfileOverlay/Panel/VBox" unique_id=300000005]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.88, 1, 1)
+theme_override_fonts/font = ExtResource("3_cinzel")
+theme_override_font_sizes/font_size = 26
+text = "CHOISIR UN PROFIL"
+horizontal_alignment = 1
+
+[node name="Slots" type="HBoxContainer" parent="ProfileOverlay/Panel/VBox" unique_id=300000006]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 20
+
+[node name="Profile1" type="Button" parent="ProfileOverlay/Panel/VBox/Slots" unique_id=300000007]
+layout_mode = 2
+size_flags_horizontal = 3
+custom_minimum_size = Vector2(0, 120)
+theme_override_colors/font_color = Color(0.88, 0.78, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 0.95, 1, 1)
+theme_override_colors/font_disabled_color = Color(0.4, 0.35, 0.5, 0.5)
+theme_override_fonts/font = ExtResource("4_mono")
+theme_override_font_sizes/font_size = 13
+theme_override_styles/normal = SubResource("StyleBoxFlat_normal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_hover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_normal")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_disabled")
+text = "PROFIL 1\n— VIDE —"
+
+[node name="Profile2" type="Button" parent="ProfileOverlay/Panel/VBox/Slots" unique_id=300000008]
+layout_mode = 2
+size_flags_horizontal = 3
+custom_minimum_size = Vector2(0, 120)
+theme_override_colors/font_color = Color(0.88, 0.78, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 0.95, 1, 1)
+theme_override_colors/font_disabled_color = Color(0.4, 0.35, 0.5, 0.5)
+theme_override_fonts/font = ExtResource("4_mono")
+theme_override_font_sizes/font_size = 13
+theme_override_styles/normal = SubResource("StyleBoxFlat_normal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_hover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_normal")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_disabled")
+text = "PROFIL 2\n— VIDE —"
+
+[node name="Profile3" type="Button" parent="ProfileOverlay/Panel/VBox/Slots" unique_id=300000009]
+layout_mode = 2
+size_flags_horizontal = 3
+custom_minimum_size = Vector2(0, 120)
+theme_override_colors/font_color = Color(0.88, 0.78, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 0.95, 1, 1)
+theme_override_colors/font_disabled_color = Color(0.4, 0.35, 0.5, 0.5)
+theme_override_fonts/font = ExtResource("4_mono")
+theme_override_font_sizes/font_size = 13
+theme_override_styles/normal = SubResource("StyleBoxFlat_normal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_hover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_normal")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_disabled")
+text = "PROFIL 3\n— VIDE —"
+
+[node name="CancelButton" type="Button" parent="ProfileOverlay/Panel/VBox" unique_id=300000010]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.88, 0.78, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 0.95, 1, 1)
+theme_override_fonts/font = ExtResource("4_mono")
+theme_override_font_sizes/font_size = 13
+theme_override_styles/normal = SubResource("StyleBoxFlat_normal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_hover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_normal")
+text = "ANNULER"
+
+[node name="OptionsOverlay" type="Control" parent="." unique_id=200000001]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+visible = false
+
+[node name="Dim" type="ColorRect" parent="OptionsOverlay" unique_id=200000002]
+layout_mode = 0
+offset_right = 1920.0
+offset_bottom = 1080.0
+mouse_filter = 0
+color = Color(0, 0, 0, 0.7)
+
+[node name="Panel" type="Panel" parent="OptionsOverlay" unique_id=200000003]
+layout_mode = 0
+offset_left = 660.0
+offset_top = 340.0
+offset_right = 1260.0
+offset_bottom = 740.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="VBox" type="VBoxContainer" parent="OptionsOverlay/Panel" unique_id=200000004]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 30.0
+offset_right = 560.0
+offset_bottom = 370.0
+theme_override_constants/separation = 24
+
+[node name="OptionsTitle" type="Label" parent="OptionsOverlay/Panel/VBox" unique_id=200000005]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.88, 1, 1)
+theme_override_fonts/font = ExtResource("3_cinzel")
+theme_override_font_sizes/font_size = 28
+text = "OPTIONS"
+horizontal_alignment = 1
+
+[node name="MusicRow" type="HBoxContainer" parent="OptionsOverlay/Panel/VBox" unique_id=200000006]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="MusicLabel" type="Label" parent="OptionsOverlay/Panel/VBox/MusicRow" unique_id=200000007]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.75, 0.68, 0.88, 1)
+theme_override_fonts/font = ExtResource("4_mono")
+theme_override_font_sizes/font_size = 13
+text = "MUSIQUE"
+vertical_alignment = 1
+
+[node name="MusicSlider" type="HSlider" parent="OptionsOverlay/Panel/VBox/MusicRow" unique_id=200000008]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = -40.0
+max_value = 0.0
+value = -40.141
+
+[node name="FullscreenRow" type="HBoxContainer" parent="OptionsOverlay/Panel/VBox" unique_id=200000009]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="FullscreenLabel" type="Label" parent="OptionsOverlay/Panel/VBox/FullscreenRow" unique_id=200000010]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.75, 0.68, 0.88, 1)
+theme_override_fonts/font = ExtResource("4_mono")
+theme_override_font_sizes/font_size = 13
+text = "PLEIN ÉCRAN"
+vertical_alignment = 1
+
+[node name="FullscreenCheck" type="CheckButton" parent="OptionsOverlay/Panel/VBox/FullscreenRow" unique_id=200000011]
+layout_mode = 2
+
+[node name="CloseButton" type="Button" parent="OptionsOverlay/Panel/VBox" unique_id=200000012]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.88, 0.78, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 0.95, 1, 1)
+theme_override_fonts/font = ExtResource("4_mono")
+theme_override_font_sizes/font_size = 13
+theme_override_styles/normal = SubResource("StyleBoxFlat_normal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_hover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_normal")
+text = "FERMER"
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1412499567]
+stream = ExtResource("5_music")
 volume_db = -40.141
 autoplay = true
 
-[connection signal="pressed" from="VBoxContainer/StartButton" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="ProfileOverlay/Panel/VBox/Slots/Profile1" to="." method="_on_profile_selected" binds=[1]]
+[connection signal="pressed" from="ProfileOverlay/Panel/VBox/Slots/Profile2" to="." method="_on_profile_selected" binds=[2]]
+[connection signal="pressed" from="ProfileOverlay/Panel/VBox/Slots/Profile3" to="." method="_on_profile_selected" binds=[3]]
+[connection signal="pressed" from="ProfileOverlay/Panel/VBox/CancelButton" to="." method="_on_profile_overlay_close"]
+[connection signal="pressed" from="VBoxContainer/NewGameButton" to="." method="_on_new_game_pressed"]
+[connection signal="pressed" from="VBoxContainer/ContinueButton" to="." method="_on_continue_pressed"]
+[connection signal="pressed" from="VBoxContainer/OptionsButton" to="." method="_on_options_pressed"]
+[connection signal="pressed" from="OptionsOverlay/Panel/VBox/CloseButton" to="." method="_on_options_close"]
+[connection signal="value_changed" from="OptionsOverlay/Panel/VBox/MusicRow/MusicSlider" to="." method="_on_music_volume_changed"]
+[connection signal="toggled" from="OptionsOverlay/Panel/VBox/FullscreenRow/FullscreenCheck" to="." method="_on_fullscreen_toggled"]

@@ -39,6 +39,15 @@ var _oeil_gele_counter     := 0
 var _orbe_mana_counter     := 0
 var _cor_guerre_timer      := 0.0
 var _cor_guerre_active     := false
+var _lightning_timer       := 0.0
+var _sceptre_timer         := 0.0
+var _shield_timer          := 0.0
+var _shield_active         := false
+var _stationary_timer      := 0.0
+var _ire_bonus             := 0.0
+var _baal_counter          := 0
+var _revive_used           := false
+var _mercy_cd              := 0.0
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_PAUSABLE
@@ -139,6 +148,8 @@ func _physics_process(delta: float) -> void:
 
 	_fire_timer   -= delta
 	_iframe_timer -= delta
+	if _mercy_cd > 0.0:
+		_mercy_cd -= delta
 
 	if _enraged:
 		_rage_timer -= delta
@@ -158,14 +169,38 @@ func _physics_process(delta: float) -> void:
 	if dir == Vector2.ZERO and PlayerData.touch_move.length() > 0.1:
 		dir = PlayerData.touch_move
 
-	velocity = dir.normalized() * PlayerData.speed if dir != Vector2.ZERO else Vector2.ZERO
+	var eff_speed := PlayerData.speed
+	if PlayerData.has_timed_buff("phlegethon_speed"):
+		eff_speed = minf(550.0, eff_speed * (1.0 + 0.05 * float(PlayerData.item_count("anneau_phlegethon"))))
+	velocity = dir.normalized() * eff_speed if dir != Vector2.ZERO else Vector2.ZERO
 	move_and_slide()
 
 	if dir != Vector2.ZERO:
 		_update_dir(dir)
 		_try_fire_trail(delta)
+		_stationary_timer = 0.0
 	else:
 		_trail_timer = 0.0
+		if PlayerData.item_count("bandeau_inquisiteur") > 0:
+			_stationary_timer += delta
+
+	if PlayerData.item_count("orbe_limbes") > 0 and not _shield_active:
+		_shield_timer += delta
+		if _shield_timer >= 8.0:
+			_shield_timer = 0.0
+			_shield_active = true
+
+	if PlayerData.item_count("rune_foudre") > 0:
+		_lightning_timer += delta
+		if _lightning_timer >= 5.0:
+			_lightning_timer = 0.0
+			_strike_lightning()
+
+	if PlayerData.item_count("sceptre_tartare") > 0:
+		_sceptre_timer += delta
+		if _sceptre_timer >= 4.0:
+			_sceptre_timer = 0.0
+			_launch_sceptre_blast()
 
 	_mouse_override_timer -= delta
 
@@ -201,6 +236,26 @@ func _effective_damage() -> int:
 	var base := float(PlayerData.damage) * (1.5 if _enraged else 1.0)
 	if _cor_guerre_active:
 		base *= 1.3
+	if _ire_bonus > 0.0:
+		base *= (1.0 + _ire_bonus)
+	if PlayerData.has_timed_buff("courroux") and PlayerData.item_count("sang_courroux") > 0:
+		base += 3.0 * float(PlayerData.item_count("sang_courroux"))
+	if _stationary_timer >= 1.0 and PlayerData.item_count("bandeau_inquisiteur") > 0:
+		base *= 1.0 + 0.20 * float(PlayerData.item_count("bandeau_inquisiteur"))
+	var mirror := PlayerData.item_count("miroir_supplies")
+	if mirror > 0 and randf() < 0.05 * float(mirror):
+		base *= 2.0
+	if PlayerData.has_timed_buff("rage_condamne"):
+		base *= 1.30
+	if PlayerData.item_count("oeil_tenebres") > 0:
+		var enemies := get_tree().get_nodes_in_group("enemies")
+		var min_dist := INF
+		for e in enemies:
+			var d := global_position.distance_to((e as Node2D).global_position)
+			if d < min_dist:
+				min_dist = d
+		if min_dist > 300.0:
+			base *= 1.0 + 0.15 * float(PlayerData.item_count("oeil_tenebres"))
 	_last_is_crit = PlayerData.roll_crit()
 	if _last_is_crit:
 		base *= PlayerData.crit_multiplier
@@ -303,6 +358,26 @@ func on_enemy_hit(enemy: Node, dmg: int, is_crit: bool = false) -> void:
 		if enemy != null and is_instance_valid(enemy) and enemy.has_method("apply_bleed"):
 			enemy.apply_bleed(2, 3.0)
 
+	# dague_asmodee: poison 3s (2 dmg/s)
+	if PlayerData.item_count("dague_asmodee") > 0:
+		if enemy != null and is_instance_valid(enemy) and enemy.has_method("apply_bleed"):
+			enemy.apply_bleed(2, 3.0)
+
+	# griffe_mephisto: flat lifesteal per hit
+	if PlayerData.lifesteal_flat_per_shot > 0:
+		hp = mini(hp + PlayerData.lifesteal_flat_per_shot, PlayerData.max_hp)
+		var hud_f := get_tree().get_first_node_in_group("hud")
+		if hud_f:
+			hud_f.refresh_hp(hp, PlayerData.max_hp)
+		hp_changed.emit(hp, PlayerData.max_hp)
+
+	# amulette_baal: every 3rd hit → 20 dmg to nearest enemy
+	if PlayerData.item_count("amulette_baal") > 0:
+		_baal_counter += 1
+		if _baal_counter >= 3:
+			_baal_counter = 0
+			_baal_strike()
+
 func on_enemy_kill() -> void:
 	if _dead:
 		return
@@ -310,15 +385,25 @@ func on_enemy_kill() -> void:
 	if rage_stacks > 0:
 		_enraged = true
 		_rage_timer = RAGE_DURATION + float(rage_stacks - 1) * 1.0
+	if PlayerData.item_count("sang_courroux") > 0:
+		PlayerData.set_timed_buff("courroux", 5.0)
+	if PlayerData.item_count("anneau_phlegethon") > 0:
+		PlayerData.set_timed_buff("phlegethon_speed", 3.0)
+	if PlayerData.item_count("talisman_ire") > 0:
+		_ire_bonus = minf(_ire_bonus + 0.03 * float(PlayerData.item_count("talisman_ire")), 0.30)
+	if PlayerData.item_count("chapelet_condamnes") > 0:
+		PlayerData.bonus_armor_round = mini(PlayerData.bonus_armor_round + 2 * PlayerData.item_count("chapelet_condamnes"), 10)
 
 func on_wave_start() -> void:
-	# cor_guerre: +30% damage for 5s at wave start
 	if PlayerData.item_count("cor_guerre") > 0:
 		_cor_guerre_active = true
 		_cor_guerre_timer  = COR_GUERRE_DUR
-	# reset per-wave counters
-	_oeil_gele_counter = 0
-	_orbe_mana_counter = 0
+	_oeil_gele_counter        = 0
+	_orbe_mana_counter        = 0
+	_ire_bonus                = 0.0
+	_baal_counter             = 0
+	_stationary_timer         = 0.0
+	PlayerData.bonus_armor_round = 0
 
 func revive() -> void:
 	_dead             = false
@@ -347,6 +432,10 @@ func _on_anim_finished() -> void:
 func take_damage(amount: int) -> void:
 	if _dead or _iframe_timer > 0.0:
 		return
+	if _shield_active and PlayerData.item_count("orbe_limbes") > 0:
+		_shield_active = false
+		_shield_timer  = 0.0
+		return
 	var final_dmg := PlayerData.calc_damage_taken(amount)
 	if final_dmg == 0:
 		return  # dodged
@@ -360,6 +449,8 @@ func take_damage(amount: int) -> void:
 	hp_changed.emit(hp, PlayerData.max_hp)
 	_flash_damage()
 	_thorn_reflect(final_dmg)
+	_ecu_reflect(final_dmg)
+	_check_mercy_burst()
 	if hp == 0:
 		_die()
 
@@ -378,6 +469,15 @@ func _thorn_reflect(original_dmg: int) -> void:
 			enemy.take_damage(reflect)
 
 func _die() -> void:
+	if PlayerData.revive_count > 0 and not _revive_used:
+		_revive_used  = true
+		hp            = maxi(1, int(PlayerData.max_hp * 0.30))
+		_iframe_timer = 2.0
+		var hud_r := get_tree().get_first_node_in_group("hud")
+		if hud_r:
+			hud_r.refresh_hp(hp, PlayerData.max_hp)
+		hp_changed.emit(hp, PlayerData.max_hp)
+		return
 	_dead = true
 	velocity = Vector2.ZERO
 	$CollisionShape2D.set_deferred("disabled", true)
@@ -403,3 +503,68 @@ func _play_move_anim(dir: Vector2) -> void:
 		$AnimatedSprite2D.play("idle_" + last_direction)
 	else:
 		$AnimatedSprite2D.play("run_" + last_direction)
+
+func _strike_lightning() -> void:
+	var enemies := get_tree().get_nodes_in_group("enemies")
+	if enemies.is_empty():
+		return
+	var nearest: Node2D = null
+	var nearest_dist := INF
+	for e in enemies:
+		var d := global_position.distance_to((e as Node2D).global_position)
+		if d < nearest_dist:
+			nearest_dist = d
+			nearest = e
+	if nearest and is_instance_valid(nearest):
+		nearest.take_damage(50 * PlayerData.item_count("rune_foudre"))
+
+func _launch_sceptre_blast() -> void:
+	var enemies := get_tree().get_nodes_in_group("enemies")
+	var target_pos := global_position + Vector2(randf_range(-200.0, 200.0), randf_range(-200.0, 200.0))
+	if not enemies.is_empty():
+		var nearest: Node2D = enemies[0]
+		for e in enemies:
+			if global_position.distance_to((e as Node2D).global_position) < global_position.distance_to(nearest.global_position):
+				nearest = e
+		target_pos = nearest.global_position
+	var blast_dmg := 60 * PlayerData.item_count("sceptre_tartare")
+	for enemy in get_tree().get_nodes_in_group("enemies"):
+		if target_pos.distance_to((enemy as Node2D).global_position) <= 120.0:
+			enemy.take_damage(blast_dmg)
+
+func _baal_strike() -> void:
+	var enemies := get_tree().get_nodes_in_group("enemies")
+	if enemies.is_empty():
+		return
+	var nearest: Node2D = null
+	var nearest_dist := INF
+	for e in enemies:
+		var d := global_position.distance_to((e as Node2D).global_position)
+		if d < nearest_dist:
+			nearest_dist = d
+			nearest = e
+	if nearest and is_instance_valid(nearest):
+		nearest.take_damage(20 * PlayerData.item_count("amulette_baal"))
+
+func _ecu_reflect(dmg_taken: int) -> void:
+	if PlayerData.reflect_pct <= 0.0:
+		return
+	var reflect := int(ceil(float(dmg_taken) * PlayerData.reflect_pct))
+	for enemy in get_tree().get_nodes_in_group("enemies"):
+		if global_position.distance_to((enemy as Node2D).global_position) <= 250.0:
+			enemy.take_damage(reflect)
+
+func _check_mercy_burst() -> void:
+	if _mercy_cd > 0.0:
+		return
+	if float(hp) / float(PlayerData.max_hp) > 0.25:
+		return
+	PlayerData.set_timed_buff("rage_condamne", 5.0)
+	_mercy_cd = 20.0
+	_flash_mercy()
+
+func _flash_mercy() -> void:
+	$AnimatedSprite2D.modulate = Color(1.0, 0.85, 0.1, 1.0)
+	await get_tree().create_timer(0.35).timeout
+	if is_instance_valid(self):
+		$AnimatedSprite2D.modulate = Color(1, 1, 1, 1)

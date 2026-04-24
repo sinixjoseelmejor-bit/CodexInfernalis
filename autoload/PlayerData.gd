@@ -1,6 +1,6 @@
 extends Node
 
-const SAVE_PATH := "user://save.json"
+const PROFILE_COUNT := 3
 
 # Stats de base par niveau de vague (index 1..9)
 const BASE_HP_TABLE  := [0,  20,  23,  27,  31,  36,  41,  47,  54,  62]
@@ -10,35 +10,68 @@ const BASE_CD_TABLE  := [0.0, 0.85, 0.82, 0.79, 0.76, 0.73, 0.70, 0.67, 0.64, 0.
 # rarity: 0=commun, 1=rare, 2=épique
 const ITEM_DB: Dictionary = {
 	# ─── COMMUNS R1 (rarity 0, max_stacks 5) ────────────────────────────────
-	"coeur_pierre":     {"rarity":0,"name":"Cœur de Pierre",    "desc":"+8 HP max\n+2 armure à 3 stacks",        "flat_hp":8},
-	"ampoule_vie":      {"rarity":0,"name":"Ampoule de Vie",    "desc":"+5 HP max\n+0.3 regen/stack",            "flat_hp":5, "flat_regen":0.3},
-	"amulette_foi":     {"rarity":0,"name":"Amulette de Foi",   "desc":"+4 HP max\n+3% esquive",                 "flat_hp":4, "pct_dodge":0.03},
-	"dent_loup":        {"rarity":0,"name":"Dent de Loup",      "desc":"+1 dégât\n+3% critique",                 "flat_damage":1, "pct_crit":0.03},
-	"pierre_aceree":    {"rarity":0,"name":"Pierre Acérée",     "desc":"+2 dégâts\n+5% vitesse proj",            "flat_damage":2, "flat_proj_speed":0.05},
-	"marteau_fissure":  {"rarity":0,"name":"Marteau Fissure",   "desc":"+2 dégâts\nCrit → saignement 3s",        "flat_damage":2},
-	"plume_rapide":     {"rarity":0,"name":"Plume Rapide",      "desc":"+15 vitesse\n+0.1s iframes/stack",       "flat_speed":15.0},
-	"bague_tir":        {"rarity":0,"name":"Bague du Tireur",   "desc":"Tir 8% plus rapide",                     "flat_fire_cd":-0.08},
-	"sac_trou":         {"rarity":0,"name":"Sac sans Fond",     "desc":"+40 portée ramassage\n+5% âmes bonus",   "flat_pickup":40.0, "bonus_soul_rate":0.05},
-	"pendentif_chance": {"rarity":0,"name":"Pendentif Chance",  "desc":"+2% crit\n+1% esquive\n+10 portée",      "pct_crit":0.02, "pct_dodge":0.01, "flat_pickup":10.0},
-	"bandage_sang":     {"rarity":0,"name":"Bandage Sanglant", "desc":"+5 HP max\n+1.5% vol de vie",             "flat_hp":5, "pct_lifesteal":0.015},
-	"fiole_sangsue":    {"rarity":0,"name":"Fiole Sangsue",    "desc":"+1 dégât\n+2% vol de vie",                "flat_damage":1, "pct_lifesteal":0.02},
-	"ceinture_aimant":  {"rarity":0,"name":"Ceinture Aimant",  "desc":"+60 portée ramassage\n+2% esquive",       "flat_pickup":60.0, "pct_dodge":0.02},
+	"coeur_pierre":     {"rarity":0,"name":"Cœur de Basalte",      "desc":"+8 HP max\n+2 armure à 3 stacks",     "flat_hp":8},
+	"ampoule_vie":      {"rarity":0,"name":"Fiole du Styx",        "desc":"+5 HP max\n+0.3 regen/stack",         "flat_hp":5, "flat_regen":0.3},
+	"amulette_foi":     {"rarity":0,"name":"Amulette des Damnés",  "desc":"+4 HP max\n+3% esquive",              "flat_hp":4, "pct_dodge":0.03},
+	"dent_loup":        {"rarity":0,"name":"Croc du Cerbère",      "desc":"+1 dégât\n+3% critique",              "flat_damage":1, "pct_crit":0.03},
+	"pierre_aceree":    {"rarity":0,"name":"Éclat de Braise",      "desc":"+2 dégâts\n+5% vitesse proj",         "flat_damage":2, "flat_proj_speed":0.05},
+	"marteau_fissure":  {"rarity":0,"name":"Marteau du Geôlier",   "desc":"+2 dégâts\nCrit → saignement 3s",    "flat_damage":2},
+	"plume_rapide":     {"rarity":0,"name":"Aile de Stryx",        "desc":"+15 vitesse\n+0.1s iframes/stack",   "flat_speed":15.0},
+	"bague_tir":        {"rarity":0,"name":"Sceau de l'Inquisiteur","desc":"Tir 5% plus rapide",                "flat_fire_cd":-0.05},
+	"sac_trou":         {"rarity":0,"name":"Besace des Limbes",    "desc":"+40 portée ramassage\n+5% âmes bonus","flat_pickup":40.0, "bonus_soul_rate":0.05},
+	"pendentif_chance": {"rarity":0,"name":"Pendentif de Belzébuth","desc":"+2% crit\n+1% esquive\n+10 portée", "pct_crit":0.02, "pct_dodge":0.01, "flat_pickup":10.0},
+	"bandage_sang":     {"rarity":0,"name":"Linceul Écarlate",     "desc":"+5 HP max\n+1.5% vol de vie",        "flat_hp":5, "pct_lifesteal":0.015},
+	"fiole_sangsue":    {"rarity":0,"name":"Sang de Léviathan",    "desc":"+1 dégât\n+2% vol de vie",           "flat_damage":1, "pct_lifesteal":0.02},
+	"ceinture_aimant":  {"rarity":0,"name":"Ceinture du Tartare",  "desc":"+60 portée ramassage\n+2% esquive",  "flat_pickup":60.0, "pct_dodge":0.02},
 	# ─── RARES R1 (rarity 1, max_stacks 3) ──────────────────────────────────
-	"vampire_amulet":   {"rarity":1,"name":"Amulette Vampire",  "desc":"+8% HP max\n+2% vol de vie/stack",       "pct_hp":0.08, "pct_lifesteal":0.02},
-	"fire_boots":       {"rarity":1,"name":"Bottes de Feu",     "desc":"+12% vitesse\nTraînée de feu",           "pct_speed":0.12},
-	"thorn_shield":     {"rarity":1,"name":"Bouclier Épineux",  "desc":"+8% dégâts\nRenvoie 15%×stacks dégâts", "pct_damage":0.08},
-	"rage_ring":        {"rarity":1,"name":"Anneau de Rage",    "desc":"+8% dégâts\nEnragé 2s après kill",       "pct_damage":0.08},
-	"phantom_step":     {"rarity":1,"name":"Pas Fantôme",       "desc":"+12% vitesse\n+0.4s iframes/stack",      "pct_speed":0.12},
-	"oeil_gele":        {"rarity":1,"name":"Œil Gelé",          "desc":"+8% dégâts\n7e tir ralentit 40% (2s)",   "pct_damage":0.08},
-	"orbe_mana":        {"rarity":1,"name":"Orbe de Mana",      "desc":"+10% dégâts\n10e tir = proj bonus",      "pct_damage":0.10},
-	"cor_guerre":       {"rarity":1,"name":"Cor de Guerre",     "desc":"+6% dégâts\n+30% dmg 5s début vague",    "pct_damage":0.06},
-	"lame_assoiffee":   {"rarity":1,"name":"Lame Assoiffée",   "desc":"+8% dégâts\n+3% vol de vie",             "pct_damage":0.08, "pct_lifesteal":0.03},
-	"cape_predateur":   {"rarity":1,"name":"Cape Prédateur",   "desc":"+10% vitesse\n+70 portée ramassage",     "pct_speed":0.10, "flat_pickup":70.0},
-	"couronne_sang":    {"rarity":1,"name":"Couronne de Sang",  "desc":"+10% HP max\n+4% vol de vie",            "pct_hp":0.10, "pct_lifesteal":0.04},
+	"vampire_amulet":   {"rarity":1,"name":"Amulette de Charon",      "desc":"+8% HP max\n+2% vol de vie/stack",      "pct_hp":0.08, "pct_lifesteal":0.02},
+	"fire_boots":       {"rarity":1,"name":"Bottes du Phlégéthon",  "desc":"+12% vitesse\nTraînée de feu",          "pct_speed":0.12},
+	"thorn_shield":     {"rarity":1,"name":"Écu des Épines Maudites","desc":"+8% dégâts\nRenvoie 15%×stacks dégâts","pct_damage":0.08},
+	"rage_ring":        {"rarity":1,"name":"Sceau du Courroux",      "desc":"+8% dégâts\nEnragé 2s après kill",     "pct_damage":0.08},
+	"phantom_step":     {"rarity":1,"name":"Pas du Spectre",         "desc":"+12% vitesse\n+0.4s iframes/stack",   "pct_speed":0.12},
+	"oeil_gele":        {"rarity":1,"name":"Œil du Cocyte",          "desc":"+8% dégâts\n7e tir ralentit 40% (2s)","pct_damage":0.08},
+	"orbe_mana":        {"rarity":1,"name":"Orbe de l'Achéron",      "desc":"+10% dégâts\n10e tir = proj bonus",   "pct_damage":0.10},
+	"cor_guerre":       {"rarity":1,"name":"Cor de Baal",            "desc":"+6% dégâts\n+30% dmg 5s début vague", "pct_damage":0.06},
+	"lame_assoiffee":   {"rarity":1,"name":"Lame de Moloch",         "desc":"+8% dégâts\n+3% vol de vie",          "pct_damage":0.08, "pct_lifesteal":0.03},
+	"cape_predateur":   {"rarity":1,"name":"Cape des Ombres",        "desc":"+10% vitesse\n+70 portée ramassage",  "pct_speed":0.10, "flat_pickup":70.0},
+	"couronne_sang":    {"rarity":1,"name":"Couronne de Dis",        "desc":"+10% HP max\n+4% vol de vie",         "pct_hp":0.10, "pct_lifesteal":0.04},
 	# ─── ÉPIQUES R1 (rarity 2, max_stacks 2) ────────────────────────────────
 	"auto_grenade":     {"rarity":2,"name":"Grenade Automatique","desc":"Grenade toutes les 6s\n+15% dégâts",    "pct_damage":0.15, "icon":"res://assets/items/HolyGrenade1.png"},
-	"double_canon":     {"rarity":2,"name":"Double Canon",      "desc":"+1 projectile simultané\n+5% dégâts",    "flat_projectiles":1, "pct_damage":0.05},
-	"faux_ames":        {"rarity":2,"name":"Faux des Âmes",    "desc":"+1 projectile\n+15% dégâts\n+3% vol de vie", "flat_projectiles":1, "pct_damage":0.15, "pct_lifesteal":0.03},
+	"double_canon":     {"rarity":2,"name":"Diptyque de l'Abîme","desc":"+1 projectile simultané\n+5% dégâts",   "flat_projectiles":1, "pct_damage":0.05},
+	"faux_ames":        {"rarity":2,"name":"Faux d'Azraël",    "desc":"+12% dégâts\n+6% vol de vie",               "pct_damage":0.12, "pct_lifesteal":0.06},
+	# ─── COMMUNS PRIORITÉ HAUTE ──────────────────────────────────────────────
+	"griffe_abaddon":   {"rarity":0,"name":"Griffe d'Abaddon",      "desc":"+2 dégâts\n+5% critique",              "flat_damage":2, "pct_crit":0.05},
+	"orbe_limbes":      {"rarity":0,"name":"Orbe des Limbes",        "desc":"Absorbe 1 coup\ntoutes les 8s",        },
+	"ceinture_gehenne": {"rarity":0,"name":"Ceinture du Géhenne",    "desc":"+10 vitesse\n+1 dégât",                "flat_speed":10.0, "flat_damage":1},
+	"collier_erebe":    {"rarity":0,"name":"Collier de l'Érèbe",     "desc":"+2 dégâts\n-5% dégâts reçus",          "flat_damage":2, "pct_dmg_reduction":0.05},
+	"lanterne_acheron": {"rarity":0,"name":"Lanterne de l'Achéron",  "desc":"+20 portée\n+3 HP max",                "flat_pickup":20.0, "flat_hp":3},
+	"scarabee_mammon":  {"rarity":0,"name":"Scarabée de Mammon",     "desc":"+10% âmes bonus",                      "bonus_soul_rate":0.10},
+	"miroir_supplies":  {"rarity":0,"name":"Miroir des Suppliciés",  "desc":"5% chance de doubler\nles dégâts",     },
+	"medaillon_belph":  {"rarity":0,"name":"Médaillon de Belphégor", "desc":"+5% critique\n+3% esquive",            "pct_crit":0.05, "pct_dodge":0.03},
+	"sang_courroux":    {"rarity":0,"name":"Sang du Courroux",       "desc":"+3 dégâts 5s\naprès un kill",          },
+	"anneau_verre_noir":{"rarity":0,"name":"Anneau de Verre Noir",   "desc":"+5 dégâts\n-5 HP max",                 "flat_damage":5, "flat_hp":-5},
+	"ecu_ronces":       {"rarity":0,"name":"Écu des Ronces Maudites","desc":"+2 armure\nRenvoie 10% dégâts reçus",  "flat_armor":2, "pct_reflect":0.10},
+	"sac_runes_damnes": {"rarity":0,"name":"Sac de Runes Damnées",   "desc":"+3 HP\n+1 dégât\n+5 vitesse",          "flat_hp":3, "flat_damage":1, "flat_speed":5.0},
+	"pierre_purgatoire":{"rarity":0,"name":"Pierre du Purgatoire",   "desc":"+0.5 regen/s",                         "flat_regen":0.5},
+	"dague_asmodee":    {"rarity":0,"name":"Dague d'Asmodée",        "desc":"+2 dégâts\nPoison 3s (2 dégâts/s)",   "flat_damage":2},
+	# ─── RARES PRIORITÉ HAUTE ────────────────────────────────────────────────
+	"anneau_phlegethon":{"rarity":1,"name":"Anneau du Phlégéthon",   "desc":"Kill → +5% vitesse\npendant 3s",       },
+	"crane_avarice":    {"rarity":1,"name":"Crâne de l'Avarice",     "desc":"+15% dégâts\n+20% âmes",              "pct_damage":0.15, "bonus_soul_rate":0.20},
+	"bottes_lilith":    {"rarity":1,"name":"Bottes de Lilith",       "desc":"+15% vitesse\n+10% esquive",           "pct_speed":0.15, "pct_dodge":0.10},
+	"bracelet_pacte":   {"rarity":1,"name":"Bracelet du Pacte",      "desc":"+12% dégâts\n-5 HP\n+10% âmes",        "pct_damage":0.12, "flat_hp":-5, "bonus_soul_rate":0.10},
+	"bandeau_inquisiteur":{"rarity":1,"name":"Bandeau de l'Inquisiteur","desc":"+20% dégâts\nsi immobile 1s",       },
+	"oeil_tenebres":    {"rarity":1,"name":"Œil de Ténèbres",        "desc":"+15% dégâts\nsi ennemi à >300px",     },
+	"chapelet_condamnes":{"rarity":1,"name":"Chapelet des Condamnés","desc":"+2 armure/kill ce round\n(max +10)",   },
+	"armure_cranes":    {"rarity":1,"name":"Armure des Crânes",      "desc":"+5 armure\n+5% HP max",               "flat_armor":5, "pct_hp":0.05},
+	# ─── ÉPIQUES PRIORITÉ HAUTE ──────────────────────────────────────────────
+	"marque_lucifer":   {"rarity":2,"name":"Marque de Lucifer",      "desc":"+25% dégâts\n-20% HP max",            "pct_damage":0.25, "pct_hp":-0.20},
+	"griffe_mephisto":  {"rarity":2,"name":"Griffe de Méphistophélès","desc":"+20% dégâts\n+1 HP volé par tir",    "pct_damage":0.20, "lifesteal_flat":1},
+	"talisman_ire":     {"rarity":2,"name":"Talisman de Ire",        "desc":"+3% dégâts/kill\nce round (max +30%)"},
+	"rune_foudre":      {"rarity":2,"name":"Rune de la Foudre Maudite","desc":"Foudre toutes les 5s\n50 dégâts",   },
+	"sceptre_tartare":  {"rarity":2,"name":"Sceptre de Tartare",     "desc":"Boule de feu toutes les 4s\n60 dégâts (120px)"},
+	"sceau_resurrection":{"rarity":2,"name":"Sceau de la Résurrection","desc":"1 revive automatique\n(reprend à 30% HP)","revive":1},
+	"ame_condamnee":    {"rarity":2,"name":"Âme Condamnée",           "desc":"+10% dégâts\n+10% HP max\n+10% vitesse\n+10% âmes", "pct_damage":0.10, "pct_hp":0.10, "pct_speed":0.10, "bonus_soul_rate":0.10},
+	"amulette_baal":    {"rarity":2,"name":"Amulette de Baal-Zébuth","desc":"Tous les 3 tirs\n20 dégâts ennemi proche"},
 }
 
 const SKILL_TREES: Dictionary = {
@@ -65,6 +98,11 @@ const SKILL_TREES: Dictionary = {
 			"requires": ["penetration"], "row": 2, "col": 0,
 		},
 		{
+			"id": "percant", "name": "PERÇANT",
+			"desc": "Les projectiles\ntraversent tous les ennemis", "cost": 1,
+			"requires": ["penetration"], "row": 2, "col": 1,
+		},
+		{
 			"id": "ricochet", "name": "RICOCHET",
 			"desc": "La balle rebondit\nvers l'ennemi le plus proche", "cost": 1,
 			"requires": ["velocite"], "row": 2, "col": 2,
@@ -76,6 +114,8 @@ const SKILL_TREES: Dictionary = {
 		},
 	]
 }
+
+var active_profile      : int          = 1
 
 # ── Persistant entre sessions (disque) ──────────────────────────────────────
 var boss_souls          : int          = 0
@@ -107,6 +147,11 @@ var dodge_chance         := 0.0
 var pickup_range         := 150.0
 var projectile_count     := 1
 var projectile_speed_pct := 0.0
+var dmg_reduction_pct       := 0.0
+var reflect_pct             := 0.0
+var lifesteal_flat_per_shot := 0
+var revive_count            := 0
+var bonus_armor_round       := 0
 var soul_bonus_rate      := 0.0
 
 # Trigger state (run-only)
@@ -197,7 +242,8 @@ func get_curse_soul_multiplier() -> float:
 func calc_damage_taken(raw: int) -> int:
 	if check_dodge():
 		return 0
-	return maxi(1, raw - armor)
+	var reduced := int(ceil(float(raw) * (1.0 - dmg_reduction_pct)))
+	return maxi(1, reduced - armor - bonus_armor_round)
 
 func calc_lifesteal(dmg: int) -> int:
 	if lifesteal_pct <= 0.0:
@@ -237,6 +283,32 @@ func has_timed_buff(key: String) -> bool:
 
 # ── Persistence ─────────────────────────────────────────────────────────────
 
+func _profile_path(n: int) -> String:
+	return "user://profile_%d.json" % n
+
+func get_profile_info(n: int) -> Dictionary:
+	var path := _profile_path(n)
+	if not FileAccess.file_exists(path):
+		return {}
+	var f := FileAccess.open(path, FileAccess.READ)
+	if not f:
+		return {}
+	var result = JSON.parse_string(f.get_as_text())
+	if result is Dictionary:
+		return result as Dictionary
+	return {}
+
+func has_run_in_progress(n: int) -> bool:
+	var info := get_profile_info(n)
+	if info.is_empty():
+		return false
+	return int(info.get("player_level", 1)) > 1 or (info.get("items", []) as Array).size() > 0
+
+func load_profile(n: int) -> void:
+	active_profile = n
+	load_save()
+	_recompute()
+
 func save() -> void:
 	var data := {
 		"boss_souls":          boss_souls,
@@ -245,15 +317,20 @@ func save() -> void:
 		"perm_skills_by_char": perm_skills_by_char,
 		"unlocked_chars":      unlocked_chars,
 		"selected_char":       selected_char,
+		"player_level":        player_level,
+		"souls":               souls,
+		"items":               items,
+		"curses":              curses,
 	}
-	var f := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
+	var f := FileAccess.open(_profile_path(active_profile), FileAccess.WRITE)
 	if f:
 		f.store_string(JSON.stringify(data))
 
 func load_save() -> void:
-	if not FileAccess.file_exists(SAVE_PATH):
+	var path := _profile_path(active_profile)
+	if not FileAccess.file_exists(path):
 		return
-	var f := FileAccess.open(SAVE_PATH, FileAccess.READ)
+	var f := FileAccess.open(path, FileAccess.READ)
 	if not f:
 		return
 	var result = JSON.parse_string(f.get_as_text())
@@ -262,6 +339,8 @@ func load_save() -> void:
 	boss_souls      = int(result.get("boss_souls",      0))
 	kills_total     = int(result.get("kills_total",     0))
 	victories_total = int(result.get("victories_total", 0))
+	player_level    = int(result.get("player_level",    1))
+	souls           = int(result.get("souls",           0))
 	var ps = result.get("perm_skills_by_char", {})
 	if ps is Dictionary:
 		perm_skills_by_char = {}
@@ -275,6 +354,16 @@ func load_save() -> void:
 		for c in uc:
 			unlocked_chars.append(String(c))
 	selected_char = String(result.get("selected_char", "neophyte"))
+	var it = result.get("items", [])
+	items.clear()
+	if it is Array:
+		for i in it:
+			items.append(String(i))
+	var cr = result.get("curses", [])
+	curses.clear()
+	if cr is Array:
+		for c in cr:
+			curses.append(String(c))
 
 func add_item(item_id: String) -> void:
 	items.append(item_id)
@@ -322,30 +411,38 @@ func _recompute() -> void:
 	var pct_crit     := 0.0
 	var pct_ls       := 0.0
 	var pct_dodge    := 0.0
-	var flat_proj    := 0
-	var flat_pspd    := 0.0
-	var flat_pickup  := 0.0
+	var flat_proj      := 0
+	var flat_pspd      := 0.0
+	var flat_pickup    := 0.0
+	var flat_dmg_reduc := 0.0
+	var flat_reflect   := 0.0
+	var flat_ls_shot   := 0
+	var flat_revive    := 0
 
 	for item_id in items:
 		var db: Dictionary = ITEM_DB.get(item_id as String, {})
-		flat_hp     += int(db.get("flat_hp",         0))
-		flat_dmg    += int(db.get("flat_damage",     0))
-		flat_spd    += float(db.get("flat_speed",    0.0))
-		flat_cd     += float(db.get("flat_fire_cd",  0.0))
-		flat_rng    += int(db.get("flat_range",      0))
-		flat_arm    += int(db.get("flat_armor",      0))
-		flat_reg    += float(db.get("flat_regen",    0.0))
-		flat_soul   += float(db.get("bonus_soul_rate", 0.0))
-		flat_proj   += int(db.get("flat_projectiles",  0))
-		flat_pspd   += float(db.get("flat_proj_speed", 0.0))
-		flat_pickup += float(db.get("flat_pickup",   0.0))
-		pct_hp      += float(db.get("pct_hp",        0.0))
-		pct_dmg     += float(db.get("pct_damage",    0.0))
-		pct_spd     += float(db.get("pct_speed",     0.0))
-		pct_cd      += float(db.get("pct_fire_cd",   0.0))
-		pct_crit    += float(db.get("pct_crit",      0.0))
-		pct_ls      += float(db.get("pct_lifesteal", 0.0))
-		pct_dodge   += float(db.get("pct_dodge",     0.0))
+		flat_hp     += int(db.get("flat_hp",            0))
+		flat_dmg    += int(db.get("flat_damage",        0))
+		flat_spd    += float(db.get("flat_speed",       0.0))
+		flat_cd     += float(db.get("flat_fire_cd",     0.0))
+		flat_rng    += int(db.get("flat_range",         0))
+		flat_arm    += int(db.get("flat_armor",         0))
+		flat_reg    += float(db.get("flat_regen",       0.0))
+		flat_soul   += float(db.get("bonus_soul_rate",  0.0))
+		flat_proj   += int(db.get("flat_projectiles",   0))
+		flat_pspd   += float(db.get("flat_proj_speed",  0.0))
+		flat_pickup += float(db.get("flat_pickup",      0.0))
+		pct_hp      += float(db.get("pct_hp",           0.0))
+		pct_dmg     += float(db.get("pct_damage",       0.0))
+		pct_spd     += float(db.get("pct_speed",        0.0))
+		pct_cd      += float(db.get("pct_fire_cd",      0.0))
+		pct_crit    += float(db.get("pct_crit",         0.0))
+		pct_ls      += float(db.get("pct_lifesteal",    0.0))
+		pct_dodge   += float(db.get("pct_dodge",        0.0))
+		flat_dmg_reduc += float(db.get("pct_dmg_reduction", 0.0))
+		flat_reflect   += float(db.get("pct_reflect",       0.0))
+		flat_ls_shot   += int(db.get("lifesteal_flat",       0))
+		flat_revive    += int(db.get("revive",               0))
 
 	# coeur_pierre: +2 armor bonus à 3 stacks
 	if item_count("coeur_pierre") >= 3:
@@ -376,17 +473,22 @@ func _recompute() -> void:
 
 	max_hp     = int((base_hp  + flat_hp)  * (1.0 + pct_hp + curse_hp_pct))
 	damage     = int((base_dmg + flat_dmg) * (1.0 + pct_dmg))
-	speed      = (base_spd + flat_spd) * (1.0 + pct_spd)
-	fire_cd    = max(0.10, (base_cd + flat_cd) * (1.0 - pct_cd) * curse_cd_mult)
+	speed      = minf(550.0, (base_spd + flat_spd) * (1.0 + pct_spd))
+	fire_cd    = max(0.28, (base_cd + flat_cd) * (1.0 - pct_cd) * curse_cd_mult)
 	flat_range = mini(400, flat_rng)
 
 	armor                = flat_arm
 	hp_regen             = flat_reg
 	soul_bonus_rate      = flat_soul
-	crit_chance          = 0.05 + pct_crit
+	crit_chance          = clampf(0.05 + pct_crit, 0.0, 0.55)
 	crit_multiplier      = 1.5
-	lifesteal_pct        = pct_ls
-	dodge_chance         = clampf(pct_dodge, 0.0, 0.6)
-	pickup_range         = 80.0 + flat_pickup
-	projectile_count     = 1 + flat_proj
-	projectile_speed_pct = flat_pspd
+	lifesteal_pct           = clampf(pct_ls, 0.0, 0.20)
+	dodge_chance            = clampf(pct_dodge, 0.0, 0.50)
+	pickup_range            = 80.0 + flat_pickup
+	projectile_count        = mini(4, 1 + flat_proj)
+	projectile_speed_pct    = flat_pspd
+	dmg_reduction_pct       = clampf(flat_dmg_reduc, 0.0, 0.40)
+	reflect_pct             = flat_reflect
+	lifesteal_flat_per_shot = mini(flat_ls_shot, 2)
+	revive_count            = mini(flat_revive, 1)
+	bonus_armor_round       = 0

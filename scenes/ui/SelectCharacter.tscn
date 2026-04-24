@@ -4,7 +4,8 @@
 [ext_resource type="Script" uid="uid://c1oearoqh8bo5" path="res://scenes/ui/SelectCharacter.gd" id="2_script"]
 [ext_resource type="FontFile" uid="uid://dppo7eddft6wh" path="res://assets/fonts/Cinzel-VariableFont_wght.ttf" id="3_cinzel"]
 [ext_resource type="FontFile" uid="uid://dm2thh3ulhwq" path="res://assets/fonts/ShareTechMono-Regular.ttf" id="4_mono"]
-[ext_resource type="Texture2D" uid="uid://s7ujimk1edlr" path="res://assets/Characters/Neophyte/NeophyteSplashart.png" id="5_splash"]
+[ext_resource type="Texture2D" uid="uid://s7ujimk1edlr" path="res://assets/Characters/Masqued_Neophyte/NeophyteSplashart.png" id="5_splash"]
+[ext_resource type="AudioStream" uid="uid://d0qvti30ienfj" path="res://sounds/musique/Beneath_the_Grey_Arch.mp3" id="6_3y8mn"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_card"]
 content_margin_left = 0.0
@@ -26,6 +27,54 @@ content_margin_bottom = 32.0
 bg_color = Color(0.04, 0.02, 0.08, 0.75)
 border_width_left = 1
 border_color = Color(0.55, 0.35, 0.85, 0.4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_forge_bg"]
+content_margin_left = 16.0
+content_margin_top = 12.0
+content_margin_right = 16.0
+content_margin_bottom = 12.0
+bg_color = Color(0.08, 0.05, 0.01, 0.8)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 0.75, 0.1, 0.45)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_forge_btn"]
+content_margin_left = 20.0
+content_margin_top = 8.0
+content_margin_right = 20.0
+content_margin_bottom = 8.0
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 0.75, 0.1, 0.85)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_forge_btn_hover"]
+content_margin_left = 20.0
+content_margin_top = 8.0
+content_margin_right = 20.0
+content_margin_bottom = 8.0
+bg_color = Color(0.25, 0.15, 0, 0.3)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 0.92, 0.3, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_disabled"]
+content_margin_left = 40.0
+content_margin_top = 12.0
+content_margin_right = 40.0
+content_margin_bottom = 12.0
+bg_color = Color(0.1, 0.08, 0.15, 0.5)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.35, 0.25, 0.5, 0.4)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn"]
 content_margin_left = 40.0
@@ -50,78 +99,6 @@ border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
 border_color = Color(0.88, 0.72, 1, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_disabled"]
-content_margin_left = 40.0
-content_margin_top = 12.0
-content_margin_right = 40.0
-content_margin_bottom = 12.0
-bg_color = Color(0.1, 0.08, 0.15, 0.5)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.35, 0.25, 0.5, 0.4)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_forge_bg"]
-content_margin_left = 16.0
-content_margin_top = 12.0
-content_margin_right = 16.0
-content_margin_bottom = 12.0
-bg_color = Color(0.08, 0.05, 0.01, 0.8)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(1.0, 0.75, 0.1, 0.45)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_forge_btn"]
-content_margin_left = 20.0
-content_margin_top = 8.0
-content_margin_right = 20.0
-content_margin_bottom = 8.0
-bg_color = Color(0, 0, 0, 0)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(1.0, 0.75, 0.1, 0.85)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_forge_btn_hover"]
-content_margin_left = 20.0
-content_margin_top = 8.0
-content_margin_right = 20.0
-content_margin_bottom = 8.0
-bg_color = Color(0.25, 0.15, 0.0, 0.3)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(1.0, 0.92, 0.3, 1.0)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_reset_btn"]
-content_margin_left = 14.0
-content_margin_top = 8.0
-content_margin_right = 14.0
-content_margin_bottom = 8.0
-bg_color = Color(0, 0, 0, 0)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.8, 0.2, 0.2, 0.7)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_reset_btn_hold"]
-content_margin_left = 14.0
-content_margin_top = 8.0
-content_margin_right = 14.0
-content_margin_bottom = 8.0
-bg_color = Color(0.4, 0.05, 0.05, 0.5)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(1.0, 0.3, 0.3, 1.0)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nav"]
 content_margin_left = 16.0
@@ -309,47 +286,47 @@ custom_minimum_size = Vector2(0, 1)
 layout_mode = 2
 color = Color(0.55, 0.35, 0.85, 0.3)
 
-[node name="ForgePanel" type="PanelContainer" parent="Card/HBox/InfoPanel/VBox"]
+[node name="ForgePanel" type="PanelContainer" parent="Card/HBox/InfoPanel/VBox" unique_id=1332317537]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_forge_bg")
 
-[node name="ForgeRow" type="HBoxContainer" parent="Card/HBox/InfoPanel/VBox/ForgePanel"]
+[node name="ForgeRow" type="HBoxContainer" parent="Card/HBox/InfoPanel/VBox/ForgePanel" unique_id=801437820]
 layout_mode = 2
 theme_override_constants/separation = 16
 
-[node name="ForgeTitle" type="Label" parent="Card/HBox/InfoPanel/VBox/ForgePanel/ForgeRow"]
+[node name="ForgeTitle" type="Label" parent="Card/HBox/InfoPanel/VBox/ForgePanel/ForgeRow" unique_id=934991795]
 layout_mode = 2
-text = "✦  GRIMOIRE ÉTERNEL"
-vertical_alignment = 1
+theme_override_colors/font_color = Color(1, 0.78, 0.2, 1)
 theme_override_fonts/font = ExtResource("4_mono")
 theme_override_font_sizes/font_size = 12
-theme_override_colors/font_color = Color(1.0, 0.78, 0.2, 1.0)
+text = "✦  GRIMOIRE ÉTERNEL"
+vertical_alignment = 1
 
-[node name="ForgeSpacer" type="Control" parent="Card/HBox/InfoPanel/VBox/ForgePanel/ForgeRow"]
+[node name="ForgeSpacer" type="Control" parent="Card/HBox/InfoPanel/VBox/ForgePanel/ForgeRow" unique_id=2011454528]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="BossSoulsLabel" type="Label" parent="Card/HBox/InfoPanel/VBox/ForgePanel/ForgeRow"]
+[node name="BossSoulsLabel" type="Label" parent="Card/HBox/InfoPanel/VBox/ForgePanel/ForgeRow" unique_id=1498471131]
 unique_name_in_owner = true
 layout_mode = 2
-vertical_alignment = 1
+theme_override_colors/font_color = Color(1, 0.78, 0.2, 0.9)
 theme_override_fonts/font = ExtResource("4_mono")
 theme_override_font_sizes/font_size = 13
-theme_override_colors/font_color = Color(1.0, 0.78, 0.2, 0.9)
 text = "✦ x0"
+vertical_alignment = 1
 
-[node name="GrimoireBtn" type="Button" parent="Card/HBox/InfoPanel/VBox/ForgePanel/ForgeRow"]
+[node name="GrimoireBtn" type="Button" parent="Card/HBox/InfoPanel/VBox/ForgePanel/ForgeRow" unique_id=1818912354]
 unique_name_in_owner = true
-layout_mode = 2
 process_mode = 3
-text = "OUVRIR ✦"
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.88, 0.3, 1)
 theme_override_fonts/font = ExtResource("4_mono")
 theme_override_font_sizes/font_size = 12
-theme_override_colors/font_color = Color(1.0, 0.88, 0.3, 1.0)
 theme_override_styles/normal = SubResource("StyleBoxFlat_forge_btn")
 theme_override_styles/hover = SubResource("StyleBoxFlat_forge_btn_hover")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_btn_disabled")
 theme_override_styles/focus = SubResource("StyleBoxFlat_forge_btn")
+text = "OUVRIR ✦"
 
 [node name="CharLore" type="Label" parent="Card/HBox/InfoPanel/VBox" unique_id=100000061]
 unique_name_in_owner = true
@@ -429,6 +406,11 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_nav")
 theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 theme_override_styles/focus = SubResource("StyleBoxFlat_nav")
 text = "< RETOUR"
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1303506574]
+stream = ExtResource("6_3y8mn")
+volume_db = -31.018
+autoplay = true
 
 [connection signal="pressed" from="Card/HBox/InfoPanel/VBox/ForgePanel/ForgeRow/GrimoireBtn" to="." method="_on_open_grimoire"]
 [connection signal="pressed" from="Card/HBox/InfoPanel/VBox/ConfirmBtn" to="." method="_on_character_selected"]

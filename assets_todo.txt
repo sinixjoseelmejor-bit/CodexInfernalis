@@ -1,0 +1,128 @@
+╔══════════════════════════════════════════════════════════════════════╗
+║             CODEX INFERNALIS — TODOLIST ASSETS MANQUANTS            ║
+╚══════════════════════════════════════════════════════════════════════╝
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  [CRITIQUE] ICÔNES ITEMS  (45 manquantes — crash/texture vide en jeu)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Chemin cible : res://assets/items/<item_id>.png
+
+  ── COMMUNS (20) ──────────────────────────────────────────────────
+  [ ] marteau_fissure       Marteau du Geôlier
+  [ ] sac_trou              Besace des Limbes
+  [ ] pendentif_chance      Pendentif de Belzébuth
+  [ ] bandage_sang          Linceul Écarlate
+  [ ] fiole_sangsue         Sang de Léviathan
+  [ ] ceinture_aimant       Ceinture du Tartare
+  [ ] griffe_abaddon        Griffe d'Abaddon
+  [ ] orbe_limbes           Orbe des Limbes
+  [ ] ceinture_gehenne      Ceinture du Géhenne
+  [ ] collier_erebe         Collier de l'Érèbe
+  [ ] lanterne_acheron      Lanterne de l'Achéron
+  [ ] scarabee_mammon       Scarabée de Mammon
+  [ ] miroir_supplies       Miroir des Suppliciés
+  [ ] medaillon_belph       Médaillon de Belphégor
+  [ ] sang_courroux         Sang du Courroux
+  [ ] anneau_verre_noir     Anneau de Verre Noir
+  [ ] ecu_ronces            Écu des Ronces Maudites
+  [ ] sac_runes_damnes      Sac de Runes Damnées
+  [ ] pierre_purgatoire     Pierre du Purgatoire
+  [ ] dague_asmodee         Dague d'Asmodée
+
+  ── RARES (8) ─────────────────────────────────────────────────────
+  [ ] oeil_gele             Œil du Cocyte
+  [ ] orbe_mana             Orbe de l'Achéron
+  [ ] cor_guerre            Cor de Baal
+  [ ] lame_assoiffee        Lame de Moloch
+  [ ] cape_predateur        Cape des Ombres
+  [ ] couronne_sang         Couronne de Dis
+  [ ] anneau_phlegethon     Anneau du Phlégéthon
+  [ ] crane_avarice         Crâne de l'Avarice
+  [ ] bottes_lilith         Bottes de Lilith
+  [ ] bracelet_pacte        Bracelet du Pacte
+  [ ] bandeau_inquisiteur   Bandeau de l'Inquisiteur
+  [ ] oeil_tenebres         Œil de Ténèbres
+  [ ] chapelet_condamnes    Chapelet des Condamnés
+  [ ] armure_cranes         Armure des Crânes
+
+  ── ÉPIQUES (11) ──────────────────────────────────────────────────
+  [ ] double_canon          Diptyque de l'Abîme
+  [ ] faux_ames             Faux d'Azraël
+  [ ] marque_lucifer        Marque de Lucifer
+  [ ] griffe_mephisto       Griffe de Méphistophélès
+  [ ] talisman_ire          Talisman de Ire
+  [ ] rune_foudre           Rune de la Foudre Maudite
+  [ ] sceptre_tartare       Sceptre de Tartare
+  [ ] sceau_resurrection    Sceau de la Résurrection
+  [ ] ame_condamnee         Âme Condamnée
+  [ ] amulette_baal         Amulette de Baal-Zébuth
+
+  ── NETTOYAGE — fichiers orphelins à supprimer ou recycler ────────
+  [ ] anneau_vitesse.png    (aucun item correspondant)
+  [ ] bottes_course.png     (aucun item correspondant)
+  [ ] bouclier_bois.png     (aucun item correspondant)
+  [ ] epee_courte.png       (aucun item correspondant)
+  [ ] soul_harvester.png    (aucun item correspondant)
+  [ ] storm_ring.png        (aucun item correspondant)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  [HAUTE] EFFETS VISUELS  (mécaniques actives mais invisibles)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  [ ] Rune de la Foudre     Éclair visuel sur l'ennemi ciblé (toutes les 5s)
+  [ ] Sceptre de Tartare    Effet de blast à l'impact (120px — réutiliser BulletExplosion?)
+  [ ] Dague d'Asmodée       Indicateur visuel poison sur ennemi (teinte verte?)
+  [ ] Fureur du Condamné    Aura / particules dorées quand le buff se déclenche
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  [HAUTE] SONS MANQUANTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Chemin cible : res://sounds/sfx/<nom>.mp3
+
+  ── JOUEUR ────────────────────────────────────────────────────────
+  [ ] player_shoot          Lancement de fireball
+  [ ] player_hit            Dégât reçu
+  [ ] player_death          Mort du joueur
+  [ ] player_revive         Déclenchement du Sceau de la Résurrection
+
+  ── ENNEMIS ───────────────────────────────────────────────────────
+  [ ] enemy_hit             Son générique quand un ennemi prend des dégâts
+  [ ] brutus_attack         Attaque de Brutus
+  [ ] golgota_laser         Tir laser de Golgota
+  [ ] golgota_orb           Lancement d'orbes
+  [ ] golgota_shockwave     Onde de choc (phase 1)
+  [ ] golgota_death         Mort de Golgota
+
+  ── UI / GAMEPLAY ─────────────────────────────────────────────────
+  [ ] soul_pickup           Ramassage d'âme
+  [ ] key_pickup            Ramassage de clé
+  [ ] chest_open            Ouverture de coffre
+  [ ] item_buy              Achat item dans le shop
+  [ ] skill_buy             Achat compétence dans l'arbre
+  [ ] ui_navigate           Navigation dans les menus
+
+  ── MUSIQUE ───────────────────────────────────────────────────────
+  [ ] boss_theme            Musique dédiée au combat contre Golgota
+                            (actuellement aucune musique assignée au boss)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  [BASSE] ANIMATIONS INCOMPLÈTES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  [ ] Golgota walk 8 directions
+        Actuellement : seulement south/ (6 frames)
+        Manquant     : north / east / west / south-east / south-west /
+                       north-east / north-west  (6 frames chacune)
+        Impact       : le boss marche dans toutes les directions mais
+                       joue toujours l'animation sud
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  RÉCAPITULATIF
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Icônes items         : 45 à créer  + 6 orphelins à supprimer
+  Effets visuels       :  4 à créer
+  Sons SFX             : 10 à créer
+  Sons musique         :  1 à créer
+  Animations           :  7 directions walk Golgota

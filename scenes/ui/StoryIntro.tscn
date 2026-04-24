@@ -1,0 +1,84 @@
+[gd_scene format=3 uid="uid://81rnqef5hmjr"]
+
+[ext_resource type="Script" uid="uid://dw1fi6id06h5l" path="res://scenes/ui/StoryIntro.gd" id="1"]
+[ext_resource type="AudioStream" uid="uid://btenwh0ure486" path="res://sounds/sfx/ClickSound.mp3" id="2"]
+[ext_resource type="AudioStream" uid="uid://d0qvti30ienfj" path="res://sounds/musique/Beneath_the_Grey_Arch.mp3" id="3"]
+
+[node name="StoryIntro" type="Control" unique_id=335870153]
+clip_contents = true
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1")
+
+[node name="BG" type="ColorRect" parent="." unique_id=68016172]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="BGImage" type="TextureRect" parent="." unique_id=1131128889]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch_mode = 5
+
+[node name="DarkOverlay" type="ColorRect" parent="." unique_id=371842457]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.5)
+
+[node name="Text" type="RichTextLabel" parent="." unique_id=1898168528]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 160.0
+offset_top = 200.0
+offset_right = -160.0
+offset_bottom = -120.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/default_color = Color(0.9, 0.85, 0.75, 1)
+theme_override_font_sizes/normal_font_size = 26
+bbcode_enabled = true
+scroll_active = false
+
+[node name="Music" type="AudioStreamPlayer" parent="." unique_id=223312001]
+stream = ExtResource("3")
+volume_db = -30.245
+autoplay = true
+
+[node name="ClickSFX" type="AudioStreamPlayer" parent="." unique_id=655563140]
+stream = ExtResource("2")
+volume_db = -39.283
+pitch_scale = 0.65
+
+[node name="Prompt" type="Label" parent="." unique_id=178312938]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -60.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.6, 0.55, 0.5, 1)
+theme_override_font_sizes/font_size = 16
+horizontal_alignment = 1
+vertical_alignment = 1

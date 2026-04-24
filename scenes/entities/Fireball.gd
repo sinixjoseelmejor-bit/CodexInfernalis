@@ -4,6 +4,7 @@ const SPEED_BASE   := 1200.0
 const SPEED_FAST   := 2020.0
 const MAX_DISTANCE := 400.0
 const EXPLOSION    := preload("res://scenes/entities/BulletExplosion.tscn")
+const HIT_SOUND    := preload("res://sounds/sfx/FireballSound.mp3")
 
 var direction    := Vector2.ZERO
 var _traveled    := 0.0
@@ -18,7 +19,12 @@ func init(dir: Vector2, dmg: int = 1, is_crit: bool = false) -> void:
 	_is_crit   = is_crit
 	direction  = dir.normalized()
 	rotation   = direction.angle()
-	_hits_left = 4 if PlayerData.has_skill("penetration") else 2
+	if PlayerData.has_skill("percant"):
+		_hits_left = 999
+	elif PlayerData.has_skill("penetration"):
+		_hits_left = 4
+	else:
+		_hits_left = 2
 
 func _process(delta: float) -> void:
 	var spd  := SPEED_FAST if PlayerData.has_skill("velocite") else SPEED_BASE
@@ -36,6 +42,13 @@ func _on_body_entered(body: Node) -> void:
 	if _hit_count >= threshold:
 		actual_dmg = maxi(1, _damage >> 1)
 	_hit_count += 1
+	if _hit_count == 1:
+		var snd := AudioStreamPlayer.new()
+		snd.stream = HIT_SOUND
+		snd.volume_db = -10.0
+		get_parent().add_child(snd)
+		snd.play()
+		snd.finished.connect(snd.queue_free)
 	body.take_damage(actual_dmg)
 	var player := get_tree().get_first_node_in_group("player")
 	if player and player.has_method("on_enemy_hit"):

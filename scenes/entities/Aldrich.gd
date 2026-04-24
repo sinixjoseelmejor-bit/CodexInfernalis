@@ -155,7 +155,7 @@ func _flash_hit() -> void:
 	if is_instance_valid(self):
 		$AnimatedSprite2D.modulate = Color(1.0, 0.45, 0.0, 1.0) if _bleed_timer > 0.0 else Color(1, 1, 1, 1)
 
-const DEATH_SOUND  := preload("res://sounds/sfx/Aldrich_death.mp3")
+const DEATH_SOUND  := preload("res://sounds/sfx/AldrichdeatSound.mp3")
 
 func _die() -> void:
 	dead = true

@@ -12,9 +12,11 @@ const LASER        := preload("res://scenes/entities/GolgotaLaser.tscn")
 const BOSS_SOUL    := preload("res://scenes/entities/BossSoul.tscn")
 const ALDRICH      := preload("res://scenes/entities/Aldrich.tscn")
 const SHOCKWAVE    := preload("res://scenes/entities/GolgotaShockwave.gd")
-const MAX_HP       := 1800
-const SHOCKWAVE_CD := 8.0
+const MAX_HP        := 1800
+const SHOCKWAVE_CD  := 8.0
 const SHOCKWAVE_DMG := 20
+# "Carapace d'Orgueil" — plafonne chaque coup pour lisser les builds burst
+const DMG_CAP       := 60
 
 var hp            := MAX_HP
 var damage        := 30
@@ -224,7 +226,7 @@ func _update_dir(dir: Vector2) -> void:
 func take_damage(amount: int) -> void:
 	if dead:
 		return
-	hp -= amount
+	hp -= mini(amount, DMG_CAP)
 	_flash_hit()
 	_check_phase()
 	var hud := get_tree().get_first_node_in_group("hud")
