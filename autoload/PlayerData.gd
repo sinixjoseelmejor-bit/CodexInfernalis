@@ -20,11 +20,11 @@ const ITEM_DB: Dictionary = {
 	"bague_tir":        {"rarity":0,"name":"Sceau de l'Inquisiteur","desc":"Tir 5% plus rapide",                "flat_fire_cd":-0.05},
 	"sac_trou":         {"rarity":0,"name":"Besace des Limbes",    "desc":"+40 portée ramassage\n+5% âmes bonus","flat_pickup":40.0, "bonus_soul_rate":0.05},
 	"pendentif_chance": {"rarity":0,"name":"Pendentif de Belzébuth","desc":"+2% crit\n+1% esquive\n+10 portée", "pct_crit":0.02, "pct_dodge":0.01, "flat_pickup":10.0},
-	"bandage_sang":     {"rarity":0,"name":"Linceul Écarlate",     "desc":"+5 HP max\n+1.5% vol de vie",        "flat_hp":5, "pct_lifesteal":0.015},
-	"fiole_sangsue":    {"rarity":0,"name":"Sang de Léviathan",    "desc":"+1 dégât\n+2% vol de vie",           "flat_damage":1, "pct_lifesteal":0.02},
+	"bandage_sang":     {"rarity":0,"name":"Linceul Écarlate",     "desc":"+5 HP max\n+1.5% vol de vie\n-1 armure",        "flat_hp":5, "pct_lifesteal":0.015, "flat_armor":-1},
+	"fiole_sangsue":    {"rarity":0,"name":"Sang de Léviathan",    "desc":"+1 dégât\n+2% vol de vie\n-5% vitesse",           "flat_damage":1, "pct_lifesteal":0.02, "pct_speed":-0.05},
 	"ceinture_aimant":  {"rarity":0,"name":"Ceinture du Tartare",  "desc":"+60 portée ramassage\n+2% esquive",  "flat_pickup":60.0, "pct_dodge":0.02},
 	# ─── RARES R1 (rarity 1, max_stacks 3) ──────────────────────────────────
-	"vampire_amulet":   {"rarity":1,"name":"Amulette de Charon",      "desc":"+8% HP max\n+2% vol de vie/stack",      "pct_hp":0.08, "pct_lifesteal":0.02},
+	"vampire_amulet":   {"rarity":1,"name":"Amulette de Charon",      "desc":"+8% HP max\n+2% vol de vie/stack\n-3% cdv/stack",      "pct_hp":0.08, "pct_lifesteal":0.02, "pct_fire_cd":-0.03},
 	"fire_boots":       {"rarity":1,"name":"Bottes du Phlégéthon",  "desc":"+12% vitesse\nTraînée de feu",          "pct_speed":0.12},
 	"thorn_shield":     {"rarity":1,"name":"Écu des Épines Maudites","desc":"+8% dégâts\nRenvoie 15%×stacks dégâts","pct_damage":0.08},
 	"rage_ring":        {"rarity":1,"name":"Sceau du Courroux",      "desc":"+8% dégâts\nEnragé 2s après kill",     "pct_damage":0.08},
@@ -32,13 +32,13 @@ const ITEM_DB: Dictionary = {
 	"oeil_gele":        {"rarity":1,"name":"Œil du Cocyte",          "desc":"+8% dégâts\n7e tir ralentit 40% (2s)","pct_damage":0.08},
 	"orbe_mana":        {"rarity":1,"name":"Orbe de l'Achéron",      "desc":"+10% dégâts\n10e tir = proj bonus",   "pct_damage":0.10},
 	"cor_guerre":       {"rarity":1,"name":"Cor de Baal",            "desc":"+6% dégâts\n+30% dmg 5s début vague", "pct_damage":0.06},
-	"lame_assoiffee":   {"rarity":1,"name":"Lame de Moloch",         "desc":"+8% dégâts\n+3% vol de vie",          "pct_damage":0.08, "pct_lifesteal":0.03},
+	"lame_assoiffee":   {"rarity":1,"name":"Lame de Moloch",         "desc":"+8% dégâts\n+3% vol de vie\n+15% dégâts reçus",          "pct_damage":0.08, "pct_lifesteal":0.03, "pct_dmg_reduction":-0.15},
 	"cape_predateur":   {"rarity":1,"name":"Cape des Ombres",        "desc":"+10% vitesse\n+70 portée ramassage",  "pct_speed":0.10, "flat_pickup":70.0},
-	"couronne_sang":    {"rarity":1,"name":"Couronne de Dis",        "desc":"+10% HP max\n+4% vol de vie",         "pct_hp":0.10, "pct_lifesteal":0.04},
+	"couronne_sang":    {"rarity":1,"name":"Couronne de Dis",        "desc":"+10% HP max\n+4% vol de vie\n-10% vitesse",         "pct_hp":0.10, "pct_lifesteal":0.04, "pct_speed":-0.10},
 	# ─── ÉPIQUES R1 (rarity 2, max_stacks 2) ────────────────────────────────
 	"auto_grenade":     {"rarity":2,"name":"Grenade Automatique","desc":"Grenade toutes les 6s\n+15% dégâts",    "pct_damage":0.15, "icon":"res://assets/items/HolyGrenade1.png"},
 	"double_canon":     {"rarity":2,"name":"Diptyque de l'Abîme","desc":"+1 projectile simultané\n+5% dégâts",   "flat_projectiles":1, "pct_damage":0.05},
-	"faux_ames":        {"rarity":2,"name":"Faux d'Azraël",    "desc":"+12% dégâts\n+6% vol de vie",               "pct_damage":0.12, "pct_lifesteal":0.06},
+	"faux_ames":        {"rarity":2,"name":"Faux d'Azraël",    "desc":"+12% dégâts\n+6% vol de vie\n-1 HP/sec",               "pct_damage":0.12, "pct_lifesteal":0.06, "hp_drain":1.0},
 	# ─── COMMUNS PRIORITÉ HAUTE ──────────────────────────────────────────────
 	"griffe_abaddon":   {"rarity":0,"name":"Griffe d'Abaddon",      "desc":"+2 dégâts\n+5% critique",              "flat_damage":2, "pct_crit":0.05},
 	"orbe_limbes":      {"rarity":0,"name":"Orbe des Limbes",        "desc":"Absorbe 1 coup\ntoutes les 8s",        },
@@ -65,7 +65,7 @@ const ITEM_DB: Dictionary = {
 	"armure_cranes":    {"rarity":1,"name":"Armure des Crânes",      "desc":"+5 armure\n+5% HP max",               "flat_armor":5, "pct_hp":0.05},
 	# ─── ÉPIQUES PRIORITÉ HAUTE ──────────────────────────────────────────────
 	"marque_lucifer":   {"rarity":2,"name":"Marque de Lucifer",      "desc":"+25% dégâts\n-20% HP max",            "pct_damage":0.25, "pct_hp":-0.20},
-	"griffe_mephisto":  {"rarity":2,"name":"Griffe de Méphistophélès","desc":"+20% dégâts\n+1 HP volé par tir",    "pct_damage":0.20, "lifesteal_flat":1},
+	"griffe_mephisto":  {"rarity":2,"name":"Griffe de Méphistophélès","desc":"+20% dégâts\n+1 HP volé par tir\n-20% cdv",    "pct_damage":0.20, "lifesteal_flat":1, "pct_fire_cd":-0.20},
 	"talisman_ire":     {"rarity":2,"name":"Talisman de Ire",        "desc":"+3% dégâts/kill\nce round (max +30%)"},
 	"rune_foudre":      {"rarity":2,"name":"Rune de la Foudre Maudite","desc":"Foudre toutes les 5s\n50 dégâts",   },
 	"sceptre_tartare":  {"rarity":2,"name":"Sceptre de Tartare",     "desc":"Boule de feu toutes les 4s\n60 dégâts (120px)"},
@@ -78,38 +78,38 @@ const SKILL_TREES: Dictionary = {
 	"neophyte": [
 		{
 			"id": "double_tir", "name": "DOUBLE TIR",
-			"desc": "Tire 2 projectiles\ncôte à côte", "cost": 1,
+			"desc": "Tire 2 projectiles\ncôte à côte", "cost": 1, "soul_cost": 50,
 			"requires": [], "row": 0, "col": 1,
 			"flat_projectiles": 1,
 		},
 		{
 			"id": "penetration", "name": "PÉNÉTRATION",
-			"desc": "Les balles traversent\njusqu'à 4 ennemis", "cost": 1,
+			"desc": "Les balles traversent\njusqu'à 4 ennemis", "cost": 1, "soul_cost": 100,
 			"requires": ["double_tir"], "row": 1, "col": 0,
 		},
 		{
 			"id": "velocite", "name": "VÉLOCITÉ",
-			"desc": "Projectiles\n+60% plus rapides", "cost": 1,
+			"desc": "Projectiles\n+60% plus rapides", "cost": 1, "soul_cost": 100,
 			"requires": ["double_tir"], "row": 1, "col": 2,
 		},
 		{
 			"id": "explosion", "name": "EXPLOSION",
-			"desc": "Chaque impact crée\nune explosion (80px)", "cost": 1,
+			"desc": "Chaque impact crée\nune explosion (80px)", "cost": 1, "soul_cost": 200,
 			"requires": ["penetration"], "row": 2, "col": 0,
 		},
 		{
 			"id": "percant", "name": "PERÇANT",
-			"desc": "Les projectiles\ntraversent tous les ennemis", "cost": 1,
+			"desc": "Les projectiles\ntraversent tous les ennemis", "cost": 1, "soul_cost": 200,
 			"requires": ["penetration"], "row": 2, "col": 1,
 		},
 		{
 			"id": "ricochet", "name": "RICOCHET",
-			"desc": "La balle rebondit\nvers l'ennemi le plus proche", "cost": 1,
+			"desc": "La balle rebondit\nvers l'ennemi le plus proche", "cost": 1, "soul_cost": 200,
 			"requires": ["velocite"], "row": 2, "col": 2,
 		},
 		{
 			"id": "tempete_acier", "name": "TEMPÊTE\nD'ACIER",
-			"desc": "Salve de 12 tirs omni\ntoutes les 10 secondes", "cost": 1,
+			"desc": "Salve de 12 tirs omni\ntoutes les 10 secondes", "cost": 1, "soul_cost": 400,
 			"requires": ["explosion", "ricochet"], "row": 3, "col": 1,
 		},
 	]
@@ -119,6 +119,7 @@ var active_profile      : int          = 1
 
 # ── Persistant entre sessions (disque) ──────────────────────────────────────
 var boss_souls          : int          = 0
+var eternal_souls       : int          = 0
 var kills_total         : int          = 0
 var victories_total     : int          = 0
 var perm_skills_by_char : Dictionary   = {}
@@ -151,6 +152,7 @@ var dmg_reduction_pct       := 0.0
 var reflect_pct             := 0.0
 var lifesteal_flat_per_shot := 0
 var revive_count            := 0
+var hp_drain_rate           := 0.0
 var bonus_armor_round       := 0
 var soul_bonus_rate      := 0.0
 
@@ -191,6 +193,8 @@ func can_buy_skill(skill_id: String) -> bool:
 		if nd["id"] == skill_id:
 			if boss_souls < int(nd.get("cost", 1)):
 				return false
+			if eternal_souls < int(nd.get("soul_cost", 0)):
+				return false
 			for req in nd.get("requires", []):
 				if not has_skill(req):
 					return false
@@ -203,7 +207,8 @@ func buy_skill(skill_id: String) -> bool:
 	var tree: Array = SKILL_TREES.get(selected_char, [])
 	for nd in tree:
 		if nd["id"] == skill_id:
-			boss_souls -= int(nd.get("cost", 1))
+			boss_souls    -= int(nd.get("cost", 1))
+			eternal_souls -= int(nd.get("soul_cost", 0))
 			if not perm_skills_by_char.has(selected_char):
 				perm_skills_by_char[selected_char] = []
 			perm_skills_by_char[selected_char].append(skill_id)
@@ -312,6 +317,7 @@ func load_profile(n: int) -> void:
 func save() -> void:
 	var data := {
 		"boss_souls":          boss_souls,
+		"eternal_souls":       eternal_souls,
 		"kills_total":         kills_total,
 		"victories_total":     victories_total,
 		"perm_skills_by_char": perm_skills_by_char,
@@ -337,6 +343,7 @@ func load_save() -> void:
 	if not result is Dictionary:
 		return
 	boss_souls      = int(result.get("boss_souls",      0))
+	eternal_souls   = int(result.get("eternal_souls",   0))
 	kills_total     = int(result.get("kills_total",     0))
 	victories_total = int(result.get("victories_total", 0))
 	player_level    = int(result.get("player_level",    1))
@@ -380,6 +387,23 @@ func item_rarity(item_id: String) -> int:
 	var db: Dictionary = ITEM_DB.get(item_id, {})
 	return db.get("rarity", 0)
 
+func delete_profile(n: int) -> void:
+	var path := _profile_path(n)
+	if FileAccess.file_exists(path):
+		var f := FileAccess.open(path, FileAccess.WRITE)
+		if f:
+			f.store_string("{}")
+	if active_profile == n:
+		boss_souls          = 0
+		eternal_souls       = 0
+		kills_total         = 0
+		victories_total     = 0
+		perm_skills_by_char = {}
+		unlocked_chars.clear()
+		unlocked_chars.append("neophyte")
+		selected_char       = "neophyte"
+		reset_run()
+
 func reset_run() -> void:
 	souls        = 0
 	player_level = 1
@@ -418,6 +442,7 @@ func _recompute() -> void:
 	var flat_reflect   := 0.0
 	var flat_ls_shot   := 0
 	var flat_revive    := 0
+	var flat_drain     := 0.0
 
 	for item_id in items:
 		var db: Dictionary = ITEM_DB.get(item_id as String, {})
@@ -443,6 +468,7 @@ func _recompute() -> void:
 		flat_reflect   += float(db.get("pct_reflect",       0.0))
 		flat_ls_shot   += int(db.get("lifesteal_flat",       0))
 		flat_revive    += int(db.get("revive",               0))
+		flat_drain     += float(db.get("hp_drain",           0.0))
 
 	# coeur_pierre: +2 armor bonus à 3 stacks
 	if item_count("coeur_pierre") >= 3:
@@ -487,8 +513,9 @@ func _recompute() -> void:
 	pickup_range            = 80.0 + flat_pickup
 	projectile_count        = mini(4, 1 + flat_proj)
 	projectile_speed_pct    = flat_pspd
-	dmg_reduction_pct       = clampf(flat_dmg_reduc, 0.0, 0.40)
+	dmg_reduction_pct       = clampf(flat_dmg_reduc, -0.50, 0.40)
 	reflect_pct             = flat_reflect
 	lifesteal_flat_per_shot = mini(flat_ls_shot, 2)
 	revive_count            = mini(flat_revive, 1)
+	hp_drain_rate           = flat_drain
 	bonus_armor_round       = 0

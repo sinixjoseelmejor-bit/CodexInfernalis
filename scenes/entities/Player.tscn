@@ -14,7 +14,7 @@ script = ExtResource("1_playerscript")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=300000002]
 position = Vector2(0, -4)
-scale = Vector2(1.5, 1.5)
+scale = Vector2(0.75, 0.75)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=300000003]
 position = Vector2(0, 8)

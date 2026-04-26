@@ -18,6 +18,7 @@ const SHOCKWAVE_DMG := 20
 # "Carapace d'Orgueil" — plafonne chaque coup pour lisser les builds burst
 const DMG_CAP       := 60
 
+var custom_max_hp := 0
 var hp            := MAX_HP
 var damage        := 30
 var laser_damage  := 25
@@ -43,6 +44,8 @@ var _spawn_timer     := 0.0
 var _shockwave_timer := SHOCKWAVE_CD
 
 func _ready() -> void:
+	if custom_max_hp > 0:
+		hp = custom_max_hp
 	process_mode = Node.PROCESS_MODE_PAUSABLE
 	add_to_group("enemies")
 	collision_layer = 2
@@ -188,7 +191,8 @@ func _spawn_enemies() -> void:
 # ── Phase transitions ─────────────────────────────────────────────────────────
 
 func _check_phase() -> void:
-	var pct := float(hp) / float(MAX_HP)
+	var eff_max := custom_max_hp if custom_max_hp > 0 else MAX_HP
+	var pct := float(hp) / float(eff_max)
 	var new_phase := 3 if pct > 0.66 else (2 if pct > 0.33 else 1)
 	if new_phase == _phase:
 		return

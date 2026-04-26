@@ -3,8 +3,8 @@ extends Control
 const CHAR_DELAY    := 0.04
 const BLINK_SPEED   := 0.6
 const FADE_DUR      := 0.5
-const PAN_DUR       := 22.0
-const PAN_EXTRA     := 0.06
+const PAN_DUR       := 10.0
+const PAN_EXTRA     := 0.1
 const CROSSFADE_DUR := 1.0
 
 var _panels := [
@@ -40,29 +40,39 @@ var _current_bg    := ""
 var _pan_tween     : Tween
 var _leaving       := false
 
-# musique crossfade
-var _music_base_vol  := -12.0
-var _track_len       := 0.0
-var _crossfading     := false
-var _music_next      : AudioStreamPlayer
+var _music_base_vol := -12.0
+var _track_len      := 0.0
+var _crossfading    := false
+var _music_next     : AudioStreamPlayer
 
-@onready var _label  : RichTextLabel     = $Text
-@onready var _prompt : Label             = $Prompt
-@onready var _bg_img : TextureRect       = $BGImage
-@onready var _click  : AudioStreamPlayer = $ClickSFX
-@onready var _music  : AudioStreamPlayer = $Music
+@onready var _label    : RichTextLabel      = $Text
+@onready var _prompt   : Label              = $Prompt
+@onready var _bg_img   : TextureRect        = $BGImage
+@onready var _overlay  : ColorRect          = $DarkOverlay
+@onready var _click    : AudioStreamPlayer  = $ClickSFX
+@onready var _music    : AudioStreamPlayer  = $Music
+@onready var _skip_btn : Button             = $SkipBtn
 
 
 func _ready() -> void:
 	_label.bbcode_enabled = true
-	_prompt.text = "[ Appuyer pour continuer ]"
+	_prompt.text       = "[ Appuyer pour continuer ]"
 	_prompt.modulate.a = 0.0
-	_music_base_vol = _music.volume_db
+	_bg_img.modulate.a = 0.0
+	_music_base_vol    = _music.volume_db
+	_skip_btn.pressed.connect(_on_skip_pressed)
 	_show_panel(_current)
 
 
+func _on_skip_pressed() -> void:
+	if _typing:
+		_typing    = false
+		_label.text = _panels[_current]
+		_char_idx   = _panels[_current].length()
+		_prompt.modulate.a = 1.0
+
+
 func _process(delta: float) -> void:
-	# clignotement prompt
 	if not _typing:
 		_blink_t += delta
 		if _blink_t >= BLINK_SPEED:
@@ -70,15 +80,13 @@ func _process(delta: float) -> void:
 			_blink_visible = not _blink_visible
 			_prompt.modulate.a = 1.0 if _blink_visible else 0.0
 
-	# crossfade musique
 	if _leaving or _crossfading:
 		return
 	if _track_len <= 0.0 and _music.playing:
 		_track_len = _music.stream.get_length()
 		return
 	if _track_len > 0.0 and _music.playing:
-		var pos := _music.get_playback_position()
-		if pos >= _track_len - CROSSFADE_DUR:
+		if _music.get_playback_position() >= _track_len - CROSSFADE_DUR:
 			_do_crossfade()
 
 
@@ -90,24 +98,22 @@ func _do_crossfade() -> void:
 	add_child(_music_next)
 	_music_next.play()
 	create_tween().tween_property(_music_next, "volume_db", _music_base_vol, CROSSFADE_DUR)
-	create_tween().tween_property(_music, "volume_db", -80.0, CROSSFADE_DUR)
+	create_tween().tween_property(_music,      "volume_db", -80.0,           CROSSFADE_DUR)
 	await get_tree().create_timer(CROSSFADE_DUR).timeout
 	if _leaving or not is_instance_valid(self):
 		return
 	_music.queue_free()
-	_music = _music_next
-	_music_next = null
+	_music        = _music_next
+	_music_next   = null
 	_music.volume_db = _music_base_vol
-	_track_len   = 0.0
-	_crossfading = false
+	_track_len    = 0.0
+	_crossfading  = false
 
-
-# ── Panneaux ────────────────────────────────────────────────────────────────
 
 func _show_panel(idx: int) -> void:
-	_label.text = ""
-	_char_idx   = 0
-	_typing     = true
+	_label.text        = ""
+	_char_idx          = 0
+	_typing            = true
 	_prompt.modulate.a = 0.0
 	_crossfade_bg(_backgrounds[idx])
 	_type_next()
@@ -120,13 +126,9 @@ func _crossfade_bg(path: String) -> void:
 	var tween := create_tween()
 	tween.tween_property(_bg_img, "modulate:a", 0.0, FADE_DUR)
 	tween.tween_callback(func() -> void:
-		if path == "":
-			_bg_img.texture = null
-		else:
-			_bg_img.texture = load(path)
+		_bg_img.texture = null if path == "" else load(path)
 		_start_pan()
-		var t2 := create_tween()
-		t2.tween_property(_bg_img, "modulate:a", 1.0, FADE_DUR)
+		create_tween().tween_property(_bg_img, "modulate:a", 1.0, FADE_DUR)
 	)
 
 
@@ -137,9 +139,14 @@ func _start_pan() -> void:
 		return
 	var vp    := get_viewport_rect().size
 	var extra := vp.x * PAN_EXTRA
+	var tex   := _bg_img.texture.get_size()
+	# scale pour que la largeur couvre exactement viewport + déplacement du pan
+	var scale := (vp.x + extra) / tex.x
+	var new_w := tex.x * scale
+	var new_h := tex.y * scale
 	_bg_img.set_anchors_preset(Control.PRESET_TOP_LEFT)
-	_bg_img.size     = Vector2(vp.x + extra, vp.y)
-	_bg_img.position = Vector2(0.0, 0.0)
+	_bg_img.size     = Vector2(new_w, new_h)
+	_bg_img.position = Vector2(0.0, -(new_h - vp.y) / 2.0)
 	_pan_tween = create_tween()
 	_pan_tween.tween_property(_bg_img, "position:x", -extra, PAN_DUR).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 
@@ -152,7 +159,7 @@ func _type_next() -> void:
 		_typing  = false
 		_blink_t = 0.0
 		return
-	var ch := full[_char_idx]
+	var ch : String = full[_char_idx]
 	_label.text = full.substr(0, _char_idx + 1)
 	_char_idx += 1
 	if ch != " " and ch != "\n":

@@ -4,11 +4,14 @@ signal hp_changed(current: int, maximum: int)
 signal died
 
 const IFRAMES        := 0.5
-const ATTACK_FRAMES  := 9
 const DEATH_DELAY    := 2.5
+const _FX_LIGHTNING  := preload("res://scenes/effects/FxLightning.tscn")
+const _FX_SCEPTRE    := preload("res://scenes/effects/FxSceptre.tscn")
 const FIREBALL       := preload("res://scenes/entities/Fireball.tscn")
+const BEAR           := preload("res://scenes/entities/Bear.tscn")
 const FIRE_TRAIL     := preload("res://scenes/entities/FireTrail.tscn")
 const GRENADE        := preload("res://scenes/entities/Grenade.tscn")
+
 
 const GRENADE_CD         := 6.0
 const TRAIL_CD           := 0.15
@@ -47,7 +50,9 @@ var _stationary_timer      := 0.0
 var _ire_bonus             := 0.0
 var _baal_counter          := 0
 var _revive_used           := false
+var _active_bear           : Node = null
 var _mercy_cd              := 0.0
+var _drain_acc             := 0.0
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_PAUSABLE
@@ -70,6 +75,12 @@ func _setup_camera() -> void:
 	add_child(cam)
 
 func _input(event: InputEvent) -> void:
+	if event is InputEventKey and (event as InputEventKey).pressed:
+		match (event as InputEventKey).keycode:
+			KEY_F5:
+				PlayerData.add_item("rune_foudre")
+				PlayerData.add_item("sceptre_tartare")
+				PlayerData.add_item("dague_asmodee")
 	if _dead:
 		return
 	if not DisplayServer.is_touchscreen_available():
@@ -92,7 +103,7 @@ func _get_aim_dir() -> Vector2:
 			nearest_dist = d
 			nearest = e
 	if nearest:
-		var bullet_speed := PlayerData.has_skill("velocite") as float * (2020.0 - 1200.0) + 1200.0
+		var bullet_speed := float(PlayerData.has_skill("velocite")) * (2020.0 - 1200.0) + 1200.0
 		var to_enemy := nearest.global_position - global_position
 		var travel_time := to_enemy.length() / bullet_speed
 		var predicted := nearest.global_position + (nearest as CharacterBody2D).velocity * travel_time
@@ -100,28 +111,39 @@ func _get_aim_dir() -> Vector2:
 	return Vector2.ZERO
 
 func _setup_animations() -> void:
+	if PlayerData.selected_char == "serayne":
+		_setup_animations_serayne()
+		return
 	var frames  := SpriteFrames.new()
-	var run_b   := "res://assets/Characters/Masqued_Neophyte/animations/Running-dc016826/"
-	var atk_b   := "res://assets/Characters/Masqued_Neophyte/animations/FireballSummon-e753ce67/"
-	var death_b := "res://assets/Characters/Masqued_Neophyte/animations/animation-0817bd7e/"
-	var rot_b   := "res://assets/Characters/Masqued_Neophyte/rotations/"
+	var run_b   := "res://assets/Characters/Neophyte/animations/walk/"
+	var atk_b   := "res://assets/Characters/Neophyte/animations/fireball/"
+	var death_b := "res://assets/Characters/Neophyte/animations/mort/"
+	var rot_b   := "res://assets/Characters/Neophyte/rotations/"
 	var dirs    := ["south","north","east","west","south-east","south-west","north-east","north-west"]
+
+	var run_dir_map : Dictionary = {"east": "east-cd7532fa"}
+	var atk_dir_map : Dictionary = {"south-west": "south-west-079a6897"}
+	var run_counts  : Dictionary = {"south": 8}
+	var atk_counts  : Dictionary = {"east": 5, "west": 5}
 
 	for dir in dirs:
 		var d := (dir as String).replace("-", "_")
+		var run_dir : String = run_dir_map.get(dir, dir)
+		var atk_dir : String = atk_dir_map.get(dir, dir)
 
 		var run: String = "run_" + d
 		frames.add_animation(run)
 		frames.set_animation_speed(run, 10.0)
-		for i in 8:
-			frames.add_frame(run, load(run_b + dir + "/frame_%03d.png" % i))
+		for i in int(run_counts.get(dir, 7)):
+			frames.add_frame(run, load(run_b + run_dir + "/frame_%03d.png" % i))
 
 		var atk: String = "attack_" + d
+		var atk_count: int = int(atk_counts.get(dir, 7))
 		frames.add_animation(atk)
-		frames.set_animation_speed(atk, ATTACK_FRAMES / PlayerData.fire_cd)
+		frames.set_animation_speed(atk, float(atk_count) / PlayerData.fire_cd)
 		frames.set_animation_loop(atk, false)
-		for i in 9:
-			frames.add_frame(atk, load(atk_b + dir + "/frame_%03d.png" % i))
+		for i in atk_count:
+			frames.add_frame(atk, load(atk_b + atk_dir + "/frame_%03d.png" % i))
 
 		var idle: String = "idle_" + d
 		frames.add_animation(idle)
@@ -137,12 +159,74 @@ func _setup_animations() -> void:
 	$AnimatedSprite2D.sprite_frames = frames
 	$AnimatedSprite2D.play("idle_south")
 
+func _setup_animations_serayne() -> void:
+	var frames := SpriteFrames.new()
+	var run_b  := "res://assets/Characters/Serayne/animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/"
+	var atk_b  := "res://assets/Characters/Serayne/animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/"
+	var rot_b  := "res://assets/Characters/Serayne/rotations/"
+	var dirs   := ["south","north","east","west","south-east","south-west","north-east","north-west"]
+	for dir in dirs:
+		var d := (dir as String).replace("-", "_")
+		var run := "run_" + d
+		frames.add_animation(run)
+		frames.set_animation_speed(run, 10.0)
+		for i in 9:
+			frames.add_frame(run, load(run_b + dir + "/frame_%03d.png" % i))
+		var atk := "attack_" + d
+		frames.add_animation(atk)
+		frames.set_animation_speed(atk, 9.0 / PlayerData.fire_cd)
+		frames.set_animation_loop(atk, false)
+		for i in 9:
+			frames.add_frame(atk, load(atk_b + dir + "/frame_%03d.png" % i))
+		var idle := "idle_" + d
+		frames.add_animation(idle)
+		frames.set_animation_speed(idle, 5.0)
+		frames.add_frame(idle, load(rot_b + dir + ".png"))
+	var death_sheet := load("res://assets/Characters/Serayne/animations/deathSerayne.png") as Texture2D
+	frames.add_animation("death")
+	frames.set_animation_speed("death", 8.0)
+	frames.set_animation_loop("death", false)
+	for row in 2:
+		for col in 3:
+			var atlas := AtlasTexture.new()
+			atlas.atlas = death_sheet
+			atlas.region = Rect2(col * 341, row * 256, 341, 256)
+			frames.add_frame("death", atlas)
+	$AnimatedSprite2D.sprite_frames = frames
+	$AnimatedSprite2D.play("idle_south")
+
+func _invoke_bear() -> void:
+	if is_instance_valid(_active_bear):
+		return
+	var spawn_pos := _get_bear_spawn_pos()
+	var bear := BEAR.instantiate()
+	get_parent().add_child(bear)
+	bear.global_position = spawn_pos
+	bear.init(_effective_damage(), _last_is_crit)
+	_active_bear = bear
+
+func _get_bear_spawn_pos() -> Vector2:
+	var enemies := get_tree().get_nodes_in_group("enemies")
+	var nearest : Node2D = null
+	var nearest_dist := INF
+	for e in enemies:
+		if (e as Node2D).get("dead") == true:
+			continue
+		var d := global_position.distance_to((e as Node2D).global_position)
+		if d < nearest_dist and d <= 350.0:
+			nearest_dist = d
+			nearest = e as Node2D
+	if nearest:
+		return nearest.global_position
+	return global_position + _last_aim_dir.normalized() * 220.0
+
 func _draw() -> void:
 	if Input.is_physical_key_pressed(KEY_ALT):
 		draw_arc(Vector2.ZERO, AUTO_AIM_RANGE, 0.0, TAU, 64, Color(0.6, 0.9, 1.0, 0.5), 2.0)
 
 func _physics_process(delta: float) -> void:
-	queue_redraw()
+	if Input.is_physical_key_pressed(KEY_ALT):
+		queue_redraw()
 	if _dead:
 		return
 
@@ -150,6 +234,17 @@ func _physics_process(delta: float) -> void:
 	_iframe_timer -= delta
 	if _mercy_cd > 0.0:
 		_mercy_cd -= delta
+
+	if PlayerData.hp_drain_rate > 0.0:
+		_drain_acc += delta * PlayerData.hp_drain_rate
+		if _drain_acc >= 1.0:
+			var drain := int(_drain_acc)
+			_drain_acc -= drain
+			if hp > 1:
+				hp = maxi(1, hp - drain)
+				var hud := get_tree().get_first_node_in_group("hud")
+				if hud:
+					hud.refresh_hp(hp, PlayerData.max_hp)
 
 	if _enraged:
 		_rage_timer -= delta
@@ -284,14 +379,18 @@ func _shoot() -> void:
 	var aim_dir := _get_aim_dir()
 	if aim_dir == Vector2.ZERO:
 		return
-	_last_aim_dir     = aim_dir
-	_attacking        = true
-	_pending_shot_dir = aim_dir
-	_waiting_to_shoot = true
-	_aim_direction    = _vec_to_dir_name(aim_dir)
+	_last_aim_dir  = aim_dir
+	_attacking     = true
+	_aim_direction = _vec_to_dir_name(aim_dir)
 	var atk_anim := "attack_" + _aim_direction
-	$AnimatedSprite2D.sprite_frames.set_animation_speed(atk_anim, ATTACK_FRAMES / PlayerData.fire_cd)
+	var fc: int = $AnimatedSprite2D.sprite_frames.get_frame_count(atk_anim)
+	$AnimatedSprite2D.sprite_frames.set_animation_speed(atk_anim, float(fc) / PlayerData.fire_cd)
 	$AnimatedSprite2D.play(atk_anim)
+	if PlayerData.selected_char == "serayne":
+		_invoke_bear()
+	else:
+		_pending_shot_dir = aim_dir
+		_waiting_to_shoot = true
 
 func _try_fire_trail(delta: float) -> void:
 	if PlayerData.item_count("fire_boots") <= 0:
@@ -307,11 +406,17 @@ func _launch_grenade() -> void:
 	var enemies := get_tree().get_nodes_in_group("enemies")
 	var target := global_position + Vector2(randf_range(-300, 300), randf_range(-300, 300))
 	if not enemies.is_empty():
-		var nearest: Node2D = enemies[0]
+		var nearest: Node2D = null
+		var nearest_dist := INF
 		for e in enemies:
-			if global_position.distance_to((e as Node2D).global_position) < global_position.distance_to(nearest.global_position):
-				nearest = e
-		target = nearest.global_position
+			if (e as Node2D).get("dead") == true:
+				continue
+			var d := global_position.distance_to((e as Node2D).global_position)
+			if d < nearest_dist:
+				nearest_dist = d
+				nearest = e as Node2D
+		if nearest:
+			target = nearest.global_position
 	var g := GRENADE.instantiate()
 	get_parent().add_child(g)
 	g.global_position = global_position
@@ -353,13 +458,13 @@ func on_enemy_hit(enemy: Node, dmg: int, is_crit: bool = false) -> void:
 				var bonus_dir: Vector2 = (enemy.global_position - global_position).normalized()
 				call_deferred("_spawn_bullet", bonus_dir, global_position)
 
-	# marteau_fissure: crits apply bleed (2 dmg/s for 3s)
-	if is_crit and PlayerData.item_count("marteau_fissure") > 0:
+	# dague_asmodee: poison 3s (2 dmg/s)
+	if PlayerData.item_count("dague_asmodee") > 0:
 		if enemy != null and is_instance_valid(enemy) and enemy.has_method("apply_bleed"):
 			enemy.apply_bleed(2, 3.0)
 
-	# dague_asmodee: poison 3s (2 dmg/s)
-	if PlayerData.item_count("dague_asmodee") > 0:
+	# marteau_fissure: crits apply bleed — applied after dague so crit wins on overlap
+	if is_crit and PlayerData.item_count("marteau_fissure") > 0:
 		if enemy != null and is_instance_valid(enemy) and enemy.has_method("apply_bleed"):
 			enemy.apply_bleed(2, 3.0)
 
@@ -413,6 +518,8 @@ func revive() -> void:
 	_fire_timer       = 0.0
 	_enraged          = false
 	_rage_timer       = 0.0
+	_revive_used      = false
+	_drain_acc        = 0.0
 	hp                = PlayerData.max_hp
 	velocity          = Vector2.ZERO
 	$CollisionShape2D.set_deferred("disabled", false)
@@ -442,7 +549,7 @@ func take_damage(amount: int) -> void:
 	var phantom := PlayerData.item_count("phantom_step")
 	var plumes  := PlayerData.item_count("plume_rapide")
 	_iframe_timer = IFRAMES + 0.4 * phantom + 0.1 * plumes
-	hp = max(0, hp - final_dmg)
+	hp = maxi(0, hp - final_dmg)
 	var hud := get_tree().get_first_node_in_group("hud")
 	if hud:
 		hud.refresh_hp(hp, PlayerData.max_hp)
@@ -511,26 +618,40 @@ func _strike_lightning() -> void:
 	var nearest: Node2D = null
 	var nearest_dist := INF
 	for e in enemies:
+		if (e as Node2D).get("dead") == true:
+			continue
 		var d := global_position.distance_to((e as Node2D).global_position)
 		if d < nearest_dist:
 			nearest_dist = d
 			nearest = e
 	if nearest and is_instance_valid(nearest):
 		nearest.take_damage(50 * PlayerData.item_count("rune_foudre"))
+		var fx := _FX_LIGHTNING.instantiate()
+		get_parent().add_child(fx)
+		fx.global_position = nearest.global_position
 
 func _launch_sceptre_blast() -> void:
 	var enemies := get_tree().get_nodes_in_group("enemies")
 	var target_pos := global_position + Vector2(randf_range(-200.0, 200.0), randf_range(-200.0, 200.0))
 	if not enemies.is_empty():
-		var nearest: Node2D = enemies[0]
+		var nearest: Node2D = null
+		var nearest_dist := INF
 		for e in enemies:
-			if global_position.distance_to((e as Node2D).global_position) < global_position.distance_to(nearest.global_position):
-				nearest = e
-		target_pos = nearest.global_position
+			if (e as Node2D).get("dead") == true:
+				continue
+			var d := global_position.distance_to((e as Node2D).global_position)
+			if d < nearest_dist:
+				nearest_dist = d
+				nearest = e as Node2D
+		if nearest:
+			target_pos = nearest.global_position
 	var blast_dmg := 60 * PlayerData.item_count("sceptre_tartare")
 	for enemy in get_tree().get_nodes_in_group("enemies"):
 		if target_pos.distance_to((enemy as Node2D).global_position) <= 120.0:
 			enemy.take_damage(blast_dmg)
+	var fx := _FX_SCEPTRE.instantiate()
+	get_parent().add_child(fx)
+	fx.global_position = target_pos
 
 func _baal_strike() -> void:
 	var enemies := get_tree().get_nodes_in_group("enemies")
@@ -539,6 +660,8 @@ func _baal_strike() -> void:
 	var nearest: Node2D = null
 	var nearest_dist := INF
 	for e in enemies:
+		if (e as Node2D).get("dead") == true:
+			continue
 		var d := global_position.distance_to((e as Node2D).global_position)
 		if d < nearest_dist:
 			nearest_dist = d

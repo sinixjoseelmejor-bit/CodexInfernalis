@@ -102,7 +102,7 @@ func _build_ui() -> void:
 
 	# ── Hint bar ────────────────────────────────────────────────────────────
 	var hint := Label.new()
-	hint.text = "Débloquez des compétences avec les Âmes de Boss  —  chaque victoire sur Golgota = 1 âme"
+	hint.text = "Chaque amélioration coûte 1 Âme de Boss + des Âmes éternelles  —  gagnées en vainquant les boss"
 	hint.add_theme_font_override("font", load(FONT_MONO))
 	hint.add_theme_font_size_override("font_size", 10)
 	hint.add_theme_color_override("font_color", Color(0.6, 0.5, 0.75, 0.65))
@@ -251,8 +251,12 @@ func _create_node(data: Dictionary) -> void:
 	desc_lbl.mouse_filter         = Control.MOUSE_FILTER_IGNORE
 	vbox.add_child(desc_lbl)
 
+	var soul_cost_nd: int = data.get("soul_cost", 0)
 	var cost_lbl := Label.new()
-	cost_lbl.text = "✦  %d âme-boss" % data.get("cost", 1)
+	if soul_cost_nd > 0:
+		cost_lbl.text = "1 boss  +  %d âmes" % soul_cost_nd
+	else:
+		cost_lbl.text = "1 âme de boss"
 	cost_lbl.add_theme_font_override("font", load(FONT_MONO))
 	cost_lbl.add_theme_font_size_override("font_size", 8)
 	cost_lbl.add_theme_color_override("font_color", Color(1.0, 0.78, 0.22, 0.65))
@@ -263,9 +267,9 @@ func _create_node(data: Dictionary) -> void:
 # ── Refresh ───────────────────────────────────────────────────────────────────
 
 func _refresh() -> void:
-	_souls_label.text = "✦  %d âme%s" % [
+	_souls_label.text = "%d boss  ·  %d âmes" % [
 		PlayerData.boss_souls,
-		"s" if PlayerData.boss_souls > 1 else ""
+		PlayerData.eternal_souls,
 	]
 	var tree: Array = PlayerData.SKILL_TREES.get(_char_id, [])
 	for nd in tree:

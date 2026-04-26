@@ -1,8 +1,9 @@
 extends Control
 
-var _vsp      : VideoStreamPlayer
-var _fade     : ColorRect
-var _mode     := ""   # "new_game" ou "continue"
+var _vsp            : VideoStreamPlayer
+var _fade           : ColorRect
+var _mode           := ""   # "new_game" ou "continue"
+var _delete_pending := 0
 
 const FADE_DUR := 0.5
 
@@ -57,26 +58,28 @@ func _on_options_pressed() -> void:
 # ── Sélecteur de profils ─────────────────────────────────────────────────────
 
 func _refresh_profiles() -> void:
+	_delete_pending = 0
+	var delete_row := $ProfileOverlay/Panel/VBox/DeleteRow
 	for n in PlayerData.PROFILE_COUNT:
-		var slot : int = n + 1
-		var card := $ProfileOverlay/Panel/VBox/Slots.get_node("Profile%d" % slot) as Button
-		var info := PlayerData.get_profile_info(slot)
+		var slot      : int    = n + 1
+		var card      := $ProfileOverlay/Panel/VBox/Slots.get_node("Profile%d" % slot) as Button
+		var del_btn   := delete_row.get_child(n) as Button
+		var info      := PlayerData.get_profile_info(slot)
+		del_btn.text  = "EFFACER"
 		if info.is_empty():
-			card.text = "PROFIL %d\n— VIDE —" % slot
-			card.disabled = _mode == "continue"
+			card.text        = "PROFIL %d\n— VIDE —" % slot
+			card.disabled    = _mode == "continue"
+			del_btn.disabled = true
 		else:
+			del_btn.disabled = false
 			var lvl       : int    = int(info.get("player_level",    1))
 			var vict      : int    = int(info.get("victories_total", 0))
 			var char_name : String = String(info.get("selected_char", "neophyte")).to_upper()
 			var run_active := PlayerData.has_run_in_progress(slot)
-			if _mode == "continue":
-				card.disabled = not run_active
-				if run_active:
-					card.text = "PROFIL %d — %s\nVague %d  |  %d victoires" % [slot, char_name, lvl, vict]
-				else:
-					card.text = "PROFIL %d — %s\n%d victoires  (pas de run en cours)" % [slot, char_name, vict]
+			card.disabled = false
+			if _mode == "continue" and run_active:
+				card.text = "PROFIL %d — %s\nVague %d  |  %d victoires" % [slot, char_name, lvl, vict]
 			else:
-				card.disabled = false
 				card.text = "PROFIL %d — %s\n%d victoires" % [slot, char_name, vict]
 
 func _on_profile_selected(slot: int) -> void:
@@ -88,10 +91,33 @@ func _on_profile_selected(slot: int) -> void:
 		get_tree().change_scene_to_file("res://scenes/ui/StoryIntro.tscn")
 	elif _mode == "continue":
 		PlayerData.load_profile(slot)
-		get_tree().change_scene_to_file("res://scenes/arenas/Arena1.tscn")
+		if PlayerData.player_level > 1:
+			get_tree().change_scene_to_file("res://scenes/arenas/Arena1.tscn")
+		else:
+			get_tree().change_scene_to_file("res://scenes/ui/SelectCharacter.tscn")
+
+func _on_delete_pressed(slot: int) -> void:
+	var delete_row := $ProfileOverlay/Panel/VBox/DeleteRow
+	if _delete_pending == slot:
+		_delete_pending = 0
+		PlayerData.delete_profile(slot)
+		_refresh_profiles()
+	else:
+		_delete_pending = slot
+		for n in PlayerData.PROFILE_COUNT:
+			var del_btn := delete_row.get_child(n) as Button
+			del_btn.text = "CONFIRMER ?" if (n + 1) == slot else "EFFACER"
+		get_tree().create_timer(3.0).timeout.connect(func() -> void:
+			if _delete_pending == slot:
+				_delete_pending = 0
+				for n in PlayerData.PROFILE_COUNT:
+					var del_btn := delete_row.get_child(n) as Button
+					del_btn.text = "EFFACER"
+		)
 
 func _on_profile_overlay_close() -> void:
 	$ProfileOverlay.visible = false
+	_delete_pending = 0
 
 # ── Options ──────────────────────────────────────────────────────────────────
 

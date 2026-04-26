@@ -1,0 +1,211 @@
+{
+  "character": {
+    "id": "7be075de-1349-468d-b85c-db378d604e6d",
+    "name": "magic sorcerer",
+    "prompt": "magic sorcerer",
+    "size": {
+      "width": 256,
+      "height": 256
+    },
+    "template_id": "mannequin",
+    "directions": 8,
+    "view": "low top-down",
+    "created_at": "2026-04-24T21:50:32.659683+00:00"
+  },
+  "frames": {
+    "rotations": {
+      "south": "rotations/south.png",
+      "south-east": "rotations/south-east.png",
+      "east": "rotations/east.png",
+      "north-east": "rotations/north-east.png",
+      "north": "rotations/north.png",
+      "north-west": "rotations/north-west.png",
+      "west": "rotations/west.png",
+      "south-west": "rotations/south-west.png"
+    },
+    "animations": {
+      "The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d": {
+        "north": [
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/north/frame_000.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/north/frame_001.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/north/frame_002.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/north/frame_003.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/north/frame_004.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/north/frame_005.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/north/frame_006.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/north/frame_007.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/north/frame_008.png"
+        ],
+        "north-east": [
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/north-east/frame_000.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/north-east/frame_001.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/north-east/frame_002.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/north-east/frame_003.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/north-east/frame_004.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/north-east/frame_005.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/north-east/frame_006.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/north-east/frame_007.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/north-east/frame_008.png"
+        ],
+        "south": [
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/south/frame_000.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/south/frame_001.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/south/frame_002.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/south/frame_003.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/south/frame_004.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/south/frame_005.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/south/frame_006.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/south/frame_007.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/south/frame_008.png"
+        ],
+        "south-east": [
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/south-east/frame_000.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/south-east/frame_001.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/south-east/frame_002.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/south-east/frame_003.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/south-east/frame_004.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/south-east/frame_005.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/south-east/frame_006.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/south-east/frame_007.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/south-east/frame_008.png"
+        ],
+        "east": [
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/east/frame_000.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/east/frame_001.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/east/frame_002.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/east/frame_003.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/east/frame_004.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/east/frame_005.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/east/frame_006.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/east/frame_007.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/east/frame_008.png"
+        ],
+        "north-west": [
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/north-west/frame_000.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/north-west/frame_001.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/north-west/frame_002.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/north-west/frame_003.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/north-west/frame_004.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/north-west/frame_005.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/north-west/frame_006.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/north-west/frame_007.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/north-west/frame_008.png"
+        ],
+        "south-west": [
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/south-west/frame_000.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/south-west/frame_001.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/south-west/frame_002.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/south-west/frame_003.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/south-west/frame_004.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/south-west/frame_005.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/south-west/frame_006.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/south-west/frame_007.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/south-west/frame_008.png"
+        ],
+        "west": [
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/west/frame_000.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/west/frame_001.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/west/frame_002.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/west/frame_003.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/west/frame_004.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/west/frame_005.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/west/frame_006.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/west/frame_007.png",
+          "animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/west/frame_008.png"
+        ]
+      },
+      "The_mage_stands_centered_her_expression_focused_as-86eecd19": {
+        "south": [
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/south/frame_000.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/south/frame_001.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/south/frame_002.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/south/frame_003.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/south/frame_004.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/south/frame_005.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/south/frame_006.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/south/frame_007.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/south/frame_008.png"
+        ],
+        "north-east": [
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/north-east/frame_000.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/north-east/frame_001.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/north-east/frame_002.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/north-east/frame_003.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/north-east/frame_004.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/north-east/frame_005.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/north-east/frame_006.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/north-east/frame_007.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/north-east/frame_008.png"
+        ],
+        "north": [
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/north/frame_000.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/north/frame_001.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/north/frame_002.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/north/frame_003.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/north/frame_004.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/north/frame_005.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/north/frame_006.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/north/frame_007.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/north/frame_008.png"
+        ],
+        "west": [
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/west/frame_000.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/west/frame_001.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/west/frame_002.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/west/frame_003.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/west/frame_004.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/west/frame_005.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/west/frame_006.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/west/frame_007.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/west/frame_008.png"
+        ],
+        "south-east": [
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/south-east/frame_000.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/south-east/frame_001.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/south-east/frame_002.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/south-east/frame_003.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/south-east/frame_004.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/south-east/frame_005.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/south-east/frame_006.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/south-east/frame_007.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/south-east/frame_008.png"
+        ],
+        "east": [
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/east/frame_000.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/east/frame_001.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/east/frame_002.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/east/frame_003.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/east/frame_004.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/east/frame_005.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/east/frame_006.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/east/frame_007.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/east/frame_008.png"
+        ],
+        "south-west": [
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/south-west/frame_000.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/south-west/frame_001.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/south-west/frame_002.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/south-west/frame_003.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/south-west/frame_004.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/south-west/frame_005.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/south-west/frame_006.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/south-west/frame_007.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/south-west/frame_008.png"
+        ],
+        "north-west": [
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/north-west/frame_000.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/north-west/frame_001.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/north-west/frame_002.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/north-west/frame_003.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/north-west/frame_004.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/north-west/frame_005.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/north-west/frame_006.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/north-west/frame_007.png",
+          "animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/north-west/frame_008.png"
+        ]
+      }
+    }
+  },
+  "export_version": "2.0",
+  "export_date": "2026-04-26T21:31:53.057895"
+}

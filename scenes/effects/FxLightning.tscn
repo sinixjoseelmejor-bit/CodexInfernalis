@@ -1,0 +1,67 @@
+[gd_scene format=3 uid="uid://km4skf75xvrj"]
+
+[ext_resource type="Script" uid="uid://bqpyyk7pdxlnb" path="res://scenes/effects/EffectSprite.gd" id="1_fxscript"]
+[ext_resource type="Texture2D" uid="uid://eu01ba7xlm8m" path="res://assets/effects/runeFoudre.png" id="1_i4avx"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_i4avx"]
+atlas = ExtResource("1_i4avx")
+region = Rect2(0, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f6ss2"]
+atlas = ExtResource("1_i4avx")
+region = Rect2(128, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xfoy1"]
+atlas = ExtResource("1_i4avx")
+region = Rect2(256, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2rtdd"]
+atlas = ExtResource("1_i4avx")
+region = Rect2(0, 128, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3a3a4"]
+atlas = ExtResource("1_i4avx")
+region = Rect2(128, 128, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pbrlu"]
+atlas = ExtResource("1_i4avx")
+region = Rect2(256, 128, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kv3tg"]
+atlas = ExtResource("1_i4avx")
+region = Rect2(0, 256, 128, 128)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_4v26d"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i4avx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f6ss2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xfoy1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2rtdd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3a3a4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pbrlu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kv3tg")
+}],
+"loop": false,
+"name": &"play",
+"speed": 8.0
+}]
+
+[node name="FxLightning" type="AnimatedSprite2D" unique_id=1094755246]
+sprite_frames = SubResource("SpriteFrames_4v26d")
+animation = &"play"
+script = ExtResource("1_fxscript")
+texture_path = "res://assets/effects/runeFoudre.png"

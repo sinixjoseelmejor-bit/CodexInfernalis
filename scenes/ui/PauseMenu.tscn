@@ -82,6 +82,18 @@ theme_override_styles/focus = SubResource("StyleBoxFlat_btn")
 text = "REPRENDRE"
 process_mode = 3
 
+[node name="OptionsBtn" type="Button" parent="Control/VBoxContainer" unique_id=700000008]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.88, 0.78, 1, 1)
+theme_override_fonts/font = ExtResource("3_mono")
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_hover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_btn")
+text = "OPTIONS"
+process_mode = 3
+
 [node name="MenuBtn" type="Button" parent="Control/VBoxContainer" unique_id=700000007]
 layout_mode = 2
 size_flags_horizontal = 4
@@ -94,5 +106,108 @@ theme_override_styles/focus = SubResource("StyleBoxFlat_btn")
 text = "MENU PRINCIPAL"
 process_mode = 3
 
+[node name="QuitBtn" type="Button" parent="Control/VBoxContainer" unique_id=700000009]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.65, 0.45, 0.75, 0.75)
+theme_override_fonts/font = ExtResource("3_mono")
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_hover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_btn")
+text = "QUITTER"
+process_mode = 3
+
+[node name="OptionsOverlay" type="Control" parent="Control" unique_id=700000010]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+visible = false
+process_mode = 3
+
+[node name="Dim" type="ColorRect" parent="Control/OptionsOverlay" unique_id=700000011]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 0
+color = Color(0, 0, 0, 0.7)
+
+[node name="Panel" type="PanelContainer" parent="Control/OptionsOverlay" unique_id=700000012]
+layout_mode = 0
+offset_left = 660.0
+offset_top = 340.0
+offset_right = 1260.0
+offset_bottom = 720.0
+process_mode = 3
+
+[node name="VBox" type="VBoxContainer" parent="Control/OptionsOverlay/Panel" unique_id=700000013]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="Title" type="Label" parent="Control/OptionsOverlay/Panel/VBox" unique_id=700000014]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.88, 1, 1)
+theme_override_fonts/font = ExtResource("2_cinzel")
+theme_override_font_sizes/font_size = 28
+text = "OPTIONS"
+horizontal_alignment = 1
+
+[node name="VolumeRow" type="HBoxContainer" parent="Control/OptionsOverlay/Panel/VBox" unique_id=700000015]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="VolumeLabel" type="Label" parent="Control/OptionsOverlay/Panel/VBox/VolumeRow" unique_id=700000016]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.75, 0.68, 0.88, 1)
+theme_override_fonts/font = ExtResource("3_mono")
+theme_override_font_sizes/font_size = 13
+text = "VOLUME"
+vertical_alignment = 1
+
+[node name="VolumeSlider" type="HSlider" parent="Control/OptionsOverlay/Panel/VBox/VolumeRow" unique_id=700000017]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = -40.0
+max_value = 0.0
+value = -6.0
+process_mode = 3
+
+[node name="FullscreenRow" type="HBoxContainer" parent="Control/OptionsOverlay/Panel/VBox" unique_id=700000018]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="FullscreenLabel" type="Label" parent="Control/OptionsOverlay/Panel/VBox/FullscreenRow" unique_id=700000019]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.75, 0.68, 0.88, 1)
+theme_override_fonts/font = ExtResource("3_mono")
+theme_override_font_sizes/font_size = 13
+text = "PLEIN ECRAN"
+vertical_alignment = 1
+
+[node name="FullscreenCheck" type="CheckButton" parent="Control/OptionsOverlay/Panel/VBox/FullscreenRow" unique_id=700000020]
+layout_mode = 2
+process_mode = 3
+
+[node name="CloseBtn" type="Button" parent="Control/OptionsOverlay/Panel/VBox" unique_id=700000021]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.88, 0.78, 1, 1)
+theme_override_fonts/font = ExtResource("3_mono")
+theme_override_font_sizes/font_size = 13
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_hover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_btn")
+text = "FERMER"
+process_mode = 3
+
 [connection signal="pressed" from="Control/VBoxContainer/ResumeBtn" to="." method="_on_resume_pressed"]
+[connection signal="pressed" from="Control/VBoxContainer/OptionsBtn" to="." method="_on_options_pressed"]
 [connection signal="pressed" from="Control/VBoxContainer/MenuBtn" to="." method="_on_main_menu_pressed"]
+[connection signal="pressed" from="Control/VBoxContainer/QuitBtn" to="." method="_on_quit_pressed"]
+[connection signal="pressed" from="Control/OptionsOverlay/Panel/VBox/CloseBtn" to="." method="_on_options_close"]
+[connection signal="value_changed" from="Control/OptionsOverlay/Panel/VBox/VolumeRow/VolumeSlider" to="." method="_on_volume_changed"]
+[connection signal="toggled" from="Control/OptionsOverlay/Panel/VBox/FullscreenRow/FullscreenCheck" to="." method="_on_fullscreen_toggled"]

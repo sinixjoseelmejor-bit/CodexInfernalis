@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://dw1fi6id06h5l" path="res://scenes/ui/StoryIntro.gd" id="1"]
 [ext_resource type="AudioStream" uid="uid://btenwh0ure486" path="res://sounds/sfx/ClickSound.mp3" id="2"]
 [ext_resource type="AudioStream" uid="uid://d0qvti30ienfj" path="res://sounds/musique/Beneath_the_Grey_Arch.mp3" id="3"]
+[ext_resource type="Texture2D" uid="uid://cnh06t3uhgpkk" path="res://assets/Intro/Intro1.png" id="4"]
 
 [node name="StoryIntro" type="Control" unique_id=335870153]
 clip_contents = true
@@ -29,8 +30,13 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -62.0
+offset_top = -25.0
+offset_right = 58.0
+offset_bottom = 51.0
 grow_horizontal = 2
 grow_vertical = 2
+texture = ExtResource("4")
 stretch_mode = 5
 
 [node name="DarkOverlay" type="ColorRect" parent="." unique_id=371842457]
@@ -67,6 +73,22 @@ autoplay = true
 stream = ExtResource("2")
 volume_db = -39.283
 pitch_scale = 0.65
+
+[node name="SkipBtn" type="Button" parent="." unique_id=991234567]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -130.0
+offset_top = -55.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 14
+text = ">> Avancer"
 
 [node name="Prompt" type="Label" parent="." unique_id=178312938]
 layout_mode = 1

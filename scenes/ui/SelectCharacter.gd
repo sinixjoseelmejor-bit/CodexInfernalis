@@ -6,22 +6,24 @@ const CHARACTERS := [
 	{
 		"id": "neophyte",
 		"name": "NÉOPHYTE",
-		"class": "LA CULTISTE",
-		"lore": "\"Appelée par l'abîme, elle a tout sacrifié\npour maîtriser les flammes infernales.\"",
+		"class": "PRÊTRE DU FEU",
+		"lore": "\"Les voix de l'abîme l'ont appelé.\nIl a répondu par les flammes.\"",
 		"hp": 5,
 		"speed": 3,
 		"magic": 4,
-		"splashart": "res://assets/Characters/Masqued_Neophyte/NeophyteSplashart.png",
+		"splashart": "res://assets/Characters/Neophyte/NeophyteSplashart.png",
 		"locked": false
 	},
 	{
-		"id": "unknown_1",
-		"name": "???",
-		"class": "BIENTÔT",
-		"lore": "\"Les ténèbres gardent encore leurs secrets.\"",
-		"hp": 0, "speed": 0, "magic": 0,
+		"id": "serayne",
+		"name": "SERAYNE",
+		"class": "LA MAGE",
+		"lore": "\"Quinze ans à étudier le Codex.\nElle en connaît le prix.\"",
+		"hp": 3,
+		"speed": 3,
+		"magic": 5,
 		"splashart": "",
-		"locked": true
+		"locked": false
 	},
 	{
 		"id": "unknown_2",
@@ -36,6 +38,7 @@ const CHARACTERS := [
 
 var _current        := 0
 var _skill_overlay  : Control = null
+var _float_tween    : Tween
 
 func _ready() -> void:
 	_skill_overlay = SKILL_TREE_OVERLAY.instantiate()
@@ -43,6 +46,7 @@ func _ready() -> void:
 	_skill_overlay.skill_changed.connect(_refresh_forge)
 	add_child(_skill_overlay)
 	_refresh()
+	_anim_entrance()
 
 func _refresh() -> void:
 	var c: Dictionary = CHARACTERS[_current]
@@ -66,6 +70,46 @@ func _refresh() -> void:
 		%LockLabel.show()
 
 	_refresh_forge()
+	_anim_portrait_float()
+
+func _anim_entrance() -> void:
+	var card  := $Card
+	var title := $Title
+	var nav   := $NavRow
+	# card glisse depuis la droite en fading in
+	card.modulate.a = 0.0
+	title.modulate.a = 0.0
+	nav.modulate.a = 0.0
+	var t := create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	t.tween_property(card, "modulate:a", 1.0, 0.6).from(0.0)
+	t.parallel().tween_method(func(x: float) -> void:
+		card.offset_left  = 240.0 + x
+		card.offset_right = 1680.0 + x,
+		80.0, 0.0, 0.5)
+	# titre et nav un peu après
+	var t2 := create_tween()
+	t2.tween_interval(0.3)
+	t2.tween_property(title, "modulate:a", 1.0, 0.4).from(0.0)
+	var t3 := create_tween()
+	t3.tween_interval(0.45)
+	t3.tween_property(nav, "modulate:a", 1.0, 0.35).from(0.0)
+
+func _anim_portrait_float() -> void:
+	if _float_tween:
+		_float_tween.kill()
+	if %Portrait.texture == null:
+		return
+	var base_top : float = %Portrait.offset_top
+	var base_bot : float = %Portrait.offset_bottom
+	_float_tween = create_tween().set_loops()
+	_float_tween.tween_method(func(v: float) -> void:
+		%Portrait.offset_top    = base_top + v
+		%Portrait.offset_bottom = base_bot + v,
+		0.0, -12.0, 2.5).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	_float_tween.tween_method(func(v: float) -> void:
+		%Portrait.offset_top    = base_top + v
+		%Portrait.offset_bottom = base_bot + v,
+		-12.0, 0.0, 2.5).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 
 func _refresh_forge() -> void:
 	%BossSoulsLabel.text  = "✦ x%d" % PlayerData.boss_souls
@@ -82,11 +126,19 @@ func _nav_dots() -> String:
 
 func _on_prev_pressed() -> void:
 	_current = (_current - 1 + CHARACTERS.size()) % CHARACTERS.size()
-	_refresh()
+	_switch_character()
 
 func _on_next_pressed() -> void:
 	_current = (_current + 1) % CHARACTERS.size()
-	_refresh()
+	_switch_character()
+
+func _switch_character() -> void:
+	if _float_tween:
+		_float_tween.kill()
+	var t := create_tween()
+	t.tween_property(%Portrait, "modulate:a", 0.0, 0.15)
+	t.tween_callback(_refresh)
+	t.tween_property(%Portrait, "modulate:a", 1.0, 0.25)
 
 func _on_open_grimoire() -> void:
 	var char_id: String = CHARACTERS[_current]["id"]

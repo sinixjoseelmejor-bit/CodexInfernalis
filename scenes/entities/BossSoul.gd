@@ -19,6 +19,7 @@ func _ready() -> void:
 func _on_body_entered(body: Node) -> void:
 	if body.is_in_group("player"):
 		PlayerData.boss_souls += 1
-		PlayerData.save()
-		PlayerData.reset_run()
-		get_tree().call_deferred("change_scene_to_file", "res://scenes/ui/MainMenu.tscn")
+		var arena := get_tree().get_first_node_in_group("arena")
+		if arena:
+			arena.on_boss_soul_collected()
+		queue_free()

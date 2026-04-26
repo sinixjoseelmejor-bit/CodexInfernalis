@@ -54,6 +54,30 @@ border_width_right = 1
 border_width_bottom = 1
 border_color = Color(0.4, 0.35, 0.5, 0.4)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_delete"]
+content_margin_left = 12.0
+content_margin_top = 6.0
+content_margin_right = 12.0
+content_margin_bottom = 6.0
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.7, 0.2, 0.2, 0.55)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_delete_hover"]
+content_margin_left = 12.0
+content_margin_top = 6.0
+content_margin_right = 12.0
+content_margin_bottom = 6.0
+bg_color = Color(0.35, 0.04, 0.04, 0.35)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.95, 0.3, 0.3, 1.0)
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
 bg_color = Color(0.06, 0.03, 0.1, 0.95)
 border_width_left = 1
@@ -270,6 +294,49 @@ theme_override_styles/focus = SubResource("StyleBoxFlat_normal")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_disabled")
 text = "PROFIL 3\n— VIDE —"
 
+[node name="DeleteRow" type="HBoxContainer" parent="ProfileOverlay/Panel/VBox" unique_id=300000020]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Delete1" type="Button" parent="ProfileOverlay/Panel/VBox/DeleteRow" unique_id=300000021]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8, 0.3, 0.3, 0.8)
+theme_override_colors/font_hover_color = Color(1.0, 0.4, 0.4, 1.0)
+theme_override_colors/font_disabled_color = Color(0.3, 0.25, 0.3, 0.3)
+theme_override_fonts/font = ExtResource("4_mono")
+theme_override_font_sizes/font_size = 11
+theme_override_styles/normal = SubResource("StyleBoxFlat_delete")
+theme_override_styles/hover = SubResource("StyleBoxFlat_delete_hover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_delete")
+text = "EFFACER"
+
+[node name="Delete2" type="Button" parent="ProfileOverlay/Panel/VBox/DeleteRow" unique_id=300000022]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8, 0.3, 0.3, 0.8)
+theme_override_colors/font_hover_color = Color(1.0, 0.4, 0.4, 1.0)
+theme_override_colors/font_disabled_color = Color(0.3, 0.25, 0.3, 0.3)
+theme_override_fonts/font = ExtResource("4_mono")
+theme_override_font_sizes/font_size = 11
+theme_override_styles/normal = SubResource("StyleBoxFlat_delete")
+theme_override_styles/hover = SubResource("StyleBoxFlat_delete_hover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_delete")
+text = "EFFACER"
+
+[node name="Delete3" type="Button" parent="ProfileOverlay/Panel/VBox/DeleteRow" unique_id=300000023]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8, 0.3, 0.3, 0.8)
+theme_override_colors/font_hover_color = Color(1.0, 0.4, 0.4, 1.0)
+theme_override_colors/font_disabled_color = Color(0.3, 0.25, 0.3, 0.3)
+theme_override_fonts/font = ExtResource("4_mono")
+theme_override_font_sizes/font_size = 11
+theme_override_styles/normal = SubResource("StyleBoxFlat_delete")
+theme_override_styles/hover = SubResource("StyleBoxFlat_delete_hover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_delete")
+text = "EFFACER"
+
 [node name="CancelButton" type="Button" parent="ProfileOverlay/Panel/VBox" unique_id=300000010]
 layout_mode = 2
 size_flags_horizontal = 4
@@ -378,6 +445,9 @@ autoplay = true
 [connection signal="pressed" from="ProfileOverlay/Panel/VBox/Slots/Profile1" to="." method="_on_profile_selected" binds=[1]]
 [connection signal="pressed" from="ProfileOverlay/Panel/VBox/Slots/Profile2" to="." method="_on_profile_selected" binds=[2]]
 [connection signal="pressed" from="ProfileOverlay/Panel/VBox/Slots/Profile3" to="." method="_on_profile_selected" binds=[3]]
+[connection signal="pressed" from="ProfileOverlay/Panel/VBox/DeleteRow/Delete1" to="." method="_on_delete_pressed" binds= [1]]
+[connection signal="pressed" from="ProfileOverlay/Panel/VBox/DeleteRow/Delete2" to="." method="_on_delete_pressed" binds= [2]]
+[connection signal="pressed" from="ProfileOverlay/Panel/VBox/DeleteRow/Delete3" to="." method="_on_delete_pressed" binds= [3]]
 [connection signal="pressed" from="ProfileOverlay/Panel/VBox/CancelButton" to="." method="_on_profile_overlay_close"]
 [connection signal="pressed" from="VBoxContainer/NewGameButton" to="." method="_on_new_game_pressed"]
 [connection signal="pressed" from="VBoxContainer/ContinueButton" to="." method="_on_continue_pressed"]
