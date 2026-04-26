@@ -11,7 +11,7 @@ const CHARACTERS := [
 		"hp": 5,
 		"speed": 3,
 		"magic": 4,
-		"splashart": "res://assets/Characters/Neophyte/NeophyteSplashart.png",
+		"splashart": "res://assets/Characters/Neophyte/SplashartLyra.png",
 		"locked": false
 	},
 	{
@@ -22,7 +22,7 @@ const CHARACTERS := [
 		"hp": 3,
 		"speed": 3,
 		"magic": 5,
-		"splashart": "",
+		"splashart": "res://assets/Characters/Serayne/SerayneSplashart.png",
 		"locked": false
 	},
 	{
@@ -95,21 +95,7 @@ func _anim_entrance() -> void:
 	t3.tween_property(nav, "modulate:a", 1.0, 0.35).from(0.0)
 
 func _anim_portrait_float() -> void:
-	if _float_tween:
-		_float_tween.kill()
-	if %Portrait.texture == null:
-		return
-	var base_top : float = %Portrait.offset_top
-	var base_bot : float = %Portrait.offset_bottom
-	_float_tween = create_tween().set_loops()
-	_float_tween.tween_method(func(v: float) -> void:
-		%Portrait.offset_top    = base_top + v
-		%Portrait.offset_bottom = base_bot + v,
-		0.0, -12.0, 2.5).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	_float_tween.tween_method(func(v: float) -> void:
-		%Portrait.offset_top    = base_top + v
-		%Portrait.offset_bottom = base_bot + v,
-		-12.0, 0.0, 2.5).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	pass
 
 func _refresh_forge() -> void:
 	%BossSoulsLabel.text  = "✦ x%d" % PlayerData.boss_souls

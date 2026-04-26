@@ -188,7 +188,7 @@ grow_vertical = 2
 mouse_filter = 2
 texture = ExtResource("5_splash")
 expand_mode = 1
-stretch_mode = 6
+stretch_mode = 5
 
 [node name="LockLabel" type="Label" parent="Card/HBox/PortraitContainer" unique_id=100000034]
 unique_name_in_owner = true
