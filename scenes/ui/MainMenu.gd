@@ -28,6 +28,7 @@ func _ready() -> void:
 
 	$OptionsOverlay/Panel/VBox/FullscreenRow/FullscreenCheck.button_pressed = \
 		DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN
+	_inject_options_extras()
 
 # ── Vidéo ────────────────────────────────────────────────────────────────────
 
@@ -121,11 +122,46 @@ func _on_profile_overlay_close() -> void:
 
 # ── Options ──────────────────────────────────────────────────────────────────
 
+func _inject_options_extras() -> void:
+	var vbox := $OptionsOverlay/Panel/VBox as VBoxContainer
+
+	var joy_row := HBoxContainer.new()
+	joy_row.add_theme_constant_override("separation", 10)
+	var close_btn := $OptionsOverlay/Panel/VBox/CloseButton as Button
+	vbox.add_child(joy_row)
+	vbox.move_child(joy_row, close_btn.get_index())
+
+	var joy_lbl := Label.new()
+	joy_lbl.text = "JOYSTICK"
+	joy_lbl.custom_minimum_size = Vector2(120, 0)
+	joy_row.add_child(joy_lbl)
+
+	var joy_sl := HSlider.new()
+	joy_sl.min_value = 0.5
+	joy_sl.max_value = 2.0
+	joy_sl.step      = 0.1
+	joy_sl.value     = Settings.joystick_size
+	joy_sl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	joy_sl.value_changed.connect(func(v: float) -> void: Settings.set_joystick_size(v))
+	joy_row.add_child(joy_sl)
+
+	var reset_btn := Button.new()
+	reset_btn.text = "RÉINITIALISER LA PARTIE EN COURS"
+	reset_btn.pressed.connect(_on_reset_run_pressed)
+	vbox.add_child(reset_btn)
+	vbox.move_child(reset_btn, close_btn.get_index())
+
+func _on_reset_run_pressed() -> void:
+	PlayerData.reset_run()
+	PlayerData.save()
+	$OptionsOverlay.visible = false
+
 func _on_options_close() -> void:
 	$OptionsOverlay.visible = false
 
 func _on_music_volume_changed(value: float) -> void:
 	$AudioStreamPlayer.volume_db = value
+	Settings.set_master_volume(value)
 
 func _on_fullscreen_toggled(pressed: bool) -> void:
 	if pressed:

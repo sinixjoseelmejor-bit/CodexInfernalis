@@ -37,7 +37,7 @@ const ITEM_DB: Dictionary = {
 	"couronne_sang":    {"rarity":1,"name":"Couronne de Dis",        "desc":"+10% HP max\n+4% vol de vie\n-10% vitesse",         "pct_hp":0.10, "pct_lifesteal":0.04, "pct_speed":-0.10},
 	# ─── ÉPIQUES R1 (rarity 2, max_stacks 2) ────────────────────────────────
 	"auto_grenade":     {"rarity":2,"name":"Grenade Automatique","desc":"Grenade toutes les 6s\n+15% dégâts",    "pct_damage":0.15, "icon":"res://assets/items/HolyGrenade1.png"},
-	"double_canon":     {"rarity":2,"name":"Diptyque de l'Abîme","desc":"+1 projectile simultané\n+5% dégâts",   "flat_projectiles":1, "pct_damage":0.05},
+	"double_canon":     {"rarity":2,"name":"Diptyque de l'Abîme","desc":"+1 projectile simultané\n+5% dégâts",   "flat_projectiles":1, "pct_damage":0.05, "incompatible_with":["serayne"]},
 	"faux_ames":        {"rarity":2,"name":"Faux d'Azraël",    "desc":"+12% dégâts\n+6% vol de vie\n-1 HP/sec",               "pct_damage":0.12, "pct_lifesteal":0.06, "hp_drain":1.0},
 	# ─── COMMUNS PRIORITÉ HAUTE ──────────────────────────────────────────────
 	"griffe_abaddon":   {"rarity":0,"name":"Griffe d'Abaddon",      "desc":"+2 dégâts\n+5% critique",              "flat_damage":2, "pct_crit":0.05},
@@ -72,6 +72,12 @@ const ITEM_DB: Dictionary = {
 	"sceau_resurrection":{"rarity":2,"name":"Sceau de la Résurrection","desc":"1 revive automatique\n(reprend à 30% HP)","revive":1},
 	"ame_condamnee":    {"rarity":2,"name":"Âme Condamnée",           "desc":"+10% dégâts\n+10% HP max\n+10% vitesse\n+10% âmes", "pct_damage":0.10, "pct_hp":0.10, "pct_speed":0.10, "bonus_soul_rate":0.10},
 	"amulette_baal":    {"rarity":2,"name":"Amulette de Baal-Zébuth","desc":"Tous les 3 tirs\n20 dégâts ennemi proche"},
+}
+
+const CURSE_DB: Dictionary = {
+	"curse_chaos":   {"name": "Chaos Éternel",  "desc": "Ennemis +20% plus rapides\n+30% âmes gagnées"},
+	"curse_silence": {"name": "Silence du Vide", "desc": "-15% cadence de tir\n+30% âmes gagnées"},
+	"curse_blood":   {"name": "Sang du Damné",  "desc": "-15% PV maximum\n+30% âmes gagnées"},
 }
 
 const SKILL_TREES: Dictionary = {
@@ -163,12 +169,9 @@ var _timed_buffs      : Dictionary = {}
 # ── Dev flags ───────────────────────────────────────────────────────────────
 var dev_no_shoot := false
 
-# ── Touch input (non sauvegardé) ────────────────────────────────────────────
-var touch_move        : Vector2 = Vector2.ZERO
-var touch_aim_world   : Vector2 = Vector2.ZERO
-var touch_shooting    : bool    = false
-
 func _ready() -> void:
+	if not OS.is_debug_build():
+		dev_no_shoot = false
 	load_save()
 	_recompute()
 
@@ -285,6 +288,9 @@ func tick_timed_buffs(delta: float) -> void:
 
 func has_timed_buff(key: String) -> bool:
 	return _timed_buffs.has(key)
+
+func get_timed_buff_remaining(key: String) -> float:
+	return float(_timed_buffs.get(key, 0.0))
 
 # ── Persistence ─────────────────────────────────────────────────────────────
 

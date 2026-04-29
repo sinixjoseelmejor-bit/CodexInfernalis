@@ -3,13 +3,13 @@ extends CharacterBody2D
 signal hp_changed(current: int, maximum: int)
 signal died
 
-const IFRAMES        := 0.5
-const DEATH_DELAY    := 2.5
+const IFRAMES             := 0.5
+const DEATH_DELAY         := 2.5
+const BEAR_SPAWN_OFFSET   := 80.0   # pixels devant le joueur dans la direction de visée
+const PHLEGETHON_SPEED_CAP := 550.0  # vitesse max avec buff phlegethon actif
 const _FX_LIGHTNING  := preload("res://scenes/effects/FxLightning.tscn")
 const _FX_SCEPTRE    := preload("res://scenes/effects/FxSceptre.tscn")
-const FIREBALL       := preload("res://scenes/entities/Fireball.tscn")
 const BEAR           := preload("res://scenes/entities/Bear.tscn")
-const FIRE_TRAIL     := preload("res://scenes/entities/FireTrail.tscn")
 const GRENADE        := preload("res://scenes/entities/Grenade.tscn")
 
 
@@ -53,6 +53,7 @@ var _revive_used           := false
 var _active_bear           : Node = null
 var _mercy_cd              := 0.0
 var _drain_acc             := 0.0
+var _regen_acc             := 0.0
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_PAUSABLE
@@ -88,8 +89,8 @@ func _input(event: InputEvent) -> void:
 			_mouse_override_timer = MOUSE_OVERRIDE_DUR
 
 func _get_aim_dir() -> Vector2:
-	if PlayerData.touch_shooting and PlayerData.touch_aim_world != Vector2.ZERO:
-		return PlayerData.touch_aim_world - global_position
+	if InputBus.touch_shooting and InputBus.touch_aim_world != Vector2.ZERO:
+		return InputBus.touch_aim_world - global_position
 	if _mouse_override_timer > 0.0:
 		return get_global_mouse_position() - global_position
 	var enemies := get_tree().get_nodes_in_group("enemies")
@@ -111,88 +112,7 @@ func _get_aim_dir() -> Vector2:
 	return Vector2.ZERO
 
 func _setup_animations() -> void:
-	if PlayerData.selected_char == "serayne":
-		_setup_animations_serayne()
-		return
-	var frames  := SpriteFrames.new()
-	var run_b   := "res://assets/Characters/Neophyte/animations/walk/"
-	var atk_b   := "res://assets/Characters/Neophyte/animations/fireball/"
-	var death_b := "res://assets/Characters/Neophyte/animations/mort/"
-	var rot_b   := "res://assets/Characters/Neophyte/rotations/"
-	var dirs    := ["south","north","east","west","south-east","south-west","north-east","north-west"]
-
-	var run_dir_map : Dictionary = {"east": "east-cd7532fa"}
-	var atk_dir_map : Dictionary = {"south-west": "south-west-079a6897"}
-	var run_counts  : Dictionary = {"south": 8}
-	var atk_counts  : Dictionary = {"east": 5, "west": 5}
-
-	for dir in dirs:
-		var d := (dir as String).replace("-", "_")
-		var run_dir : String = run_dir_map.get(dir, dir)
-		var atk_dir : String = atk_dir_map.get(dir, dir)
-
-		var run: String = "run_" + d
-		frames.add_animation(run)
-		frames.set_animation_speed(run, 10.0)
-		for i in int(run_counts.get(dir, 7)):
-			frames.add_frame(run, load(run_b + run_dir + "/frame_%03d.png" % i))
-
-		var atk: String = "attack_" + d
-		var atk_count: int = int(atk_counts.get(dir, 7))
-		frames.add_animation(atk)
-		frames.set_animation_speed(atk, float(atk_count) / PlayerData.fire_cd)
-		frames.set_animation_loop(atk, false)
-		for i in atk_count:
-			frames.add_frame(atk, load(atk_b + atk_dir + "/frame_%03d.png" % i))
-
-		var idle: String = "idle_" + d
-		frames.add_animation(idle)
-		frames.set_animation_speed(idle, 5.0)
-		frames.add_frame(idle, load(rot_b + dir + ".png"))
-
-	frames.add_animation("death")
-	frames.set_animation_speed("death", 8.0)
-	frames.set_animation_loop("death", false)
-	for i in 9:
-		frames.add_frame("death", load(death_b + "south/frame_%03d.png" % i))
-
-	$AnimatedSprite2D.sprite_frames = frames
-	$AnimatedSprite2D.play("idle_south")
-
-func _setup_animations_serayne() -> void:
-	var frames := SpriteFrames.new()
-	var run_b  := "res://assets/Characters/Serayne/animations/The_wizard_steps_forward_with_a_steady_rhythmic_ga-ee30a20d/"
-	var atk_b  := "res://assets/Characters/Serayne/animations/The_mage_stands_centered_her_expression_focused_as-86eecd19/"
-	var rot_b  := "res://assets/Characters/Serayne/rotations/"
-	var dirs   := ["south","north","east","west","south-east","south-west","north-east","north-west"]
-	for dir in dirs:
-		var d := (dir as String).replace("-", "_")
-		var run := "run_" + d
-		frames.add_animation(run)
-		frames.set_animation_speed(run, 10.0)
-		for i in 9:
-			frames.add_frame(run, load(run_b + dir + "/frame_%03d.png" % i))
-		var atk := "attack_" + d
-		frames.add_animation(atk)
-		frames.set_animation_speed(atk, 9.0 / PlayerData.fire_cd)
-		frames.set_animation_loop(atk, false)
-		for i in 9:
-			frames.add_frame(atk, load(atk_b + dir + "/frame_%03d.png" % i))
-		var idle := "idle_" + d
-		frames.add_animation(idle)
-		frames.set_animation_speed(idle, 5.0)
-		frames.add_frame(idle, load(rot_b + dir + ".png"))
-	var death_sheet := load("res://assets/Characters/Serayne/animations/deathSerayne.png") as Texture2D
-	frames.add_animation("death")
-	frames.set_animation_speed("death", 8.0)
-	frames.set_animation_loop("death", false)
-	for row in 2:
-		for col in 3:
-			var atlas := AtlasTexture.new()
-			atlas.atlas = death_sheet
-			atlas.region = Rect2(col * 341, row * 256, 341, 256)
-			frames.add_frame("death", atlas)
-	$AnimatedSprite2D.sprite_frames = frames
+	$AnimatedSprite2D.sprite_frames = Assets.get_player_frames(PlayerData.selected_char)
 	$AnimatedSprite2D.play("idle_south")
 
 func _invoke_bear() -> void:
@@ -206,19 +126,7 @@ func _invoke_bear() -> void:
 	_active_bear = bear
 
 func _get_bear_spawn_pos() -> Vector2:
-	var enemies := get_tree().get_nodes_in_group("enemies")
-	var nearest : Node2D = null
-	var nearest_dist := INF
-	for e in enemies:
-		if (e as Node2D).get("dead") == true:
-			continue
-		var d := global_position.distance_to((e as Node2D).global_position)
-		if d < nearest_dist and d <= 350.0:
-			nearest_dist = d
-			nearest = e as Node2D
-	if nearest:
-		return nearest.global_position
-	return global_position + _last_aim_dir.normalized() * 220.0
+	return global_position + _last_aim_dir.normalized() * BEAR_SPAWN_OFFSET
 
 func _draw() -> void:
 	if Input.is_physical_key_pressed(KEY_ALT):
@@ -246,6 +154,16 @@ func _physics_process(delta: float) -> void:
 				if hud:
 					hud.refresh_hp(hp, PlayerData.max_hp)
 
+	if PlayerData.hp_regen > 0.0 and hp < PlayerData.max_hp:
+		_regen_acc += PlayerData.hp_regen * delta
+		if _regen_acc >= 1.0:
+			var heal := int(_regen_acc)
+			_regen_acc -= heal
+			hp = mini(hp + heal, PlayerData.max_hp)
+			var hud := get_tree().get_first_node_in_group("hud")
+			if hud:
+				hud.refresh_hp(hp, PlayerData.max_hp)
+
 	if _enraged:
 		_rage_timer -= delta
 		if _rage_timer <= 0.0:
@@ -261,12 +179,12 @@ func _physics_process(delta: float) -> void:
 	if Input.is_physical_key_pressed(KEY_A) or Input.is_key_pressed(KEY_LEFT):   dir.x -= 1
 	if Input.is_physical_key_pressed(KEY_S) or Input.is_key_pressed(KEY_DOWN):   dir.y += 1
 	if Input.is_physical_key_pressed(KEY_W) or Input.is_key_pressed(KEY_UP):     dir.y -= 1
-	if dir == Vector2.ZERO and PlayerData.touch_move.length() > 0.1:
-		dir = PlayerData.touch_move
+	if dir == Vector2.ZERO and InputBus.touch_move.length() > 0.1:
+		dir = InputBus.touch_move
 
 	var eff_speed := PlayerData.speed
 	if PlayerData.has_timed_buff("phlegethon_speed"):
-		eff_speed = minf(550.0, eff_speed * (1.0 + 0.05 * float(PlayerData.item_count("anneau_phlegethon"))))
+		eff_speed = minf(PHLEGETHON_SPEED_CAP, eff_speed * (1.0 + 0.05 * float(PlayerData.item_count("anneau_phlegethon"))))
 	velocity = dir.normalized() * eff_speed if dir != Vector2.ZERO else Vector2.ZERO
 	move_and_slide()
 
@@ -305,12 +223,14 @@ func _physics_process(delta: float) -> void:
 
 	if _waiting_to_shoot and $AnimatedSprite2D.frame >= 1:
 		_waiting_to_shoot = false
-		var dir_n := _pending_shot_dir.normalized()
+		var dir_n      := _pending_shot_dir.normalized()
 		var count      := PlayerData.projectile_count
 		var spread_deg := 15.0
+		var shot_dmg   := _effective_damage()
+		var shot_crit  := _last_is_crit
 		for b in count:
 			var angle_off := deg_to_rad(spread_deg * (b - (count - 1) * 0.5))
-			_spawn_bullet(dir_n.rotated(angle_off), global_position)
+			_spawn_bullet(dir_n.rotated(angle_off), global_position, shot_dmg, shot_crit)
 
 	if not _attacking:
 		_play_move_anim(dir)
@@ -367,11 +287,11 @@ func _vec_to_dir_name(v: Vector2) -> String:
 	elif deg < 292.5:                 return "north"
 	else:                             return "north_east"
 
-func _spawn_bullet(dir: Vector2, pos: Vector2) -> void:
-	var dmg     := _effective_damage()
-	var is_crit := _last_is_crit
-	var fb := FIREBALL.instantiate()
-	get_parent().add_child(fb)
+func _spawn_bullet(dir: Vector2, pos: Vector2, dmg: int = -1, is_crit: bool = false) -> void:
+	if dmg < 0:
+		dmg     = _effective_damage()
+		is_crit = _last_is_crit
+	var fb := BulletPool.get_fireball(get_parent())
 	fb.global_position = pos
 	fb.init(dir, dmg, is_crit)
 
@@ -386,7 +306,8 @@ func _shoot() -> void:
 	var fc: int = $AnimatedSprite2D.sprite_frames.get_frame_count(atk_anim)
 	$AnimatedSprite2D.sprite_frames.set_animation_speed(atk_anim, float(fc) / PlayerData.fire_cd)
 	$AnimatedSprite2D.play(atk_anim)
-	if PlayerData.selected_char == "serayne":
+	var char_def := CharacterRegistry.get_def(PlayerData.selected_char)
+	if char_def and char_def.attack_strategy == CharacterDef.AttackStrategy.SUMMON:
 		_invoke_bear()
 	else:
 		_pending_shot_dir = aim_dir
@@ -398,8 +319,7 @@ func _try_fire_trail(delta: float) -> void:
 	_trail_timer += delta
 	if _trail_timer >= TRAIL_CD:
 		_trail_timer = 0.0
-		var trail := FIRE_TRAIL.instantiate()
-		get_parent().add_child(trail)
+		var trail := BulletPool.get_trail(get_parent())
 		trail.global_position = global_position + Vector2(0, 18)
 
 func _launch_grenade() -> void:
@@ -423,92 +343,31 @@ func _launch_grenade() -> void:
 	g.init(target)
 
 func _launch_tempete() -> void:
+	var shot_dmg  := _effective_damage()
+	var shot_crit := _last_is_crit
 	for i in 12:
 		var angle := i * TAU / 12.0
 		var dir   := Vector2(cos(angle), sin(angle))
-		_spawn_bullet(dir, global_position)
+		_spawn_bullet(dir, global_position, shot_dmg, shot_crit)
+
+func fire_bonus_bullet(dir: Vector2) -> void:
+	_spawn_bullet(dir, global_position)
+
+func trigger_baal() -> void:
+	_baal_strike()
 
 func on_enemy_hit(enemy: Node, dmg: int, is_crit: bool = false) -> void:
 	if _dead:
 		return
-
-	# vampire_amulet lifesteal
-	var heal := PlayerData.calc_lifesteal(dmg)
-	if heal > 0:
-		hp = min(hp + heal, PlayerData.max_hp)
-		var hud_ls := get_tree().get_first_node_in_group("hud")
-		if hud_ls:
-			hud_ls.refresh_hp(hp, PlayerData.max_hp)
-		hp_changed.emit(hp, PlayerData.max_hp)
-
-	# oeil_gele: every 7th hit slows enemy 40% for 2s
-	if PlayerData.item_count("oeil_gele") > 0:
-		_oeil_gele_counter += 1
-		if _oeil_gele_counter >= 7:
-			_oeil_gele_counter = 0
-			if enemy != null and is_instance_valid(enemy) and enemy.has_method("slow"):
-				enemy.slow(0.4, 2.0)
-
-	# orbe_mana: every 10th hit fires a bonus projectile toward the enemy
-	if PlayerData.item_count("orbe_mana") > 0:
-		_orbe_mana_counter += 1
-		if _orbe_mana_counter >= 10:
-			_orbe_mana_counter = 0
-			if enemy != null and is_instance_valid(enemy):
-				var bonus_dir: Vector2 = (enemy.global_position - global_position).normalized()
-				call_deferred("_spawn_bullet", bonus_dir, global_position)
-
-	# dague_asmodee: poison 3s (2 dmg/s)
-	if PlayerData.item_count("dague_asmodee") > 0:
-		if enemy != null and is_instance_valid(enemy) and enemy.has_method("apply_bleed"):
-			enemy.apply_bleed(2, 3.0)
-
-	# marteau_fissure: crits apply bleed — applied after dague so crit wins on overlap
-	if is_crit and PlayerData.item_count("marteau_fissure") > 0:
-		if enemy != null and is_instance_valid(enemy) and enemy.has_method("apply_bleed"):
-			enemy.apply_bleed(2, 3.0)
-
-	# griffe_mephisto: flat lifesteal per hit
-	if PlayerData.lifesteal_flat_per_shot > 0:
-		hp = mini(hp + PlayerData.lifesteal_flat_per_shot, PlayerData.max_hp)
-		var hud_f := get_tree().get_first_node_in_group("hud")
-		if hud_f:
-			hud_f.refresh_hp(hp, PlayerData.max_hp)
-		hp_changed.emit(hp, PlayerData.max_hp)
-
-	# amulette_baal: every 3rd hit → 20 dmg to nearest enemy
-	if PlayerData.item_count("amulette_baal") > 0:
-		_baal_counter += 1
-		if _baal_counter >= 3:
-			_baal_counter = 0
-			_baal_strike()
+	ItemEffects.on_enemy_hit(self, enemy, dmg, is_crit)
 
 func on_enemy_kill() -> void:
 	if _dead:
 		return
-	var rage_stacks := PlayerData.item_count("rage_ring")
-	if rage_stacks > 0:
-		_enraged = true
-		_rage_timer = RAGE_DURATION + float(rage_stacks - 1) * 1.0
-	if PlayerData.item_count("sang_courroux") > 0:
-		PlayerData.set_timed_buff("courroux", 5.0)
-	if PlayerData.item_count("anneau_phlegethon") > 0:
-		PlayerData.set_timed_buff("phlegethon_speed", 3.0)
-	if PlayerData.item_count("talisman_ire") > 0:
-		_ire_bonus = minf(_ire_bonus + 0.03 * float(PlayerData.item_count("talisman_ire")), 0.30)
-	if PlayerData.item_count("chapelet_condamnes") > 0:
-		PlayerData.bonus_armor_round = mini(PlayerData.bonus_armor_round + 2 * PlayerData.item_count("chapelet_condamnes"), 10)
+	ItemEffects.on_enemy_kill(self)
 
 func on_wave_start() -> void:
-	if PlayerData.item_count("cor_guerre") > 0:
-		_cor_guerre_active = true
-		_cor_guerre_timer  = COR_GUERRE_DUR
-	_oeil_gele_counter        = 0
-	_orbe_mana_counter        = 0
-	_ire_bonus                = 0.0
-	_baal_counter             = 0
-	_stationary_timer         = 0.0
-	PlayerData.bonus_armor_round = 0
+	ItemEffects.on_wave_start(self)
 
 func revive() -> void:
 	_dead             = false
@@ -520,6 +379,7 @@ func revive() -> void:
 	_rage_timer       = 0.0
 	_revive_used      = false
 	_drain_acc        = 0.0
+	_regen_acc        = 0.0
 	hp                = PlayerData.max_hp
 	velocity          = Vector2.ZERO
 	$CollisionShape2D.set_deferred("disabled", false)

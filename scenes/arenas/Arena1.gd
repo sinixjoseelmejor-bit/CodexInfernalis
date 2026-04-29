@@ -8,7 +8,7 @@ const KEY_SCENE            := preload("res://scenes/entities/Key.tscn")
 const ENEMY_CAP            := 45
 const KEY_DROP_CHANCE_EARLY  := 0.30
 const KEY_DROP_CHANCE        := 0.14
-const KEY_DROP_CHANCE_FLOOR2 := 0.05
+const KEY_DROP_CHANCE_FLOOR2 := 0.08
 const KEY_DROP_MAX_FLOOR2    := 12
 
 const ARENA_CENTER := Vector2(1016, 517)
@@ -23,6 +23,7 @@ const BRUTUS_DMG      := [0, 0,  6,  7,  8,  9, 11, 13, 15, 17, 20,  22,  24,  2
 const BRUTUS_CD       := [0.0, 0.0, 0.80, 0.75, 0.70, 0.65, 0.60, 0.55, 0.50, 0.50, 0.45, 0.43, 0.41, 0.39, 0.37, 0.35, 0.33, 0.31, 0.29, 0.27]
 const BRUTUS_BSPD     := [0.0, 0.0, 280.0, 300.0, 320.0, 340.0, 360.0, 380.0, 400.0, 420.0, 440.0, 460.0, 480.0, 500.0, 520.0, 540.0, 560.0, 580.0, 600.0, 620.0]
 const BRUTUS_RANGE    := [0.0, 0.0, 500.0, 500.0, 520.0, 520.0, 540.0, 540.0, 560.0, 560.0, 580.0, 600.0, 615.0, 630.0, 645.0, 660.0, 675.0, 690.0, 700.0, 700.0]
+# Niv 11 remonte à 5.0s (vs 4.0s au niv 10) : compensation pour l'arrivée des Boosters au floor 2.
 const BRUTUS_INTERVAL := [0.0, 0.0, 15.0, 12.0, 10.0, 8.5, 7.0, 6.0, 5.0, 4.5, 4.0, 5.0, 4.8, 4.6, 4.4, 4.2, 4.0, 3.8, 3.6, 3.4]
 
 const BOOSTER_HP      := [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 80, 95, 112, 133, 157, 185, 218, 255, 300]
@@ -38,13 +39,19 @@ var _boss_spawned             := false
 var _kills_this_round         := 0
 var _keys_dropped_this_round  := 0
 var _disperse_timer           := 0.0
-var _run_complete             := false
 var _game_over                := false
 var _hud                      : Node = null
 
 const DISPERSE_CHECK_INTERVAL := 2.0
 const CLUSTER_RADIUS          := 180.0
 const CLUSTER_THRESHOLD       := 0.9
+
+const SOULS_ALDRICH   := 1
+const SOULS_BRUTUS    := 3
+const SOULS_BOOSTER   := 8
+const SOULS_BOSS      := 50
+const ETERNAL_SOULS_BOSS10 := 50
+const ETERNAL_SOULS_BOSS20 := 100
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -133,35 +140,43 @@ func _process(delta: float) -> void:
 	if _game_over or get_tree().paused:
 		return
 	if not _is_boss_level():
-		_spawn_timer += delta
-		if _spawn_timer >= _spawn_interval():
-			_spawn_timer = 0.0
-			if get_tree().get_nodes_in_group("enemies").size() < ENEMY_CAP:
-				for i in _spawn_count():
-					_spawn_aldrich()
-		if _level >= 2:
-			_brutus_timer += delta
-			if _brutus_timer >= _brutus_interval():
-				_brutus_timer = 0.0
-				_spawn_brutus()
-		_disperse_timer += delta
-		if _disperse_timer >= DISPERSE_CHECK_INTERVAL:
-			_disperse_timer = 0.0
-			_check_disperse()
-		if _level >= 11:
-			_booster_timer += delta
-			if _booster_timer >= BOOSTER_INTERVAL:
-				_booster_timer = 0.0
-				_spawn_booster()
+		_tick_spawners(delta)
+	_tick_boss_state()
+	if not _is_boss_level():
+		_tick_round_clock(delta)
 
-	var boss_level := _is_boss_level()
-	if boss_level and not _boss_spawned:
+func _tick_spawners(delta: float) -> void:
+	_spawn_timer += delta
+	if _spawn_timer >= _spawn_interval():
+		_spawn_timer = 0.0
+		if get_tree().get_nodes_in_group("enemies").size() < ENEMY_CAP:
+			for i in _spawn_count():
+				_spawn_aldrich()
+	if _level >= 2:
+		_brutus_timer += delta
+		if _brutus_timer >= _brutus_interval():
+			_brutus_timer = 0.0
+			_spawn_brutus()
+	_disperse_timer += delta
+	if _disperse_timer >= DISPERSE_CHECK_INTERVAL:
+		_disperse_timer = 0.0
+		_check_disperse()
+	if _level >= 11:
+		_booster_timer += delta
+		if _booster_timer >= BOOSTER_INTERVAL:
+			_booster_timer = 0.0
+			_spawn_booster()
+
+func _tick_boss_state() -> void:
+	if not _is_boss_level():
+		return
+	if not _boss_spawned:
 		_boss_spawned = true
 		_spawn_boss()
-	if boss_level and _boss_spawned:
-		if _hud:
-			_hud.refresh_timer(-1)
-		return
+	if _hud:
+		_hud.refresh_timer(-1)
+
+func _tick_round_clock(delta: float) -> void:
 	_round_timer -= delta
 	if _round_timer <= 0.0:
 		_round_timer = 0.0
@@ -275,13 +290,15 @@ func on_boss_soul_collected() -> void:
 		PlayerData.unlocked_chars.append("zealot")
 	if PlayerData.victories_total >= 5 and not ("paladin" in PlayerData.unlocked_chars):
 		PlayerData.unlocked_chars.append("paladin")
-	PlayerData.eternal_souls += 100 if _level == 20 else 50
+	PlayerData.eternal_souls += ETERNAL_SOULS_BOSS20 if _level == 20 else ETERNAL_SOULS_BOSS10
 	PlayerData.save()
-	var key_bonus := 10 if _level == 20 else 5
+	if _level == 20:
+		PlayerData.reset_run()
+		get_tree().change_scene_to_file("res://scenes/ui/SelectCharacter.tscn")
+		return
+	var key_bonus := 5
 	for i in key_bonus:
 		add_key()
-	if _level == 20:
-		_run_complete = true
 	_end_round()
 
 func _end_round() -> void:
@@ -338,10 +355,10 @@ func add_key() -> void:
 func _on_enemy_died(enemy_type: String) -> void:
 	var base_souls := 0
 	match enemy_type:
-		"aldrich": base_souls = 1
-		"brutus":  base_souls = 3
-		"booster": base_souls = 8
-		"boss":    base_souls = 50
+		"aldrich": base_souls = SOULS_ALDRICH
+		"brutus":  base_souls = SOULS_BRUTUS
+		"booster": base_souls = SOULS_BOOSTER
+		"boss":    base_souls = SOULS_BOSS
 	var mult := PlayerData.get_curse_soul_multiplier()
 	PlayerData.souls += maxi(1, int(ceil(float(base_souls) * (1.0 + PlayerData.soul_bonus_rate) * mult)))
 	if _hud:
@@ -358,10 +375,6 @@ func _on_round_continue(remaining_keys: int) -> void:
 	_brutus_timer            = 0.0
 	_booster_timer           = 0.0
 	_disperse_timer          = 0.0
-	if _run_complete:
-		PlayerData.reset_run()
-		get_tree().change_scene_to_file("res://scenes/ui/MainMenu.tscn")
-		return
 	_level += 1
 	PlayerData.player_level = _level
 	PlayerData._recompute()

@@ -17,11 +17,19 @@ config/features=PackedStringArray("4.6", "GL Compatibility")
 [autoload]
 
 PlayerData="*res://autoload/PlayerData.gd"
+BulletPool="*res://autoload/BulletPool.gd"
+Assets="*res://autoload/Assets.gd"
+ItemEffects="*res://autoload/ItemEffects.gd"
+CharacterRegistry="*res://autoload/CharacterRegistry.gd"
+InputBus="*res://autoload/InputBus.gd"
+Settings="*res://autoload/Settings.gd"
 
 [display]
 
 window/size/viewport_width=1920
 window/size/viewport_height=1080
+window/stretch/mode="canvas_items"
+window/handheld/orientation="landscape"
 
 [physics]
 
@@ -32,3 +40,4 @@ window/size/viewport_height=1080
 rendering_device/driver.windows="d3d12"
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
+textures/vram_compression/import_etc2_astc=true

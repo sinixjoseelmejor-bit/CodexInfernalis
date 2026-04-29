@@ -79,7 +79,7 @@ func _process(delta: float) -> void:
 
 func _strike() -> void:
 	_hitting = true
-	if is_instance_valid(_target) and "grabbed" in _target:
+	if is_instance_valid(_target) and "grabbed" in _target:  # Golgota has no grabbed property
 		_target.grabbed = true
 	var anim := "attack_left" if _target.global_position.x < global_position.x else "attack_right"
 	$AnimatedSprite2D.play(anim)

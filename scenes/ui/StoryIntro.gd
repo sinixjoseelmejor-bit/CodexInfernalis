@@ -116,7 +116,7 @@ func _show_panel(idx: int) -> void:
 	_typing            = true
 	_prompt.modulate.a = 0.0
 	_crossfade_bg(_backgrounds[idx])
-	_type_next()
+	_type_panel(_panels[idx])
 
 
 func _crossfade_bg(path: String) -> void:
@@ -151,21 +151,19 @@ func _start_pan() -> void:
 	_pan_tween.tween_property(_bg_img, "position:x", -extra, PAN_DUR).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 
 
-func _type_next() -> void:
-	if not _typing:
-		return
-	var full : String = _panels[_current]
-	if _char_idx >= full.length():
+func _type_panel(text: String) -> void:
+	for i in text.length():
+		if not _typing:
+			return
+		_char_idx   = i
+		var ch      := text[i]
+		_label.text = text.substr(0, i + 1)
+		if ch != " " and ch != "\n":
+			_click.play()
+		await get_tree().create_timer(CHAR_DELAY).timeout
+	if _typing:
 		_typing  = false
 		_blink_t = 0.0
-		return
-	var ch : String = full[_char_idx]
-	_label.text = full.substr(0, _char_idx + 1)
-	_char_idx += 1
-	if ch != " " and ch != "\n":
-		_click.play()
-	await get_tree().create_timer(CHAR_DELAY).timeout
-	_type_next()
 
 
 func _input(event: InputEvent) -> void:

@@ -15,6 +15,9 @@ var _bounced     := false
 var _is_crit     := false
 
 func init(dir: Vector2, dmg: int = 1, is_crit: bool = false) -> void:
+	_traveled  = 0.0
+	_hit_count = 0
+	_bounced   = false
 	_damage    = dmg
 	_is_crit   = is_crit
 	direction  = dir.normalized()
@@ -26,13 +29,16 @@ func init(dir: Vector2, dmg: int = 1, is_crit: bool = false) -> void:
 	else:
 		_hits_left = 2
 
+func _pool_return() -> void:
+	BulletPool.release_fireball(self)
+
 func _process(delta: float) -> void:
 	var spd  := SPEED_FAST if PlayerData.has_skill("velocite") else SPEED_BASE
 	var move := direction * spd * delta
 	position += move
 	_traveled += move.length()
 	if _traveled >= MAX_DISTANCE + PlayerData.flat_range:
-		queue_free()
+		call_deferred("_pool_return")
 
 func _on_body_entered(body: Node) -> void:
 	if not body.is_in_group("enemies"):
@@ -65,7 +71,7 @@ func _on_body_entered(body: Node) -> void:
 		if PlayerData.has_skill("ricochet") and not _bounced:
 			_do_ricochet(body)
 		else:
-			queue_free()
+			call_deferred("_pool_return")
 
 func _do_ricochet(from_body: Node) -> void:
 	_bounced   = true
@@ -81,7 +87,7 @@ func _do_ricochet(from_body: Node) -> void:
 			best_dist = d
 			best      = e
 	if best == null:
-		queue_free()
+		call_deferred("_pool_return")
 		return
 	direction = (best.global_position - global_position).normalized()
 	rotation  = direction.angle()

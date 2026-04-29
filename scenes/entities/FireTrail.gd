@@ -16,6 +16,13 @@ func _ready() -> void:
 	$Visual.rotation = randf() * TAU
 	body_entered.connect(_on_body_entered)
 
+func reinit() -> void:
+	_life = 0.0
+	_tick = 0.0
+	$Visual.texture  = TEXTURES[randi() % 2]
+	$Visual.rotation = randf() * TAU
+	$Visual.modulate.a = 1.0
+
 func _process(delta: float) -> void:
 	_life += delta
 	_tick += delta
@@ -26,7 +33,10 @@ func _process(delta: float) -> void:
 				body.take_damage(1)
 	$Visual.modulate.a = 1.0 - (_life / LIFETIME)
 	if _life >= LIFETIME:
-		queue_free()
+		call_deferred("_pool_return")
+
+func _pool_return() -> void:
+	BulletPool.release_trail(self)
 
 func _on_body_entered(body: Node) -> void:
 	if body.is_in_group("enemies"):

@@ -38,7 +38,12 @@ var _crate_btns        : Array = []
 var _crate_lock_btns   : Array = []
 
 # Stats panel (right column)
-var _stats_rtlabel : RichTextLabel = null
+var _stats_rtlabel     : RichTextLabel = null
+var _curse_offer_panel : Control       = null
+var _curse_name_lbl    : Label         = null
+var _curse_desc_lbl    : Label         = null
+var _curse_accept_btn  : Button        = null
+var _curse_offer_id    : String        = ""
 
 # 1-parmi-3 choice overlay
 var _choice_overlay       : Control = null
@@ -113,6 +118,39 @@ func _build_stats_panel(parent: Node) -> void:
 	rtl.add_theme_font_size_override("normal_font_size", 13)
 	vbox.add_child(rtl)
 	_stats_rtlabel = rtl
+
+	_build_curse_offer_section(vbox)
+
+func _build_curse_offer_section(vbox: VBoxContainer) -> void:
+	var sep2 := HSeparator.new()
+	vbox.add_child(sep2)
+
+	_curse_offer_panel = VBoxContainer.new()
+	_curse_offer_panel.add_theme_constant_override("separation", 6)
+	_curse_offer_panel.visible = false
+	vbox.add_child(_curse_offer_panel)
+
+	var pact_title := Label.new()
+	pact_title.text = "► PACTE MAUDIT"
+	pact_title.add_theme_color_override("font_color", Color(1.0, 0.35, 0.25, 1.0))
+	pact_title.add_theme_font_size_override("font_size", 13)
+	_curse_offer_panel.add_child(pact_title)
+
+	_curse_name_lbl = Label.new()
+	_curse_name_lbl.add_theme_font_size_override("font_size", 13)
+	_curse_name_lbl.add_theme_color_override("font_color", Color(1.0, 0.65, 0.2, 1.0))
+	_curse_offer_panel.add_child(_curse_name_lbl)
+
+	_curse_desc_lbl = Label.new()
+	_curse_desc_lbl.add_theme_font_size_override("font_size", 12)
+	_curse_desc_lbl.add_theme_color_override("font_color", Color(0.8, 0.7, 0.8, 1.0))
+	_curse_desc_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD
+	_curse_offer_panel.add_child(_curse_desc_lbl)
+
+	_curse_accept_btn = Button.new()
+	_curse_accept_btn.text = "ACCEPTER LE PACTE"
+	_curse_accept_btn.pressed.connect(_on_curse_accepted)
+	_curse_offer_panel.add_child(_curse_accept_btn)
 
 func _refresh_stats_panel() -> void:
 	if _stats_rtlabel == null:
@@ -445,6 +483,7 @@ func show_shop(keys: int, level: int = 1) -> void:
 	_reroll_cost  = REROLL_COSTS[0]
 	_build_crate_panels()
 	_roll_crates_unlocked()
+	_roll_curse_offer()
 	_refresh_all()
 	_refresh_lock_btns()
 	_refresh_shop_btns()
@@ -456,8 +495,13 @@ func show_shop(keys: int, level: int = 1) -> void:
 func _roll_3_items(rarity: int) -> Array:
 	var pool: Array = []
 	for id in PlayerData.ITEM_DB:
-		if int(PlayerData.ITEM_DB[id]["rarity"]) == rarity:
-			pool.append(id)
+		var db: Dictionary = PlayerData.ITEM_DB[id]
+		if int(db["rarity"]) != rarity:
+			continue
+		var incompatible: Array = db.get("incompatible_with", [])
+		if PlayerData.selected_char in incompatible:
+			continue
+		pool.append(id)
 	pool.shuffle()
 	var choices: Array = []
 	for c in mini(3, pool.size()):
@@ -467,6 +511,34 @@ func _roll_3_items(rarity: int) -> Array:
 	while choices.size() < 3 and not choices.is_empty():
 		choices.append(choices[0])
 	return choices
+
+func _roll_curse_offer() -> void:
+	if Engine.is_editor_hint() or _curse_offer_panel == null:
+		return
+	if PlayerData.curses.size() >= 3:
+		_curse_offer_panel.visible = false
+		return
+	var available: Array = []
+	for curse_id in PlayerData.CURSE_DB:
+		if not PlayerData.has_curse(curse_id):
+			available.append(curse_id)
+	if available.is_empty():
+		_curse_offer_panel.visible = false
+		return
+	available.shuffle()
+	_curse_offer_id = available[0]
+	var db: Dictionary = PlayerData.CURSE_DB[_curse_offer_id]
+	_curse_name_lbl.text = str(db.get("name", ""))
+	_curse_desc_lbl.text = str(db.get("desc", ""))
+	_curse_offer_panel.visible = true
+
+func _on_curse_accepted() -> void:
+	if _curse_offer_id.is_empty():
+		return
+	PlayerData.apply_curse(_curse_offer_id)
+	_curse_offer_id = ""
+	_curse_offer_panel.visible = false
+	_refresh_stats_panel()
 
 func _roll_crates_unlocked() -> void:
 	var prev_items := _crate_items.duplicate()

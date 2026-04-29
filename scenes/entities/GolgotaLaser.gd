@@ -1,7 +1,5 @@
 extends Node2D
 
-signal laser_done
-
 const TELEGRAPH  := 1.2
 const LOCK_DELAY := 0.2
 const ACTIVE     := 0.5
@@ -73,7 +71,6 @@ func _process(delta: float) -> void:
 			_area.monitoring = true
 	elif _phase == "active":
 		if _timer <= 0.0:
-			laser_done.emit()
 			queue_free()
 
 func _on_body_entered(body: Node) -> void:

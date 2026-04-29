@@ -1,3 +1,6 @@
+# Golgota extends CharacterBody2D directly (not BaseEnemy) by design:
+# the boss is immune to grabbed/bleed/slow status effects.
+# Bear.gd guards against this with "grabbed" in _target checks.
 extends CharacterBody2D
 
 signal died
