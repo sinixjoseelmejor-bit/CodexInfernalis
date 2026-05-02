@@ -37,6 +37,7 @@ var _tempete_timer      := 0.0
 var _pending_shot_dir      := Vector2.ZERO
 var _waiting_to_shoot      := false
 var _mouse_override_timer  := 0.0
+var _manual_fire           := false
 var _last_aim_dir          := Vector2.DOWN
 var _last_is_crit          := false
 @warning_ignore("unused_private_class_variable")
@@ -82,7 +83,8 @@ func _setup_camera() -> void:
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventKey and (event as InputEventKey).pressed:
-		match (event as InputEventKey).keycode:
+		var ke := event as InputEventKey
+		match ke.keycode:
 			KEY_F5:
 				PlayerData.add_item("rune_foudre")
 				PlayerData.add_item("sceptre_tartare")
@@ -92,6 +94,9 @@ func _input(event: InputEvent) -> void:
 	if not DisplayServer.is_touchscreen_available():
 		if event is InputEventMouseButton and (event as InputEventMouseButton).pressed:
 			_mouse_override_timer = MOUSE_OVERRIDE_DUR
+			if PlayerData.dev_no_shoot:
+				_manual_fire  = true
+				_fire_timer   = 0.0
 
 func _get_aim_dir() -> Vector2:
 	if InputBus.touch_shooting and InputBus.touch_aim_world != Vector2.ZERO:
@@ -138,8 +143,7 @@ func _draw() -> void:
 		draw_arc(Vector2.ZERO, AUTO_AIM_RANGE, 0.0, TAU, 64, Color(0.6, 0.9, 1.0, 0.5), 2.0)
 
 func _physics_process(delta: float) -> void:
-	if Input.is_physical_key_pressed(KEY_ALT):
-		queue_redraw()
+	queue_redraw()
 	if _dead:
 		return
 
@@ -222,7 +226,8 @@ func _physics_process(delta: float) -> void:
 
 	_mouse_override_timer -= delta
 
-	if _fire_timer <= 0.0 and not PlayerData.dev_no_shoot:
+	if _fire_timer <= 0.0 and (not PlayerData.dev_no_shoot or _manual_fire):
+		_manual_fire = false
 		_shoot()
 		_fire_timer = PlayerData.fire_cd
 

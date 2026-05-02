@@ -80,7 +80,7 @@ func _setup_animations() -> void:
 	for i in 17:
 		var atlas := AtlasTexture.new()
 		atlas.atlas = death_sheet
-		atlas.region = Rect2(float(i % 5) * 160.0, float(i / 5) * 160.0, 160.0, 160.0)
+		atlas.region = Rect2(float(i % 5) * 160.0, float(i / 5.0) * 160.0, 160.0, 160.0)
 		frames.add_frame("death", atlas)
 
 	$AnimatedSprite2D.sprite_frames = frames

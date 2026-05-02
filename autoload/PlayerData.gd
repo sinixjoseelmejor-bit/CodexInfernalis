@@ -85,39 +85,45 @@ const SKILL_TREES: Dictionary = {
 	"neophyte": [
 		{
 			"id": "double_tir", "name": "DOUBLE TIR",
-			"desc": "Tire 2 projectiles\ncôte à côte", "cost": 1, "soul_cost": 50,
+			"desc": "Tire 2 projectiles\ncôte à côte\n+5 PV max", "cost": 1, "soul_cost": 50,
 			"requires": [], "row": 0, "col": 1,
-			"flat_projectiles": 1,
+			"flat_projectiles": 1, "flat_hp": 5,
 		},
 		{
 			"id": "penetration", "name": "PÉNÉTRATION",
-			"desc": "Les balles traversent\njusqu'à 4 ennemis", "cost": 1, "soul_cost": 100,
+			"desc": "Les balles traversent\njusqu'à 4 ennemis\n+5 PV max", "cost": 1, "soul_cost": 100,
 			"requires": ["double_tir"], "row": 1, "col": 0,
+			"flat_hp": 5,
 		},
 		{
 			"id": "velocite", "name": "VÉLOCITÉ",
-			"desc": "Projectiles\n+60% plus rapides", "cost": 1, "soul_cost": 100,
+			"desc": "Projectiles\n+60% plus rapides\n+5 PV max", "cost": 1, "soul_cost": 100,
 			"requires": ["double_tir"], "row": 1, "col": 2,
+			"flat_hp": 5,
 		},
 		{
 			"id": "explosion", "name": "EXPLOSION",
-			"desc": "Chaque impact crée\nune explosion (80px)", "cost": 1, "soul_cost": 200,
+			"desc": "Chaque impact crée\nune explosion (80px)\n+5 PV max", "cost": 1, "soul_cost": 200,
 			"requires": ["penetration"], "row": 2, "col": 0,
+			"flat_hp": 5,
 		},
 		{
 			"id": "percant", "name": "PERÇANT",
-			"desc": "Les projectiles\ntraversent tous les ennemis", "cost": 1, "soul_cost": 200,
+			"desc": "Les projectiles\ntraversent tous les ennemis\n+5 PV max", "cost": 1, "soul_cost": 200,
 			"requires": ["penetration"], "row": 2, "col": 1,
+			"flat_hp": 5,
 		},
 		{
 			"id": "ricochet", "name": "RICOCHET",
-			"desc": "La balle rebondit\nvers l'ennemi le plus proche", "cost": 1, "soul_cost": 200,
+			"desc": "La balle rebondit\nvers l'ennemi le plus proche\n+5 PV max", "cost": 1, "soul_cost": 200,
 			"requires": ["velocite"], "row": 2, "col": 2,
+			"flat_hp": 5,
 		},
 		{
 			"id": "tempete_acier", "name": "TEMPÊTE\nD'ACIER",
-			"desc": "Salve de 12 tirs omni\ntoutes les 10 secondes", "cost": 1, "soul_cost": 400,
+			"desc": "Salve de 12 tirs omni\ntoutes les 10 secondes\n+5 PV max", "cost": 1, "soul_cost": 400,
 			"requires": ["explosion", "ricochet"], "row": 3, "col": 1,
+			"flat_hp": 5,
 		},
 	]
 }

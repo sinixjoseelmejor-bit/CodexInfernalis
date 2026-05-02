@@ -78,7 +78,7 @@ func _ai(delta: float) -> void:
 		move_dir = to_player.normalized() * 0.35
 	else:
 		move_dir = to_player.normalized().rotated(PI * 0.5) * 0.4
-	velocity = move_dir * speed * _slow_factor
+	velocity = move_dir * speed * _slow_factor + _wall_repulsion()
 	move_and_slide()
 	if move_dir.length_squared() > 0.001:
 		$AnimatedSprite2D.play("levitation_" + _dir_name(move_dir))
@@ -91,6 +91,17 @@ func _apply_aura() -> void:
 		if global_position.distance_to(e.global_position) <= AURA_RADIUS:
 			if enemy.has_method("apply_booster_buff"):
 				enemy.apply_booster_buff(SPEED_BOOST, BUFF_INTERVAL * 2.5, REGEN_RATE)
+
+func _wall_repulsion() -> Vector2:
+	const MARGIN := 160.0
+	const FORCE  := 120.0
+	var push := Vector2.ZERO
+	var p    := global_position
+	push.x += maxf(0.0, MARGIN - (p.x - ARENA_MIN.x)) / MARGIN
+	push.x -= maxf(0.0, MARGIN - (ARENA_MAX.x - p.x)) / MARGIN
+	push.y += maxf(0.0, MARGIN - (p.y - ARENA_MIN.y)) / MARGIN
+	push.y -= maxf(0.0, MARGIN - (ARENA_MAX.y - p.y)) / MARGIN
+	return push * FORCE
 
 func _do_wander(delta: float) -> void:
 	_wander_timer -= delta

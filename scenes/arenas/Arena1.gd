@@ -462,6 +462,7 @@ func on_boss_soul_collected() -> void:
 		PlayerData.unlocked_chars.append("zealot")
 	if PlayerData.victories_total >= 5 and not ("paladin" in PlayerData.unlocked_chars):
 		PlayerData.unlocked_chars.append("paladin")
+	@warning_ignore("integer_division")
 	var boss_num: int = _level / 10
 	PlayerData.eternal_souls += ETERNAL_BOSS[mini(boss_num, 5)]
 	PlayerData.save()
@@ -614,6 +615,7 @@ func _cheat_reset_items() -> void:
 func _cheat_skip_to_boss() -> void:
 	for e in get_tree().get_nodes_in_group("enemies"):
 		e.queue_free()
+	@warning_ignore("integer_division")
 	var next_boss: int = ((_level / 10) + 1) * 10
 	_level        = mini(next_boss, 50)
 	_boss_spawned = false
