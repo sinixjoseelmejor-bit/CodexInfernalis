@@ -19,8 +19,10 @@ var player : Node2D = null
 
 var _slow_factor  := 1.0
 var _slow_timer   := 0.0
-var _boost_factor := 1.0
-var _boost_timer  := 0.0
+var _boost_factor      := 1.0
+var _boost_timer       := 0.0
+var _booster_regen     := 0.0
+var _booster_regen_acc := 0.0
 var _bleed_dmg    := 0
 var _bleed_timer  := 0.0
 var _bleed_tick   := 0.0
@@ -72,8 +74,16 @@ func _tick_status(delta: float) -> void:
 			_slow_factor = 1.0
 	if _boost_timer > 0.0:
 		_boost_timer -= delta
+		if _booster_regen > 0.0:
+			_booster_regen_acc += delta * _booster_regen
+			if _booster_regen_acc >= 1.0:
+				var heal := int(_booster_regen_acc)
+				hp += heal
+				_booster_regen_acc -= heal
 		if _boost_timer <= 0.0:
-			_boost_factor = 1.0
+			_boost_factor      = 1.0
+			_booster_regen     = 0.0
+			_booster_regen_acc = 0.0
 			if not dead and _bleed_timer <= 0.0:
 				_tint(_normal_tint())
 	if _bleed_timer > 0.0:
@@ -156,9 +166,10 @@ func slow(factor: float, duration: float) -> void:
 	_slow_factor = factor
 	_slow_timer  = duration
 
-func apply_booster_buff(factor: float, duration: float) -> void:
-	_boost_factor = 1.0 + factor
-	_boost_timer  = duration
+func apply_booster_buff(factor: float, duration: float, regen: float = 0.0) -> void:
+	_boost_factor  = 1.0 + factor
+	_boost_timer   = duration
+	_booster_regen = regen
 	if not dead and _bleed_timer <= 0.0:
 		_tint(Color(0.75, 0.45, 1.0, 1.0))
 

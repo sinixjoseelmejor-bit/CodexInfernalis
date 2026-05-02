@@ -25,11 +25,11 @@ const ITEM_DB: Dictionary = {
 	"fiole_sangsue":    {"rarity":0,"weight":90, "name":"Sang de Léviathan",    "desc":"+1 dégât\n+2% vol de vie\n-5% vitesse",           "flat_damage":1, "pct_lifesteal":0.02, "pct_speed":-0.05},
 	"ceinture_aimant":  {"rarity":0,"weight":90, "name":"Ceinture du Tartare",  "desc":"+60 portée ramassage\n+2% esquive",  "flat_pickup":60.0, "pct_dodge":0.02},
 	# ─── RARES R1 (rarity 1, max_stacks 3) ──────────────────────────────────
-	"vampire_amulet":   {"rarity":1,"weight":90, "name":"Amulette de Charon",      "desc":"+8% HP max\n+2% vol de vie/stack\n-3% cdv/stack",      "pct_hp":0.08, "pct_lifesteal":0.02, "pct_fire_cd":-0.03},
+	"vampire_amulet":   {"rarity":1,"weight":90, "name":"Amulette de Charon",      "desc":"+8% HP max\n+2% vol de vie/stack\n-3% cadence de tir/stack",      "pct_hp":0.08, "pct_lifesteal":0.02, "pct_fire_cd":-0.03},
 	"fire_boots":       {"rarity":1,"weight":100,"name":"Bottes du Phlégéthon",  "desc":"+12% vitesse\nTraînée de feu",          "pct_speed":0.12},
 	"thorn_shield":     {"rarity":1,"weight":100,"name":"Écu des Épines Maudites","desc":"+8% dégâts\nRenvoie 15%×stacks dégâts","pct_damage":0.08},
 	"rage_ring":        {"rarity":1,"weight":100,"name":"Sceau du Courroux",      "desc":"+8% dégâts\nEnragé 2s après kill",     "pct_damage":0.08},
-	"phantom_step":     {"rarity":1,"weight":100,"name":"Pas du Spectre",         "desc":"+12% vitesse\n+0.4s iframes/stack",   "pct_speed":0.12},
+	"phantom_step":     {"rarity":1,"weight":100,"name":"Pas du Spectre",         "desc":"+12% vitesse\n+3 armure/stack",        "pct_speed":0.12, "flat_armor":3},
 	"oeil_gele":        {"rarity":1,"weight":100,"name":"Œil du Cocyte",          "desc":"+8% dégâts\n7e tir ralentit 40% (2s)","pct_damage":0.08},
 	"orbe_mana":        {"rarity":1,"weight":100,"name":"Orbe de l'Achéron",      "desc":"+10% dégâts\n10e tir = proj bonus",   "pct_damage":0.10},
 	"cor_guerre":       {"rarity":1,"weight":100,"name":"Cor de Baal",            "desc":"+6% dégâts\n+30% dmg 5s début vague", "pct_damage":0.06},
@@ -66,7 +66,7 @@ const ITEM_DB: Dictionary = {
 	"armure_cranes":    {"rarity":1,"weight":100,"name":"Armure des Crânes",      "desc":"+5 armure\n+5% HP max",               "flat_armor":5, "pct_hp":0.05},
 	# ─── ÉPIQUES PRIORITÉ HAUTE ──────────────────────────────────────────────
 	"marque_lucifer":   {"rarity":2,"weight":80, "name":"Marque de Lucifer",      "desc":"+25% dégâts\n-20% HP max",            "pct_damage":0.25, "pct_hp":-0.20},
-	"griffe_mephisto":  {"rarity":2,"weight":80, "name":"Griffe de Méphistophélès","desc":"+20% dégâts\n+1 HP volé par tir\n-20% cdv",    "pct_damage":0.20, "lifesteal_flat":1, "pct_fire_cd":-0.20},
+	"griffe_mephisto":  {"rarity":2,"weight":80, "name":"Griffe de Méphistophélès","desc":"+20% dégâts\n+1 HP volé par tir\n-20% cadence de tir",    "pct_damage":0.20, "lifesteal_flat":1, "pct_fire_cd":-0.20},
 	"talisman_ire":     {"rarity":2,"weight":100,"name":"Talisman de Ire",        "desc":"+3% dégâts/kill\nce round (max +30%)"},
 	"rune_foudre":      {"rarity":2,"weight":100,"name":"Rune de la Foudre Maudite","desc":"Foudre toutes les 5s\n50 dégâts",   },
 	"sceptre_tartare":  {"rarity":2,"weight":100,"name":"Sceptre de Tartare",     "desc":"Boule de feu toutes les 4s\n60 dégâts (120px)"},
@@ -510,7 +510,7 @@ func _recompute() -> void:
 	fire_cd    = max(0.28, (base_cd + flat_cd) * (1.0 - pct_cd) * curse_cd_mult)
 	flat_range = mini(400, flat_rng)
 
-	armor                = mini(flat_arm, 10)
+	armor                = flat_arm
 	hp_regen             = flat_reg
 	soul_bonus_rate      = flat_soul
 	crit_chance          = clampf(0.05 + pct_crit, 0.0, 0.55)
@@ -518,7 +518,8 @@ func _recompute() -> void:
 	lifesteal_pct           = clampf(pct_ls, 0.0, 0.20)
 	dodge_chance            = clampf(pct_dodge, 0.0, 0.50)
 	pickup_range            = 80.0 + flat_pickup
-	projectile_count        = mini(4, 1 + flat_proj)
+	var _proj_cap           := 8 if has_skill("double_tir") else 4
+	projectile_count        = mini(_proj_cap, 1 + flat_proj)
 	projectile_speed_pct    = flat_pspd
 	dmg_reduction_pct       = clampf(flat_dmg_reduc, -0.50, 0.40)
 	reflect_pct             = flat_reflect

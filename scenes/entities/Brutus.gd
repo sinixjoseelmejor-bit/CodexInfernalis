@@ -61,6 +61,9 @@ func teleport_to_edge() -> void:
 func _tint(color: Color) -> void:
 	$AnimatedSprite2D.modulate = color
 
+const DESIRED_DIST := 380.0
+const FLEE_DIST    := 220.0
+
 func _ai(delta: float) -> void:
 	_shoot_timer -= delta
 	var player_dead: bool = player == null or player.get("_dead") == true
@@ -70,15 +73,27 @@ func _ai(delta: float) -> void:
 
 	var to_player := player.global_position - global_position
 	var dist      := to_player.length()
-	var dir       := _nav_dir_to(player.global_position)
+	var move_dir  : Vector2
 
-	velocity = dir * speed * _slow_factor * _boost_factor + _separation()
+	if dist < FLEE_DIST:
+		move_dir = -to_player.normalized()
+	elif dist > DESIRED_DIST + 80.0:
+		move_dir = _nav_dir_to(player.global_position)
+	else:
+		move_dir = to_player.normalized().rotated(PI * 0.5) * 0.3
+
+	velocity = move_dir * speed * _slow_factor * _boost_factor + _separation()
 	move_and_slide()
-	_update_dir(dir)
-	$AnimatedSprite2D.play("walk_" + _last_dir)
+	if move_dir.length_squared() > 0.01:
+		_update_dir(move_dir)
+	var in_shoot_zone := dist >= FLEE_DIST and dist <= DESIRED_DIST + 80.0
+	if in_shoot_zone:
+		$AnimatedSprite2D.play("idle_" + _last_dir)
+	else:
+		$AnimatedSprite2D.play("walk_" + _last_dir)
 
 	if dist <= shoot_range and _shoot_timer <= 0.0:
-		_shoot(dir)
+		_shoot(to_player.normalized())
 		_shoot_timer = shoot_cd
 
 func _shoot(dir: Vector2) -> void:

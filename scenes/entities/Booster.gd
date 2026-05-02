@@ -2,8 +2,9 @@ extends "res://scenes/entities/BaseEnemy.gd"
 
 const FLEE_RADIUS   := 380.0
 const DESIRED_DIST  := 680.0
-const AURA_RADIUS   := 280.0
+const AURA_RADIUS   := 420.0
 const SPEED_BOOST   := 0.40
+const REGEN_RATE    := 6.0
 const BUFF_INTERVAL := 0.5
 
 var _buff_timer := 0.0
@@ -89,7 +90,7 @@ func _apply_aura() -> void:
 		var e := enemy as Node2D
 		if global_position.distance_to(e.global_position) <= AURA_RADIUS:
 			if enemy.has_method("apply_booster_buff"):
-				enemy.apply_booster_buff(SPEED_BOOST, BUFF_INTERVAL * 2.5)
+				enemy.apply_booster_buff(SPEED_BOOST, BUFF_INTERVAL * 2.5, REGEN_RATE)
 
 func _do_wander(delta: float) -> void:
 	_wander_timer -= delta

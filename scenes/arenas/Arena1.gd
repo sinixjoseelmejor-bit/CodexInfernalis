@@ -232,6 +232,8 @@ func _round_duration() -> float:
 # ── Spawn intervals (PDF table) ───────────────────────────────────────────────
 func _aldrich_interval() -> float:
 	var base := maxf(0.30, 1.40 - float(_level - 1) * 1.10 / 49.0)
+	if _level >= 20:
+		base *= 1.20
 	if PlayerData.has_curse("curse_chaos"):
 		base *= 0.80
 	return base
@@ -246,7 +248,7 @@ func _booster_interval() -> float:
 	return maxf(12.0, 25.0 - float(_level - 11) * 0.6)
 
 func _kael_interval() -> float:
-	var base := maxf(4.0, 14.0 - float(_level - 12) * 0.5)
+	var base := maxf(0.8, 2.5 - float(_level - 12) * 0.10)
 	if PlayerData.has_curse("curse_chaos"):
 		base *= 0.80
 	return base
@@ -312,7 +314,7 @@ func _booster_hp(w: int) -> int:
 	if w <= 19: return BOOSTER_HP[w]
 	return int(300.0 * pow(1.13, w - 19))
 
-func _kael_hp(w: int)   -> int: return maxi(1, int(55.0  * pow(1.15, w - 12)))
+func _kael_hp(w: int)   -> int: return maxi(1, int(70.0  * pow(1.15, w - 12)))
 func _kael_dmg(w: int)  -> int: return maxi(1, int(14.0  * pow(1.12, w - 12)))
 
 func _morbius_hp(w: int)    -> int: return maxi(1, int(350.0 * pow(1.13, w - 18)))
@@ -495,7 +497,7 @@ func _on_round_continue(remaining_keys: int) -> void:
 	PlayerData._recompute()
 	_round_timer  = _round_duration()
 	_boss_spawned = false
-	$Player.global_position = Vector2(1016, 517)
+	$Player.global_position = Vector2(247, 462)
 	$Player.revive()
 	$Player.on_wave_start()
 	if _hud:

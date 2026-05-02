@@ -432,9 +432,8 @@ func take_damage(amount: int) -> void:
 	var final_dmg := PlayerData.calc_damage_taken(amount)
 	if final_dmg == 0:
 		return  # dodged
-	var phantom := PlayerData.item_count("phantom_step")
 	var plumes  := PlayerData.item_count("plume_rapide")
-	_iframe_timer = IFRAMES + 0.4 * phantom + 0.1 * plumes
+	_iframe_timer = IFRAMES + 0.1 * plumes
 	hp = maxi(0, hp - final_dmg)
 	var hud := get_tree().get_first_node_in_group("hud")
 	if hud:
