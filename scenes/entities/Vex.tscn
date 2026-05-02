@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://vex_enemy_01"]
+
+[ext_resource type="Script" path="res://scenes/entities/Vex.gd" id="1_vex"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_vex"]
+radius = 12.0
+
+[node name="Vex" type="CharacterBody2D"]
+script = ExtResource("1_vex")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_vex")

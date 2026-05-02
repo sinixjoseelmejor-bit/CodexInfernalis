@@ -1,19 +1,20 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://b8lv40l4xhjij"]
 
-[ext_resource type="Script" path="res://scenes/entities/Key.gd" id="1_key"]
-[ext_resource type="Texture2D" path="res://assets/pickups/KeyChest.png" id="2_keychest"]
+[ext_resource type="Script" uid="uid://cfcgrvmopm0fr" path="res://scenes/entities/Key.gd" id="1_key"]
+[ext_resource type="Texture2D" uid="uid://cmlumyem1apkf" path="res://assets/pickups/KeyChest.png" id="2_keychest"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_pickup"]
 radius = 20.0
 
-[node name="Key" type="Area2D"]
+[node name="Key" type="Area2D" unique_id=1547758210]
 collision_layer = 0
-collision_mask = 1
 script = ExtResource("1_key")
 
-[node name="Placeholder" type="Sprite2D" parent="."]
+[node name="Placeholder" type="Sprite2D" parent="." unique_id=1274977432]
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("2_keychest")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=248313228]
 shape = SubResource("CircleShape2D_pickup")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="." unique_id=1867808234]

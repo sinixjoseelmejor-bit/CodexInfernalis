@@ -1,13 +1,13 @@
 [gd_scene format=3 uid="uid://player001"]
 
-[ext_resource type="Script" path="res://scenes/entities/Player.gd" id="1_playerscript"]
+[ext_resource type="Script" uid="uid://b73jmwvcc48h0" path="res://scenes/entities/Player.gd" id="1_playerscript"]
+[ext_resource type="Texture2D" uid="uid://gsvjt2vm17p7" path="res://assets/Characters/Neophyte/rotations/south.png" id="2_o7et6"]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_body"]
-radius = 14.0
-height = 32.0
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_o7et6"]
+size = Vector2(50, 59)
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_hit"]
-radius = 22.0
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_24gqh"]
+size = Vector2(26.5, 108)
 
 [node name="Player" type="CharacterBody2D" unique_id=300000001]
 script = ExtResource("1_playerscript")
@@ -16,13 +16,28 @@ script = ExtResource("1_playerscript")
 position = Vector2(0, -4)
 scale = Vector2(0.75, 0.75)
 
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1704388311]
+visible = false
+offset_left = -116.0
+offset_top = -122.0
+offset_right = 112.0
+offset_bottom = 106.0
+texture = ExtResource("2_o7et6")
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=300000003]
-position = Vector2(0, 8)
-shape = SubResource("CapsuleShape2D_body")
+position = Vector2(-1, 15.5)
+shape = SubResource("RectangleShape2D_o7et6")
 
 [node name="HitArea" type="Area2D" parent="." unique_id=300000004]
+visible = false
 collision_layer = 0
 collision_mask = 2
 
 [node name="HitShape" type="CollisionShape2D" parent="HitArea" unique_id=300000005]
-shape = SubResource("CircleShape2D_hit")
+position = Vector2(-1, -5)
+shape = SubResource("RectangleShape2D_24gqh")
+
+[node name="HitShape2" type="CollisionShape2D" parent="HitArea" unique_id=468612647]
+position = Vector2(-0.9999995, 7)
+scale = Vector2(2.015, 0.76)
+shape = SubResource("RectangleShape2D_24gqh")

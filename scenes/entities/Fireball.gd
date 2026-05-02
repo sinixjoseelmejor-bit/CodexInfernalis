@@ -3,7 +3,6 @@ extends Area2D
 const SPEED_BASE   := 1200.0
 const SPEED_FAST   := 2020.0
 const MAX_DISTANCE := 400.0
-const EXPLOSION    := preload("res://scenes/entities/BulletExplosion.tscn")
 const HIT_SOUND    := preload("res://sounds/sfx/FireballSound.mp3")
 
 var direction    := Vector2.ZERO
@@ -61,10 +60,7 @@ func _on_body_entered(body: Node) -> void:
 		player.on_enemy_hit(body, actual_dmg, _is_crit)
 
 	if PlayerData.has_skill("explosion"):
-		var blast := EXPLOSION.instantiate()
-		blast.global_position = global_position
-		blast.damage = _damage
-		get_parent().call_deferred("add_child", blast)
+		call_deferred("_spawn_explosion", get_parent(), global_position, _damage)
 
 	_hits_left -= 1
 	if _hits_left <= 0:
@@ -72,6 +68,13 @@ func _on_body_entered(body: Node) -> void:
 			_do_ricochet(body)
 		else:
 			call_deferred("_pool_return")
+
+func _spawn_explosion(arena: Node, pos: Vector2, dmg: int) -> void:
+	if not is_instance_valid(arena):
+		return
+	var blast := BulletPool.get_explosion(arena)
+	blast.global_position = pos
+	blast.reinit(dmg)
 
 func _do_ricochet(from_body: Node) -> void:
 	_bounced   = true

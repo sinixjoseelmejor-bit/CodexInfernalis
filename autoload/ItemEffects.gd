@@ -30,7 +30,7 @@ func on_enemy_hit(player: Node, enemy: Node, dmg: int, is_crit: bool) -> void:
 		if player._orbe_mana_counter >= 10:
 			player._orbe_mana_counter = 0
 			if is_instance_valid(enemy):
-				var bonus_dir := (enemy.global_position - player.global_position).normalized()
+				var bonus_dir := ((enemy as Node2D).global_position - (player as Node2D).global_position).normalized()
 				player.call_deferred("fire_bonus_bullet", bonus_dir)
 
 	# dague_asmodee: bleed 2 dmg/s for 3s

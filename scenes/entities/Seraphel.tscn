@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://bmgyg6priu6k3"]
+
+[ext_resource type="Script" uid="uid://c48ts00h0vrmd" path="res://scenes/entities/Seraphel.gd" id="1_seraphel"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_seraphel"]
+radius = 22.0
+
+[node name="Seraphel" type="CharacterBody2D" unique_id=412953964]
+script = ExtResource("1_seraphel")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=855922388]
+shape = SubResource("CircleShape2D_seraphel")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="." unique_id=1169451873]
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="NavigationAgent2D" unique_id=141962734]

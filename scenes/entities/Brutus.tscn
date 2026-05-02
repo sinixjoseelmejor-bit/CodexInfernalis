@@ -1,18 +1,20 @@
 [gd_scene format=3 uid="uid://brutus001"]
 
-[ext_resource type="Script" path="res://scenes/entities/Brutus.gd" id="1_brutus"]
+[ext_resource type="Script" uid="uid://byd6sxjiubt02" path="res://scenes/entities/Brutus.gd" id="1_brutus"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_1"]
 radius = 24.0
 height = 55.0
 
-[node name="Brutus" type="CharacterBody2D"]
+[node name="Brutus" type="CharacterBody2D" unique_id=821802268]
 script = ExtResource("1_brutus")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1437402946]
 position = Vector2(0, -4)
 scale = Vector2(1.2, 1.2)
 
-[node name="CollisionPolygon2D" type="CollisionShape2D" parent="."]
+[node name="CollisionPolygon2D" type="CollisionShape2D" parent="." unique_id=1598162970]
 position = Vector2(0, 8)
 shape = SubResource("CapsuleShape2D_1")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="." unique_id=1250695561]

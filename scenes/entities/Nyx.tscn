@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://bib88hsk0rv8h"]
+
+[ext_resource type="Script" uid="uid://c231fq4cb0luq" path="res://scenes/entities/Nyx.gd" id="1_nyx"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_nyx"]
+radius = 20.0
+
+[node name="Nyx" type="CharacterBody2D" unique_id=316902610]
+script = ExtResource("1_nyx")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=477667043]
+shape = SubResource("CircleShape2D_nyx")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="." unique_id=1786480711]

@@ -53,7 +53,7 @@ func _ai(delta: float) -> void:
 	if player_dead:
 		_do_wander(delta)
 	else:
-		var dir := (player.global_position - global_position).normalized()
+		var dir := _nav_dir_to(player.global_position)
 		velocity = dir * speed * _slow_factor * _boost_factor + _separation()
 		move_and_slide()
 		$AnimatedSprite2D.play("walk_" + _dir_name(dir))

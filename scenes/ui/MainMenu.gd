@@ -77,7 +77,7 @@ func _refresh_profiles() -> void:
 			var vict      : int    = int(info.get("victories_total", 0))
 			var char_name : String = String(info.get("selected_char", "neophyte")).to_upper()
 			var run_active := PlayerData.has_run_in_progress(slot)
-			card.disabled = false
+			card.disabled = (_mode == "continue" and not run_active)
 			if _mode == "continue" and run_active:
 				card.text = "PROFIL %d — %s\nVague %d  |  %d victoires" % [slot, char_name, lvl, vict]
 			else:

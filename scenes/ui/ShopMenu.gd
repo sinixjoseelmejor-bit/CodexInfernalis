@@ -501,13 +501,27 @@ func _roll_3_items(rarity: int) -> Array:
 		var incompatible: Array = db.get("incompatible_with", [])
 		if PlayerData.selected_char in incompatible:
 			continue
-		pool.append(id)
-	pool.shuffle()
+		pool.append({"id": id, "weight": int(db.get("weight", 100))})
+
 	var choices: Array = []
-	for c in mini(3, pool.size()):
-		var entry: Dictionary = PlayerData.ITEM_DB[pool[c]].duplicate()
-		entry["id"] = pool[c]
+	var remaining := pool.duplicate()
+	while choices.size() < 3 and not remaining.is_empty():
+		var total := 0
+		for e in remaining:
+			total += int(e["weight"])
+		var roll := randi() % maxi(1, total)
+		var cum := 0
+		var picked_id: String = remaining[-1]["id"]
+		for i in remaining.size():
+			cum += int(remaining[i]["weight"])
+			if roll < cum:
+				picked_id = remaining[i]["id"]
+				remaining.remove_at(i)
+				break
+		var entry: Dictionary = PlayerData.ITEM_DB[picked_id].duplicate()
+		entry["id"] = picked_id
 		choices.append(entry)
+
 	while choices.size() < 3 and not choices.is_empty():
 		choices.append(choices[0])
 	return choices

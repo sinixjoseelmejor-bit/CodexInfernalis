@@ -48,7 +48,6 @@ var _music_next     : AudioStreamPlayer
 @onready var _label    : RichTextLabel      = $Text
 @onready var _prompt   : Label              = $Prompt
 @onready var _bg_img   : TextureRect        = $BGImage
-@onready var _overlay  : ColorRect          = $DarkOverlay
 @onready var _click    : AudioStreamPlayer  = $ClickSFX
 @onready var _music    : AudioStreamPlayer  = $Music
 @onready var _skip_btn : Button             = $SkipBtn
@@ -141,9 +140,9 @@ func _start_pan() -> void:
 	var extra := vp.x * PAN_EXTRA
 	var tex   := _bg_img.texture.get_size()
 	# scale pour que la largeur couvre exactement viewport + déplacement du pan
-	var scale := (vp.x + extra) / tex.x
-	var new_w := tex.x * scale
-	var new_h := tex.y * scale
+	var tex_scale := (vp.x + extra) / tex.x
+	var new_w := tex.x * tex_scale
+	var new_h := tex.y * tex_scale
 	_bg_img.set_anchors_preset(Control.PRESET_TOP_LEFT)
 	_bg_img.size     = Vector2(new_w, new_h)
 	_bg_img.position = Vector2(0.0, -(new_h - vp.y) / 2.0)

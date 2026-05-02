@@ -1,6 +1,5 @@
 extends "res://scenes/entities/BaseEnemy.gd"
 
-const BULLET      := preload("res://scenes/entities/BrutusBullet.tscn")
 const DEATH_SOUND := preload("res://sounds/sfx/Brutus_Death.mp3")
 const WALK_BASE   := "res://assets/Characters/Brutus/animations/The_demon_shifts_its_weight_and_begins_to_walk_for-427ed1f1/"
 const ROT_BASE    := "res://assets/Characters/Brutus/rotations/"
@@ -71,11 +70,10 @@ func _ai(delta: float) -> void:
 
 	var to_player := player.global_position - global_position
 	var dist      := to_player.length()
-	var dir       := to_player.normalized()
+	var dir       := _nav_dir_to(player.global_position)
 
 	velocity = dir * speed * _slow_factor * _boost_factor + _separation()
 	move_and_slide()
-	global_position = global_position.clamp(ARENA_MIN, ARENA_MAX)
 	_update_dir(dir)
 	$AnimatedSprite2D.play("walk_" + _last_dir)
 
@@ -84,10 +82,9 @@ func _ai(delta: float) -> void:
 		_shoot_timer = shoot_cd
 
 func _shoot(dir: Vector2) -> void:
-	var b := BULLET.instantiate()
+	var b := BulletPool.get_brutus_bullet(get_parent())
 	b.global_position = global_position
 	b.init(dir, damage, bullet_speed)
-	get_parent().call_deferred("add_child", b)
 
 func _do_wander(delta: float) -> void:
 	_wander_timer -= delta
@@ -96,7 +93,6 @@ func _do_wander(delta: float) -> void:
 		_wander_timer = randf_range(2.0, 4.5)
 	velocity = _wander_dir * speed * 0.5 * _boost_factor + _separation()
 	move_and_slide()
-	global_position = global_position.clamp(ARENA_MIN, ARENA_MAX)
 	_update_dir(_wander_dir)
 	$AnimatedSprite2D.play("walk_" + _last_dir)
 

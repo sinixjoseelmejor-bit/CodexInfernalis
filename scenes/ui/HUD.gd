@@ -37,7 +37,8 @@ func _ready() -> void:
 	refresh_kills(PlayerData.kills_total)
 	_create_stats_bar()
 	_create_buff_strip()
-	_create_dev_shoot_btn()
+	if OS.is_debug_build():
+		_create_dev_shoot_btn()
 
 func _create_hp_bar() -> void:
 	%HPHearts.hide()
@@ -189,7 +190,7 @@ func _update_stack_buff(id: String, active: bool, text: String) -> void:
 func _create_dev_shoot_btn() -> void:
 	var btn := Button.new()
 	btn.text = "🔫 TIR ON"
-	btn.position = Vector2(8, 80)
+	btn.position = Vector2(8, 120)
 	btn.size = Vector2(110, 30)
 	btn.add_theme_font_size_override("font_size", 11)
 	btn.pressed.connect(func():
@@ -293,6 +294,23 @@ func refresh_stats_bar() -> void:
 	txt += W + "PROJECTILES" + E + G + " %d" % PlayerData.projectile_count + E + "\n"
 	txt += W + "PORTÉE     " + E + G + "%d" % int(PlayerData.pickup_range) + E + "\n"
 	txt += W + "REGEN      " + E + G + "%.1f/s" % PlayerData.hp_regen + E + "\n"
+
+	if not PlayerData.items.is_empty():
+		txt += "\n" + W + "[b]── INVENTAIRE ──[/b]" + E + "\n\n"
+		var counts: Dictionary = {}
+		for item_id in PlayerData.items:
+			counts[item_id] = counts.get(item_id, 0) + 1
+		const RARITY_COLORS := ["#999999", "#59a6ff", "#e673ff"]
+		for item_id in counts:
+			var db: Dictionary  = PlayerData.ITEM_DB.get(item_id as String, {})
+			var item_name: String = db.get("name", item_id)
+			var rarity: int     = int(db.get("rarity", 0))
+			var col: String     = RARITY_COLORS[clampi(rarity, 0, 2)]
+			var cnt: int        = counts[item_id]
+			if cnt > 1:
+				txt += "[color=#ffee66]×%d[/color] [color=%s]%s[/color]\n" % [cnt, col, item_name]
+			else:
+				txt += "[color=%s]%s[/color]\n" % [col, item_name]
 
 	_stats_rtl.text = txt
 
@@ -411,6 +429,34 @@ func refresh_boss_hp(current: int) -> void:
 func hide_boss_bar() -> void:
 	if _boss_bar_root:
 		_boss_bar_root.hide()
+
+func show_revive() -> void:
+	var flash := ColorRect.new()
+	flash.color = Color(1.0, 0.85, 0.1, 0.35)
+	flash.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	flash.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	flash.z_index = 10
+	add_child(flash)
+
+	var lbl := Label.new()
+	lbl.text = "RESSUSCITÉ"
+	lbl.set_anchors_preset(Control.PRESET_CENTER)
+	lbl.position = Vector2(-200, -60)
+	lbl.size = Vector2(400, 80)
+	lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	lbl.vertical_alignment   = VERTICAL_ALIGNMENT_CENTER
+	lbl.add_theme_font_size_override("font_size", 42)
+	lbl.add_theme_color_override("font_color", Color(1.0, 0.9, 0.2, 1.0))
+	lbl.z_index = 11
+	add_child(lbl)
+
+	var tw := create_tween()
+	tw.tween_property(flash, "color:a", 0.0, 0.5)
+	tw.parallel().tween_property(lbl,   "modulate:a", 0.0, 0.8).set_delay(0.5)
+	tw.tween_callback(func() -> void:
+		flash.queue_free()
+		lbl.queue_free()
+	)
 
 func _make_item_count_label() -> Label:
 	var lbl := Label.new()

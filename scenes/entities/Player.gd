@@ -4,6 +4,7 @@ signal hp_changed(current: int, maximum: int)
 signal died
 
 const IFRAMES             := 0.5
+const SPREAD_DEG          := 15.0   # angle entre projectiles simultanés
 const DEATH_DELAY         := 2.5
 const BEAR_SPAWN_OFFSET   := 80.0   # pixels devant le joueur dans la direction de visée
 const PHLEGETHON_SPEED_CAP := 550.0  # vitesse max avec buff phlegethon actif
@@ -38,7 +39,9 @@ var _waiting_to_shoot      := false
 var _mouse_override_timer  := 0.0
 var _last_aim_dir          := Vector2.DOWN
 var _last_is_crit          := false
+@warning_ignore("unused_private_class_variable")
 var _oeil_gele_counter     := 0
+@warning_ignore("unused_private_class_variable")
 var _orbe_mana_counter     := 0
 var _cor_guerre_timer      := 0.0
 var _cor_guerre_active     := false
@@ -48,8 +51,10 @@ var _shield_timer          := 0.0
 var _shield_active         := false
 var _stationary_timer      := 0.0
 var _ire_bonus             := 0.0
+@warning_ignore("unused_private_class_variable")
 var _baal_counter          := 0
 var _revive_used           := false
+var _pending_revive        := false
 var _active_bear           : Node = null
 var _mercy_cd              := 0.0
 var _drain_acc             := 0.0
@@ -225,7 +230,7 @@ func _physics_process(delta: float) -> void:
 		_waiting_to_shoot = false
 		var dir_n      := _pending_shot_dir.normalized()
 		var count      := PlayerData.projectile_count
-		var spread_deg := 15.0
+		var spread_deg := SPREAD_DEG
 		var shot_dmg   := _effective_damage()
 		var shot_crit  := _last_is_crit
 		for b in count:
@@ -255,7 +260,7 @@ func _effective_damage() -> int:
 		base *= (1.0 + _ire_bonus)
 	if PlayerData.has_timed_buff("courroux") and PlayerData.item_count("sang_courroux") > 0:
 		base += 3.0 * float(PlayerData.item_count("sang_courroux"))
-	if _stationary_timer >= 1.0 and PlayerData.item_count("bandeau_inquisiteur") > 0:
+	if _stationary_timer > 0.0 and _stationary_timer <= 0.5 and PlayerData.item_count("bandeau_inquisiteur") > 0:
 		base *= 1.0 + 0.20 * float(PlayerData.item_count("bandeau_inquisiteur"))
 	var mirror := PlayerData.item_count("miroir_supplies")
 	if mirror > 0 and randf() < 0.05 * float(mirror):
@@ -378,6 +383,7 @@ func revive() -> void:
 	_enraged          = false
 	_rage_timer       = 0.0
 	_revive_used      = false
+	_pending_revive   = false
 	_drain_acc        = 0.0
 	_regen_acc        = 0.0
 	hp                = PlayerData.max_hp
@@ -387,14 +393,34 @@ func revive() -> void:
 	$AnimatedSprite2D.modulate = Color(1, 1, 1, 1)
 	$AnimatedSprite2D.play("idle_south")
 
+func _do_revive() -> void:
+	_dead         = false
+	hp            = maxi(1, int(PlayerData.max_hp * 0.30))
+	_iframe_timer = 5.0
+	velocity      = Vector2.ZERO
+	$CollisionShape2D.set_deferred("disabled", false)
+	$HitArea/HitShape.set_deferred("disabled", false)
+	$AnimatedSprite2D.modulate = Color(1, 1, 1, 1)
+	$AnimatedSprite2D.play("idle_south")
+	var hud_r := get_tree().get_first_node_in_group("hud")
+	if hud_r:
+		hud_r.refresh_hp(hp, PlayerData.max_hp)
+		hud_r.show_revive()
+	hp_changed.emit(hp, PlayerData.max_hp)
+	_flash_revive()
+
 func _on_anim_finished() -> void:
 	var anim: String = $AnimatedSprite2D.animation
 	if anim.begins_with("attack"):
 		_attacking = false
 		$AnimatedSprite2D.play("idle_" + _aim_direction)
 	elif anim == "death":
-		await get_tree().create_timer(DEATH_DELAY).timeout
-		died.emit()
+		if _pending_revive:
+			_pending_revive = false
+			_do_revive()
+		else:
+			await get_tree().create_timer(DEATH_DELAY).timeout
+			died.emit()
 
 func take_damage(amount: int) -> void:
 	if _dead or _iframe_timer > 0.0:
@@ -437,14 +463,8 @@ func _thorn_reflect(original_dmg: int) -> void:
 
 func _die() -> void:
 	if PlayerData.revive_count > 0 and not _revive_used:
-		_revive_used  = true
-		hp            = maxi(1, int(PlayerData.max_hp * 0.30))
-		_iframe_timer = 2.0
-		var hud_r := get_tree().get_first_node_in_group("hud")
-		if hud_r:
-			hud_r.refresh_hp(hp, PlayerData.max_hp)
-		hp_changed.emit(hp, PlayerData.max_hp)
-		return
+		_revive_used    = true
+		_pending_revive = true
 	_dead = true
 	velocity = Vector2.ZERO
 	$CollisionShape2D.set_deferred("disabled", true)
@@ -551,3 +571,14 @@ func _flash_mercy() -> void:
 	await get_tree().create_timer(0.35).timeout
 	if is_instance_valid(self):
 		$AnimatedSprite2D.modulate = Color(1, 1, 1, 1)
+
+func _flash_revive() -> void:
+	for _i in 4:
+		$AnimatedSprite2D.modulate = Color(1.0, 0.9, 0.2, 1.0)
+		await get_tree().create_timer(0.18).timeout
+		if not is_instance_valid(self):
+			return
+		$AnimatedSprite2D.modulate = Color(1, 1, 1, 1)
+		await get_tree().create_timer(0.12).timeout
+		if not is_instance_valid(self):
+			return

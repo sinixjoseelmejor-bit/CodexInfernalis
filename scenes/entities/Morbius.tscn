@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://b0v5fytypvnow"]
+
+[ext_resource type="Script" uid="uid://bsfjgrh3ejuur" path="res://scenes/entities/Morbius.gd" id="1_morbius"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_morbius"]
+radius = 28.0
+
+[node name="Morbius" type="CharacterBody2D" unique_id=134943173]
+script = ExtResource("1_morbius")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=703210577]
+shape = SubResource("CircleShape2D_morbius")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="." unique_id=1034606926]
